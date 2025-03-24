@@ -1,16 +1,21 @@
 package com.dailyalcorwork.universal_pet_care.model;
 
-public class Veterinarian {
+import jakarta.persistence.Entity;
+import jakarta.persistence.PrimaryKeyJoinColumn;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@PrimaryKeyJoinColumn(name = "vet_id")
+public class Veterinarian extends User {
 
     private Long id;
-    private String firstName;
-    private String lastName;
-    private String gender;
-    private String phoneNumber;
-    private String email;
-    private String password;
-    private String userType;
-    private boolean isEnable;
     // veterinarian will has another attribute
     private String specialization;
 }
