@@ -1,4 +1,4 @@
-package com.dailyalcorwork.universal_pet_care.service;
+package com.dailyalcorwork.universal_pet_care.service.user;
 
 import com.dailyalcorwork.universal_pet_care.model.User;
 import com.dailyalcorwork.universal_pet_care.repository.UserRepository;

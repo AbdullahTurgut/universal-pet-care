@@ -26,4 +26,8 @@ public class User {
     private String password;
     private String userType;
     private boolean isEnable;
+
+    // @Transient -> hibernate bizim için bu sutunu kaydetmeyecek dbye.bu veterinere ait
+    @Transient
+    private String specialization;
 }
