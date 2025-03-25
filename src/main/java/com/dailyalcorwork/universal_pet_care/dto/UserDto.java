@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class UserDto {
 
+    // Veritabanındaki tüm verilerden ise frontendden dtodaki verilere ulasabilecegiz.
     private Long id;
     private String firstName;
     private String lastName;
