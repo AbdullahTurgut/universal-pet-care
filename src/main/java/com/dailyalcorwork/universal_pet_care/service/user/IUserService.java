@@ -9,4 +9,8 @@ public interface IUserService {
     User register(RegistrationRequest request);
 
     User update(Long userId, UserUpdateRequest request);
+
+    User findById(Long userId);
+
+    void delete(Long userId);
 }

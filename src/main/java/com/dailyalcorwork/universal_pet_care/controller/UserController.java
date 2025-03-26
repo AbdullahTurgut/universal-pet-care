@@ -25,6 +25,8 @@ public class UserController {
     private final UserService userService;
     private final EntityConverter<User, UserDto> entityConverter;
 
+
+    //---------------- REGISTER ----------------
     // Dto ile beraber User geri döndürmek yerine ApiResponse döndürecegiz
     @PostMapping(UrlMapping.REGISTER_USER)
     public ResponseEntity<ApiResponse> register(@RequestBody RegistrationRequest request) {
@@ -42,8 +44,10 @@ public class UserController {
         }
     }
 
+    //---------------- UPDATE USER ------------------------
+
     @PutMapping(UrlMapping.UPDATE_USER)
-    public ResponseEntity<ApiResponse> update(@PathVariable("id") Long userId,
+    public ResponseEntity<ApiResponse> update(@PathVariable Long userId,
                                               @RequestBody UserUpdateRequest request) {
         try {
             User theUser = userService.update(userId, request);
@@ -56,6 +60,38 @@ public class UserController {
         }
 
     }
+
+    //----------------GET ONE USER ------------------------
+
+    @GetMapping(UrlMapping.GET_USER_BY_ID)
+    public ResponseEntity<ApiResponse> findById(@PathVariable Long userId) {
+        try {
+            User user = userService.findById(userId);
+            UserDto theUser = entityConverter.mapEntityToDto(user, UserDto.class);
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.FOUND, theUser));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    // -----------------DELETE ----------------
+    @DeleteMapping(UrlMapping.DELETE_USER_BY_ID)
+    public ResponseEntity<ApiResponse> deleteById(@PathVariable Long userId) {
+        try {
+            userService.delete(userId);
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.DELETE_SUCCESS, null));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+
+
+
    /* @PostMapping("/add")
     public User addUser(@RequestBody RegistrationRequest request) {
         return userService.add(request);
