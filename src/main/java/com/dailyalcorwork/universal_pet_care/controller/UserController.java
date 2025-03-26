@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static org.springframework.http.HttpStatus.*;
 
 @RequiredArgsConstructor
@@ -68,7 +70,7 @@ public class UserController {
         try {
             User user = userService.findById(userId);
             UserDto theUser = entityConverter.mapEntityToDto(user, UserDto.class);
-            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.FOUND, theUser));
+            return ResponseEntity.status(FOUND).body(new ApiResponse(FeedBackMessage.FOUND, theUser));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         } catch (Exception e) {
@@ -89,7 +91,13 @@ public class UserController {
         }
     }
 
+    // ----------------- GET ALL ----------------
 
+    @GetMapping(UrlMapping.GET_ALL_USERS)
+    public ResponseEntity<ApiResponse> getAllUsers() {
+        List<UserDto> theUsers = userService.getAllUsers();
+        return ResponseEntity.ok(new ApiResponse(FeedBackMessage.GET_ALL_SUCCESS, theUsers));
+    }
 
 
    /* @PostMapping("/add")
