@@ -1,5 +1,6 @@
 package com.dailyalcorwork.universal_pet_care.model;
 
+import com.dailyalcorwork.universal_pet_care.enums.AppointmentStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +26,9 @@ public class Appointment {
     private LocalTime time;
     private String appointmentNo;
     private LocalDate createdAt;
+
+    @Enumerated(EnumType.STRING)
+    private AppointmentStatus status;
 
     @JoinColumn(name = "sender")
     @ManyToOne(fetch = FetchType.LAZY)
