@@ -59,6 +59,28 @@ public class AppointmentController {
         }
     }
 
-    // ------------- DELETE APPOINTMENT -------------
+    // ------------- GET APPOINTMENT BY NUMBER -------------
+    @GetMapping("/appointment/{appointmentNo}")
+    public ResponseEntity<ApiResponse> getAppointmentById(@PathVariable String appointmentNo) {
+        // ctrl+alt+t ile try catch vs icine alabiliyoruz
+        try {
+            Appointment appointment = appointmentService.getAppointmentByNo(appointmentNo);
+            return ResponseEntity.status(FOUND).body(new ApiResponse(FeedBackMessage.FOUND, appointment));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
 
+    // ------------- DELETE APPOINTMENT -------------
+    @DeleteMapping("/appointment/{id}/delete")
+    public ResponseEntity<ApiResponse> deleteAppointmentById(@PathVariable Long id) {
+        try {
+            appointmentService.deleteAppointment(id);
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.DELETE_SUCCESS, null));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
 }
