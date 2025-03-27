@@ -2,6 +2,7 @@ package com.dailyalcorwork.universal_pet_care.controller;
 
 import com.dailyalcorwork.universal_pet_care.exception.ResourceNotFoundException;
 import com.dailyalcorwork.universal_pet_care.model.Appointment;
+import com.dailyalcorwork.universal_pet_care.request.AppointmentUpdateRequest;
 import com.dailyalcorwork.universal_pet_care.response.ApiResponse;
 import com.dailyalcorwork.universal_pet_care.service.appointment.AppointmentService;
 import com.dailyalcorwork.universal_pet_care.utils.FeedBackMessage;
@@ -79,6 +80,22 @@ public class AppointmentController {
             return ResponseEntity.ok(new ApiResponse(FeedBackMessage.DELETE_SUCCESS, null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    // ------------- UPDATE APPOINTMENT -------------
+    @PutMapping("/appointment/{id}/update")
+    public ResponseEntity<ApiResponse> updateAppointment(
+            @PathVariable Long id,
+            @RequestBody AppointmentUpdateRequest request
+    ) {
+        try {
+            Appointment appointment = appointmentService.updateAppointment(id, request);
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.UPDATE_SUCCESS, appointment));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(NOT_ACCEPTABLE).body(new ApiResponse(e.getMessage(), null));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }

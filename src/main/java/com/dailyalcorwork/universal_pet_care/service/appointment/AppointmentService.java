@@ -45,7 +45,7 @@ public class AppointmentService implements IAppointmentService {
     public Appointment updateAppointment(Long id, AppointmentUpdateRequest request) {
         Appointment existingAppointment = getAppointmentById(id); // yazdığım get methodu
         if (!Objects.equals(existingAppointment.getStatus(), AppointmentStatus.WAITING_FOR_APPROVAL)) {
-            throw new IllegalStateException("Sorry. This appointment can no longer be updated");
+            throw new IllegalStateException("Sorry, this appointment can no longer be updated");
         }
         existingAppointment.setDate(LocalDate.parse(request.getAppointmentDate()));
         existingAppointment.setTime(LocalTime.parse(request.getAppointmentTime()));
