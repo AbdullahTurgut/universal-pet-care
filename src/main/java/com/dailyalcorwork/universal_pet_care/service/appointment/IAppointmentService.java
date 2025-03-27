@@ -1,7 +1,7 @@
 package com.dailyalcorwork.universal_pet_care.service.appointment;
 
 import com.dailyalcorwork.universal_pet_care.model.Appointment;
-import com.dailyalcorwork.universal_pet_care.request.AppointmentRequest;
+import com.dailyalcorwork.universal_pet_care.request.AppointmentUpdateRequest;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ public interface IAppointmentService {
 
     List<Appointment> getAllAppointments();
 
-    Appointment updateAppointment(Long id, AppointmentRequest request);
+    Appointment updateAppointment(Long id, AppointmentUpdateRequest request);
 
     void deleteAppointment(Long id);
 
