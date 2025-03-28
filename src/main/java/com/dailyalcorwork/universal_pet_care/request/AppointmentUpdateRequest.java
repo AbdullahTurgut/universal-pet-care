@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AppointmentUpdateRequest {
-    private String appointmentDate;
-    private String appointmentTime;
+    private String date;
+    private String time;
     private String reason;
 }

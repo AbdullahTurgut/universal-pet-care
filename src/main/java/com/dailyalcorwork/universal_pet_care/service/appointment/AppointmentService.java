@@ -47,8 +47,8 @@ public class AppointmentService implements IAppointmentService {
         if (!Objects.equals(existingAppointment.getStatus(), AppointmentStatus.WAITING_FOR_APPROVAL)) {
             throw new IllegalStateException("Sorry, this appointment can no longer be updated");
         }
-        existingAppointment.setDate(LocalDate.parse(request.getAppointmentDate()));
-        existingAppointment.setTime(LocalTime.parse(request.getAppointmentTime()));
+        existingAppointment.setDate(LocalDate.parse(request.getDate()));
+        existingAppointment.setTime(LocalTime.parse(request.getTime()));
         existingAppointment.setReason(request.getReason());
         return appointmentRepository.save(existingAppointment);
     }

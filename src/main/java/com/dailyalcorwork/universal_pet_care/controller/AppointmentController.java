@@ -16,7 +16,7 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/appointments")
+@RequestMapping("/api/v1/appointments")
 public class AppointmentController {
     private final AppointmentService appointmentService;
 
@@ -88,7 +88,7 @@ public class AppointmentController {
     // ------------- UPDATE APPOINTMENT -------------
     @PutMapping("/appointment/{id}/update")
     public ResponseEntity<ApiResponse> updateAppointment(
-            @PathVariable Long id,
+            @PathVariable("id") Long id,
             @RequestBody AppointmentUpdateRequest request
     ) {
         try {
