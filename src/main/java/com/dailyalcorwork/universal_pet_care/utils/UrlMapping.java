@@ -10,6 +10,7 @@ public class UrlMapping {
     public static final String GET_ALL_USERS = "/all-users";
 
     /*======================= START APPOINTMENT API =================================*/
+    
     public static final String APPOINTMENT = API + "/appointments";
     public static final String BOOK_APPOINTMENT = "/book-appointment";
     public static final String GET_APPOINTMENT_BY_ID = "/{id}/appointment";
@@ -17,6 +18,18 @@ public class UrlMapping {
     public static final String GET_ALL_APPOINTMENTS = "/all";
     public static final String UPDATE_APPOINTMENT = "/{id}/update";
     public static final String DELETE_APPOINTMENT_BY_ID = "/{id}/delete";
+
     /*======================= END APPOINTMENT API =================================*/
+
+
+    /*====================== START PET API ==========================================*/
+
+    public static final String PETS = API + "/pets";
+    public static final String SAVE_PETS_FOR_APPOINTMENT = "/all";
+    public static final String GET_PET_BY_ID = "/{id}/pet";
+    public static final String DELETE_PET_BY_ID = "/{id}/delete";
+    public static final String UPDATE_PET = "/{id}/update";
+
+    /*====================== END PET API ==========================================*/
 
 }
