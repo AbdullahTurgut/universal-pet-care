@@ -7,6 +7,7 @@ import com.dailyalcorwork.universal_pet_care.model.User;
 import com.dailyalcorwork.universal_pet_care.repository.AppointmentRepository;
 import com.dailyalcorwork.universal_pet_care.repository.UserRepository;
 import com.dailyalcorwork.universal_pet_care.request.AppointmentUpdateRequest;
+import com.dailyalcorwork.universal_pet_care.utils.FeedBackMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,7 @@ public class AppointmentService implements IAppointmentService {
             appointment.setStatus(AppointmentStatus.WAITING_FOR_APPROVAL);
             return appointmentRepository.save(appointment);
         }
-        throw new ResourceNotFoundException("sender or recipient not found");
+        throw new ResourceNotFoundException(FeedBackMessage.SENDER_RECIPIENT_NOT_FOUND);
     }
 
     @Override
@@ -45,7 +46,7 @@ public class AppointmentService implements IAppointmentService {
     public Appointment updateAppointment(Long id, AppointmentUpdateRequest request) {
         Appointment existingAppointment = getAppointmentById(id); // yazdığım get methodu
         if (!Objects.equals(existingAppointment.getStatus(), AppointmentStatus.WAITING_FOR_APPROVAL)) {
-            throw new IllegalStateException("Sorry, this appointment can no longer be updated");
+            throw new IllegalStateException(FeedBackMessage.ALREADY_APPROVED);
         }
         existingAppointment.setDate(LocalDate.parse(request.getDate()));
         existingAppointment.setTime(LocalTime.parse(request.getTime()));
@@ -57,14 +58,14 @@ public class AppointmentService implements IAppointmentService {
     public void deleteAppointment(Long id) {
         appointmentRepository.findById(id)
                 .ifPresentOrElse(appointmentRepository::delete, () -> {
-                    throw new ResourceNotFoundException("Appointment not found");
+                    throw new ResourceNotFoundException(FeedBackMessage.NOT_FOUND);
                 });
     }
 
     @Override
     public Appointment getAppointmentById(Long id) {
         return appointmentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Appointment not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(FeedBackMessage.NOT_FOUND));
     }
 
     @Override

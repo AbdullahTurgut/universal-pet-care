@@ -6,6 +6,7 @@ import com.dailyalcorwork.universal_pet_care.request.AppointmentUpdateRequest;
 import com.dailyalcorwork.universal_pet_care.response.ApiResponse;
 import com.dailyalcorwork.universal_pet_care.service.appointment.AppointmentService;
 import com.dailyalcorwork.universal_pet_care.utils.FeedBackMessage;
+import com.dailyalcorwork.universal_pet_care.utils.UrlMapping;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +17,12 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/appointments")
+@RequestMapping(UrlMapping.APPOINTMENT)
 public class AppointmentController {
     private final AppointmentService appointmentService;
 
     // ------------- GET ALL APPOINTMENTS -------------
-    @GetMapping("/all")
+    @GetMapping(UrlMapping.GET_ALL_APPOINTMENTS)
     public ResponseEntity<ApiResponse> getAllAppointments() {
         try {
             List<Appointment> appointments = appointmentService.getAllAppointments();
@@ -32,7 +33,7 @@ public class AppointmentController {
     }
 
     // ------------- POST APPOINTMENT -------------
-    @PostMapping("/book-appointment")
+    @PostMapping(UrlMapping.BOOK_APPOINTMENT)
     public ResponseEntity<ApiResponse> bookAppointment(
             @RequestBody Appointment appointment,
             @RequestParam Long senderId,
@@ -49,7 +50,7 @@ public class AppointmentController {
     }
 
     // ------------- GET APPOINTMENT BY ID -------------
-    @GetMapping("/appointment/{id}")
+    @GetMapping(UrlMapping.GET_APPOINTMENT_BY_ID)
     public ResponseEntity<ApiResponse> getAppointmentById(@PathVariable Long id) {
         // ctrl+alt+t ile try catch vs icine alabiliyoruz
         try {
@@ -61,8 +62,8 @@ public class AppointmentController {
     }
 
     // ------------- GET APPOINTMENT BY NUMBER -------------
-    @GetMapping("/appointment/{appointmentNo}")
-    public ResponseEntity<ApiResponse> getAppointmentById(@PathVariable String appointmentNo) {
+    @GetMapping(UrlMapping.GET_APPOINTMENT_BY_NO)
+    public ResponseEntity<ApiResponse> getAppointmentByNo(@PathVariable String appointmentNo) {
         // ctrl+alt+t ile try catch vs icine alabiliyoruz
         try {
             Appointment appointment = appointmentService.getAppointmentByNo(appointmentNo);
@@ -73,7 +74,7 @@ public class AppointmentController {
     }
 
     // ------------- DELETE APPOINTMENT -------------
-    @DeleteMapping("/appointment/{id}/delete")
+    @DeleteMapping(UrlMapping.DELETE_APPOINTMENT_BY_ID)
     public ResponseEntity<ApiResponse> deleteAppointmentById(@PathVariable Long id) {
         try {
             appointmentService.deleteAppointment(id);
@@ -86,9 +87,9 @@ public class AppointmentController {
     }
 
     // ------------- UPDATE APPOINTMENT -------------
-    @PutMapping("/appointment/{id}/update")
+    @PutMapping(UrlMapping.UPDATE_APPOINTMENT)
     public ResponseEntity<ApiResponse> updateAppointment(
-            @PathVariable("id") Long id,
+            @PathVariable Long id,
             @RequestBody AppointmentUpdateRequest request
     ) {
         try {
