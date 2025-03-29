@@ -27,7 +27,7 @@ public class PetController {
     public ResponseEntity<ApiResponse> savePets(@RequestBody List<Pet> pets) {
         try {
             List<Pet> savedPets = petService.savePetForAppointment(pets);
-            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.SUCCESS, savedPets));
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.CREATE_SUCCESS, savedPets));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
@@ -38,7 +38,7 @@ public class PetController {
     public ResponseEntity<ApiResponse> getPetsById(@PathVariable Long petId) {
         try {
             Pet pet = petService.getPetById(petId);
-            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.FOUND, pet));
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.RESOURCE_FOUND, pet));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         } catch (Exception e) {

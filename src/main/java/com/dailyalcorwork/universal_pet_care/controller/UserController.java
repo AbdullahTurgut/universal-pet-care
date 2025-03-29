@@ -35,7 +35,7 @@ public class UserController {
         try {
             User theUser = userService.register(request);
             UserDto registeredUser = entityConverter.mapEntityToDto(theUser, UserDto.class);
-            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.SUCCESS, registeredUser));
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.CREATE_SUCCESS, registeredUser));
         } catch (UserAlreadyExistsException e) {
             // burda db de email olsa bile htpp status 200 olarak ok geri döndürüyor
             // onu düzeltmek için
@@ -70,7 +70,7 @@ public class UserController {
         try {
             User user = userService.findById(userId);
             UserDto theUser = entityConverter.mapEntityToDto(user, UserDto.class);
-            return ResponseEntity.status(FOUND).body(new ApiResponse(FeedBackMessage.FOUND, theUser));
+            return ResponseEntity.status(FOUND).body(new ApiResponse(FeedBackMessage.RESOURCE_FOUND, theUser));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         } catch (Exception e) {
