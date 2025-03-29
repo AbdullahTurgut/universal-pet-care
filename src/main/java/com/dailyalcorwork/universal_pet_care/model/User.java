@@ -38,4 +38,7 @@ public class User {
 
     @Transient
     List<Appointment> appointments;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private Photo photo;
 }
