@@ -1,9 +1,11 @@
 package com.dailyalcorwork.universal_pet_care.service.photo;
 
+import com.dailyalcorwork.universal_pet_care.exception.ResourceNotFoundException;
 import com.dailyalcorwork.universal_pet_care.model.Photo;
 import com.dailyalcorwork.universal_pet_care.model.User;
 import com.dailyalcorwork.universal_pet_care.repository.PhotoRepository;
 import com.dailyalcorwork.universal_pet_care.repository.UserRepository;
+import com.dailyalcorwork.universal_pet_care.utils.FeedBackMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,17 +46,26 @@ public class PhotoService implements IPhotoService {
 
     @Override
     public Optional<Photo> getPhotoById(Long photoId) {
-        return Optional.empty();
+        return photoRepository.findById(photoId);
     }
 
     @Override
     public void deletePhoto(Long photoId) {
-
+        photoRepository.findById(photoId)
+                .ifPresentOrElse(photoRepository::delete, () -> {
+                    throw new ResourceNotFoundException(FeedBackMessage.NOT_FOUND);
+                });
     }
 
     @Override
-    public Photo updatePhoto(Long photoId, byte[] imageData) {
-        return null;
+    public Photo updatePhoto(Long photoId, byte[] imageData) throws SQLException {
+        Optional<Photo> thePhoto = getPhotoById(photoId);
+        if (thePhoto.isPresent()) {
+            Photo photo = thePhoto.get();
+            photo.setImage(new SerialBlob(imageData));
+            return photoRepository.save(photo);
+        }
+        throw new ResourceNotFoundException(FeedBackMessage.NOT_FOUND);
     }
 
     @Override
