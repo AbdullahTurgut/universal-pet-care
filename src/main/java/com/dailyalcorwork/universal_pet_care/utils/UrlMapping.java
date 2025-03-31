@@ -35,6 +35,11 @@ public class UrlMapping {
     /*====================== START PHOTO API ==========================================*/
     public static final String PHOTOS = API + "/photos";
     public static final String UPLOAD_PHOTO = "/upload";
+    public static final String UPDATE_PHOTO = "/{photoId}/update";
+    public static final String DELETE_PHOTO = "/{photoId}/delete";
+    public static final String GET_PHOTO_BY_ID = "/{photoId}/get";
+
+    /*====================== END PHOTO API ==========================================*/
 
 }
 

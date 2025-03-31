@@ -53,7 +53,7 @@ public class PhotoService implements IPhotoService {
     public void deletePhoto(Long photoId) {
         photoRepository.findById(photoId)
                 .ifPresentOrElse(photoRepository::delete, () -> {
-                    throw new ResourceNotFoundException(FeedBackMessage.NOT_FOUND);
+                    throw new ResourceNotFoundException(FeedBackMessage.RESOURCE_NOT_FOUND);
                 });
     }
 
@@ -65,7 +65,7 @@ public class PhotoService implements IPhotoService {
             photo.setImage(new SerialBlob(imageData));
             return photoRepository.save(photo);
         }
-        throw new ResourceNotFoundException(FeedBackMessage.NOT_FOUND);
+        throw new ResourceNotFoundException(FeedBackMessage.RESOURCE_NOT_FOUND);
     }
 
     @Override
