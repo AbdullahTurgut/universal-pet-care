@@ -17,5 +17,5 @@ public interface IPhotoService {
 
     Photo updatePhoto(Long photoId, byte[] imageData) throws SQLException;
 
-    byte[] getImageData(Long photoId);
+    byte[] getImageData(Long photoId) throws SQLException;
 }

@@ -69,7 +69,13 @@ public class PhotoService implements IPhotoService {
     }
 
     @Override
-    public byte[] getImageData(Long photoId) {
-        return new byte[0];
+    public byte[] getImageData(Long photoId) throws SQLException {
+        Optional<Photo> thePhoto = getPhotoById(photoId);
+        if (thePhoto.isPresent()) {
+            Blob photoBlob = thePhoto.get().getImage();
+            int bloblength = (int) photoBlob.length();
+            return new byte[bloblength];
+        }
+        return null;
     }
 }
