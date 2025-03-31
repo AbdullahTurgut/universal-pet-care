@@ -32,4 +32,9 @@ public class UrlMapping {
 
     /*====================== END PET API ==========================================*/
 
+    /*====================== START PHOTO API ==========================================*/
+    public static final String PHOTOS = API + "/photos";
+    public static final String UPLOAD_PHOTO = "/upload";
+
 }
+
