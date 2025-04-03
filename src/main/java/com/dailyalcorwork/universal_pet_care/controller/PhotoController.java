@@ -29,34 +29,39 @@ public class PhotoController {
                                                    @RequestParam("userId") Long userId) throws SQLException, IOException {
         try {
             Photo photo = photoService.savePhoto(file, userId);
-            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.CREATE_SUCCESS, null));
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.CREATE_SUCCESS, userId));
         } catch (IOException | SQLException e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(FeedBackMessage.SERVER_ERROR, null));
         }
     }
 
     @PutMapping(UrlMapping.UPDATE_PHOTO)
-    public ResponseEntity<ApiResponse> updatePhoto(@PathVariable Long photoId, byte[] photoBytes) {
+    public ResponseEntity<ApiResponse> updatePhoto(@PathVariable Long photoId, @RequestBody MultipartFile file)
+            throws SQLException {
         try {
-            Photo photo = photoService.updatePhoto(photoId, photoBytes);
-            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.UPDATE_SUCCESS, photo));
-        } catch (ResourceNotFoundException | SQLException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(FeedBackMessage.RESOURCE_NOT_FOUND, null));
-        } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(FeedBackMessage.SERVER_ERROR, null));
+            Optional<Photo> photo = photoService.getPhotoById(photoId);
+            if (photo.isPresent()) {
+                Photo updatedPhoto = photoService.updatePhoto(photo.get().getId(), file);
+                return ResponseEntity.ok(new ApiResponse(FeedBackMessage.UPDATE_SUCCESS, updatedPhoto.getId()));
+            }
+        } catch (ResourceNotFoundException | IOException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(null, NOT_FOUND));
         }
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(null, INTERNAL_SERVER_ERROR));
     }
 
     @DeleteMapping(UrlMapping.DELETE_PHOTO)
-    public ResponseEntity<ApiResponse> deletePhoto(@PathVariable Long photoId) {
+    public ResponseEntity<ApiResponse> deletePhoto(@PathVariable Long photoId, @PathVariable Long userId) {
         try {
-            photoService.deletePhoto(photoId);
-            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.DELETE_SUCCESS, null));
+            Optional<Photo> photo = photoService.getPhotoById(photoId);
+            if (photo.isPresent()) {
+                photoService.deletePhoto(photo.get().getId(), userId);
+                return ResponseEntity.ok(new ApiResponse(FeedBackMessage.DELETE_SUCCESS, null));
+            }
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(FeedBackMessage.RESOURCE_NOT_FOUND, null));
-        } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(FeedBackMessage.SERVER_ERROR, null));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(null, INTERNAL_SERVER_ERROR));
     }
 
 
@@ -64,9 +69,13 @@ public class PhotoController {
     public ResponseEntity<ApiResponse> getPhotoById(@PathVariable Long photoId) {
         try {
             Optional<Photo> photo = photoService.getPhotoById(photoId);
-            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.RESOURCE_FOUND, photo));
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(FeedBackMessage.RESOURCE_NOT_FOUND, null));
+            if (photo.isPresent()) {
+                byte[] photoBytes = photoService.getImageData(photo.get().getId());
+                return ResponseEntity.ok().body(new ApiResponse(FeedBackMessage.RESOURCE_FOUND, photoBytes));
+            }
+        } catch (ResourceNotFoundException | SQLException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(null, NOT_FOUND));
     }
 }

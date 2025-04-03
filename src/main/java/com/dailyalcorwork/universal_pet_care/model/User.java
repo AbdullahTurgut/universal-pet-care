@@ -41,4 +41,10 @@ public class User {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Photo photo;
+
+    public void removeUserPhoto() {
+        if (this.getPhoto() != null) {
+            this.setPhoto(null);
+        }
+    }
 }

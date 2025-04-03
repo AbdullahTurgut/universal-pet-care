@@ -11,11 +11,11 @@ public interface IPhotoService {
 
     Photo savePhoto(MultipartFile file, Long userId) throws IOException, SQLException;
 
-    Optional<Photo> getPhotoById(Long photoId);
+    Optional<Photo> getPhotoById(Long id);
 
-    void deletePhoto(Long photoId);
+    void deletePhoto(Long id, Long userId);
 
-    Photo updatePhoto(Long photoId, byte[] imageData) throws SQLException;
+    Photo updatePhoto(Long id, MultipartFile file) throws SQLException, IOException;
 
-    byte[] getImageData(Long photoId) throws SQLException;
+    byte[] getImageData(Long id) throws SQLException;
 }

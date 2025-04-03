@@ -8,6 +8,7 @@ import com.dailyalcorwork.universal_pet_care.repository.UserRepository;
 import com.dailyalcorwork.universal_pet_care.utils.FeedBackMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.rowset.serial.SerialBlob;
@@ -45,12 +46,18 @@ public class PhotoService implements IPhotoService {
     }
 
     @Override
-    public Optional<Photo> getPhotoById(Long photoId) {
-        return photoRepository.findById(photoId);
+    public Optional<Photo> getPhotoById(Long id) {
+        return photoRepository.findById(id);
     }
 
+
+    @Transactional
     @Override
-    public void deletePhoto(Long photoId) {
+    public void deletePhoto(Long photoId, Long userId) {
+        userRepository.findById(userId)
+                .ifPresentOrElse(User::removeUserPhoto, () -> {
+                    throw new ResourceNotFoundException(FeedBackMessage.RESOURCE_NOT_FOUND);
+                });
         photoRepository.findById(photoId)
                 .ifPresentOrElse(photoRepository::delete, () -> {
                     throw new ResourceNotFoundException(FeedBackMessage.RESOURCE_NOT_FOUND);
@@ -58,12 +65,15 @@ public class PhotoService implements IPhotoService {
     }
 
     @Override
-    public Photo updatePhoto(Long photoId, byte[] imageData) throws SQLException {
-        Optional<Photo> thePhoto = getPhotoById(photoId);
+    public Photo updatePhoto(Long id, MultipartFile file) throws SQLException, IOException {
+        Optional<Photo> thePhoto = getPhotoById(id);
         if (thePhoto.isPresent()) {
-            Photo photo = thePhoto.get();
-            photo.setImage(new SerialBlob(imageData));
-            return photoRepository.save(photo);
+            byte[] photoBytes = file.getBytes();
+            Blob photoBlob = new SerialBlob(photoBytes);
+            thePhoto.get().setImage(photoBlob);
+            thePhoto.get().setFileType(file.getContentType());
+            thePhoto.get().setFileName(file.getOriginalFilename());
+            return photoRepository.save(thePhoto.get());
         }
         throw new ResourceNotFoundException(FeedBackMessage.RESOURCE_NOT_FOUND);
     }
