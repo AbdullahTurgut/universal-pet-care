@@ -1,0 +1,15 @@
+package com.dailyalcorwork.universal_pet_care.service.review;
+
+import com.dailyalcorwork.universal_pet_care.model.Review;
+import org.springframework.data.domain.Page;
+
+public interface IReviewService {
+
+    void saveReview(Review review, Long reviewerId, Long veterinarianId);
+
+    double getAverageRatingForVet(Long veterinarianId);
+
+    void updateReview(Long reviewerId, Review review);
+
+    Page<Review> findAllReviewsByUserId(Long userId, int page, int size);
+}
