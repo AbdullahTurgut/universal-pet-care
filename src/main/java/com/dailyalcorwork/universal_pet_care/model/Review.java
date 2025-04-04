@@ -6,13 +6,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Optional;
+
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Review {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,4 +29,11 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "reviewer_id")
     private User patient;
+
+    public void removeRelationship() {
+        Optional.ofNullable(veterinarian)
+                .ifPresent(vet -> vet.getReviews().remove(this));
+        Optional.ofNullable(patient)
+                .ifPresent(patient -> patient.getReviews().remove(this));
+    }
 }

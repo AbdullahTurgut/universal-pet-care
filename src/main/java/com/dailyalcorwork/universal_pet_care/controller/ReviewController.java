@@ -56,4 +56,14 @@ public class ReviewController {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
+
+    @DeleteMapping(UrlMapping.DELETE_REVIEW)
+    public ResponseEntity<ApiResponse> deleteReview(@PathVariable Long reviewId) {
+        try {
+            reviewService.deleteReview(reviewId);
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.DELETE_SUCCESS, null));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
 }

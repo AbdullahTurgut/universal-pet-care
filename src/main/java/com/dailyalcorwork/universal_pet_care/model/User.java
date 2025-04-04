@@ -52,4 +52,5 @@ public class User {
             this.setPhoto(null);
         }
     }
+    
 }

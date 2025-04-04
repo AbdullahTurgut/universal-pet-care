@@ -71,6 +71,22 @@ public class ReviewService implements IReviewService {
                 .orElse(0.0);
     }
 
+    // deleteReview steps
+
+    // 1. Get the review from database
+    // 2. Check and remove all relationships between the review and other users ( patient and veterinarian)
+    // 3. Delete the review from the database
+
+    @Override
+    public void deleteReview(Long reviewerId) {
+        reviewRepository.findById(reviewerId)
+                .ifPresentOrElse(Review::removeRelationship, () -> {
+                    throw new ResourceNotFoundException(FeedBackMessage.RESOURCE_NOT_FOUND);
+                });
+
+        reviewRepository.deleteById(reviewerId);
+    }
+
     @Override
     public Review updateReview(Long reviewerId, ReviewUpdateRequest review) {
         return reviewRepository.findById(reviewerId)

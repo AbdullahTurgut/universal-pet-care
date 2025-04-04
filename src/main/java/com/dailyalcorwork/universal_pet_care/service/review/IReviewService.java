@@ -10,6 +10,8 @@ public interface IReviewService {
 
     double getAverageRatingForVet(Long veterinarianId);
 
+    void deleteReview(Long reviewerId);
+
     Review updateReview(Long reviewerId, ReviewUpdateRequest review);
 
     Page<Review> findAllReviewsByUserId(Long userId, int page, int size);
