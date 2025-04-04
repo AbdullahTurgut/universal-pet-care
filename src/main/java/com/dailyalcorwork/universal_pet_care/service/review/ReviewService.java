@@ -8,6 +8,7 @@ import com.dailyalcorwork.universal_pet_care.model.User;
 import com.dailyalcorwork.universal_pet_care.repository.AppointmentRepository;
 import com.dailyalcorwork.universal_pet_care.repository.ReviewRepository;
 import com.dailyalcorwork.universal_pet_care.repository.UserRepository;
+import com.dailyalcorwork.universal_pet_care.request.ReviewUpdateRequest;
 import com.dailyalcorwork.universal_pet_care.utils.FeedBackMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -50,7 +51,7 @@ public class ReviewService implements IReviewService {
         User vet = userRepository.findById(veterinarianId).orElseThrow(() -> new ResourceNotFoundException(FeedBackMessage.VET_OR_PATIENT_NOT_FOUND));
 
         // 5. Get the patient from the database
-        User user = userRepository.findById(reviewerId).orElseThrow(() -> new ResourceNotFoundException(FeedBackMessage.RESOURCE_NOT_FOUND));
+        User user = userRepository.findById(reviewerId).orElseThrow(() -> new ResourceNotFoundException(FeedBackMessage.VET_OR_PATIENT_NOT_FOUND));
 
         // Set both to the review
         review.setVeterinarian(vet);
@@ -71,15 +72,13 @@ public class ReviewService implements IReviewService {
     }
 
     @Override
-    public void updateReview(Long reviewerId, Review review) {
-        reviewRepository.findById(reviewerId)
-                .ifPresentOrElse(existingReview -> {
+    public Review updateReview(Long reviewerId, ReviewUpdateRequest review) {
+        return reviewRepository.findById(reviewerId)
+                .map(existingReview -> {
                     existingReview.setStars(review.getStars());
                     existingReview.setFeedback(review.getFeedback());
-                    reviewRepository.save(existingReview);
-                }, () -> {
-                    throw new ResourceNotFoundException(FeedBackMessage.RESOURCE_NOT_FOUND);
-                });
+                    return reviewRepository.save(existingReview);
+                }).orElseThrow(() -> new ResourceNotFoundException(FeedBackMessage.RESOURCE_NOT_FOUND));
     }
 
     @Override
