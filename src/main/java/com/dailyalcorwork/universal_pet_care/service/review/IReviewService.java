@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 
 public interface IReviewService {
 
-    void saveReview(Review review, Long reviewerId, Long veterinarianId);
+    Review saveReview(Review review, Long reviewerId, Long veterinarianId);
 
     double getAverageRatingForVet(Long veterinarianId);
 

@@ -11,9 +11,11 @@ public class FeedBackMessage {
     public static final String ALREADY_APPROVED = "Sorry, this appointment is already approved";
     public static final String SENDER_RECIPIENT_NOT_FOUND = "Sender or recipient not found";
     public static final String SERVER_ERROR = "Server error";
-    public static final String ALREADY_RATED = "You have already rated this veterinarian, you may edit your previous review";
+    public static final String ALREADY_REVIEWED = "You have already rated this veterinarian, you may edit your previous review";
     public static final String VET_CANNOT_REVIEW_THEMSELVES = "Veterinarian can not review themselves";
-    public static final String NOT_COMPLETED_WITH_THIS_VETERINARIAN = "Sorry, only patient with has a completed appointments with this veterinarian can leave a review";
+    public static final String NOT_ALLOWED = "Sorry, only patient with has a completed appointments with this veterinarian can leave a review";
+    public static final String VET_OR_PATIENT_NOT_FOUND = "Veterinarian or Patient not found";
+    
 }
 
 

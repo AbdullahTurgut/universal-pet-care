@@ -1,8 +1,8 @@
 package com.dailyalcorwork.universal_pet_care.service.review;
 
 import com.dailyalcorwork.universal_pet_care.enums.AppointmentStatus;
+import com.dailyalcorwork.universal_pet_care.exception.AlreadyExistsException;
 import com.dailyalcorwork.universal_pet_care.exception.ResourceNotFoundException;
-import com.dailyalcorwork.universal_pet_care.exception.UserAlreadyExistsException;
 import com.dailyalcorwork.universal_pet_care.model.Review;
 import com.dailyalcorwork.universal_pet_care.model.User;
 import com.dailyalcorwork.universal_pet_care.repository.AppointmentRepository;
@@ -26,7 +26,7 @@ public class ReviewService implements IReviewService {
     private final UserRepository userRepository;
 
     @Override
-    public void saveReview(Review review, Long reviewerId, Long veterinarianId) {
+    public Review saveReview(Review review, Long reviewerId, Long veterinarianId) {
         // 1. Check if the reviewer is same as the doctor being reviewed
         // esitlik halinde veteriner kendini yorumlamis gibi olur.
         if (veterinarianId.equals(reviewerId)) {
@@ -36,18 +36,18 @@ public class ReviewService implements IReviewService {
         // 2. Check if the reviewer has previously submitted a review for this doctor.
         Optional<Review> existingReview = reviewRepository.findByVeterinarianIdAndPatientId(veterinarianId, reviewerId);
         if (existingReview.isPresent()) {
-            throw new UserAlreadyExistsException(FeedBackMessage.ALREADY_RATED);
+            throw new AlreadyExistsException(FeedBackMessage.ALREADY_REVIEWED);
         }
 
         // 3. Check if the reviewer has gotten a completed appointment with this doctor.
         boolean hadCompletedAppointments = appointmentRepository
                 .existsByVeterinarianIdAndPatientIdAndStatus(veterinarianId, reviewerId, AppointmentStatus.COMPLETED);
         if (!hadCompletedAppointments) {
-            throw new IllegalArgumentException(FeedBackMessage.NOT_COMPLETED_WITH_THIS_VETERINARIAN);
+            throw new IllegalStateException(FeedBackMessage.NOT_ALLOWED);
         }
 
         // 4. Get the veterinarian from the database
-        User vet = userRepository.findById(veterinarianId).orElseThrow(() -> new ResourceNotFoundException(FeedBackMessage.RESOURCE_NOT_FOUND));
+        User vet = userRepository.findById(veterinarianId).orElseThrow(() -> new ResourceNotFoundException(FeedBackMessage.VET_OR_PATIENT_NOT_FOUND));
 
         // 5. Get the patient from the database
         User user = userRepository.findById(reviewerId).orElseThrow(() -> new ResourceNotFoundException(FeedBackMessage.RESOURCE_NOT_FOUND));
@@ -56,7 +56,7 @@ public class ReviewService implements IReviewService {
         review.setVeterinarian(vet);
         review.setPatient(vet);
         // Save the review
-        reviewRepository.save(review);
+        return reviewRepository.save(review);
     }
 
     @Transactional
