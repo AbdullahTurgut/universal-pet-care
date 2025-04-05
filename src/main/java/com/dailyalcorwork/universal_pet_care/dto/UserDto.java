@@ -2,6 +2,9 @@ package com.dailyalcorwork.universal_pet_care.dto;
 
 import lombok.Data;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Data
 public class UserDto {
 
@@ -18,4 +21,11 @@ public class UserDto {
 
     // @Transient -> hibernate bizim için bu sutunu kaydetmeyecek dbye.bu veterinere ait
     private String specialization;
+
+    private LocalDate createdAt;
+    private List<AppointmentDto> appointments;
+    private List<ReviewDto> reviews;
+    private Long imageId;
+    private byte[] image;
+    private Double averageRating;
 }
