@@ -1,6 +1,5 @@
 package com.dailyalcorwork.universal_pet_care.service.review;
 
-import com.dailyalcorwork.universal_pet_care.enums.AppointmentStatus;
 import com.dailyalcorwork.universal_pet_care.exception.AlreadyExistsException;
 import com.dailyalcorwork.universal_pet_care.exception.ResourceNotFoundException;
 import com.dailyalcorwork.universal_pet_care.model.Review;
@@ -41,12 +40,13 @@ public class ReviewService implements IReviewService {
         }
 
         // 3. Check if the reviewer has gotten a completed appointment with this doctor.
+        /*
         boolean hadCompletedAppointments = appointmentRepository
                 .existsByVeterinarianIdAndPatientIdAndStatus(veterinarianId, reviewerId, AppointmentStatus.COMPLETED);
         if (!hadCompletedAppointments) {
             throw new IllegalStateException(FeedBackMessage.NOT_ALLOWED);
         }
-
+        */
         // 4. Get the veterinarian from the database
         User vet = userRepository.findById(veterinarianId).orElseThrow(() -> new ResourceNotFoundException(FeedBackMessage.VET_OR_PATIENT_NOT_FOUND));
 

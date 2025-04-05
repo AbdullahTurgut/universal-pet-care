@@ -1,5 +1,6 @@
 package com.dailyalcorwork.universal_pet_care.controller;
 
+import com.dailyalcorwork.universal_pet_care.dto.ReviewDto;
 import com.dailyalcorwork.universal_pet_care.exception.AlreadyExistsException;
 import com.dailyalcorwork.universal_pet_care.exception.ResourceNotFoundException;
 import com.dailyalcorwork.universal_pet_care.model.Review;
@@ -20,6 +21,7 @@ import static org.springframework.http.HttpStatus.*;
 @RestController
 public class ReviewController {
     private final IReviewService reviewService;
+    private final org.modelmapper.ModelMapper modelMapper;
 
     @PostMapping(UrlMapping.SUBMIT_REVIEW)
     public ResponseEntity<ApiResponse> saveReview(@RequestBody Review review,
@@ -39,10 +41,12 @@ public class ReviewController {
 
     @GetMapping(UrlMapping.GET_USER_REVIEWS)
     public ResponseEntity<ApiResponse> getReviewsByUserId(@PathVariable Long userId,
-                                                          @RequestParam int page,
-                                                          @RequestParam int size) {
+                                                          @RequestParam(defaultValue = "0") int page,
+                                                          @RequestParam(defaultValue = "5") int size) {
         Page<Review> reviewPage = reviewService.findAllReviewsByUserId(userId, page, size);
-        return ResponseEntity.status(FOUND).body(new ApiResponse(FeedBackMessage.RESOURCE_FOUND, reviewPage));
+        // reviewpage olayını dto kullanarak çözeceğiz
+        Page<ReviewDto> reviewDtos = reviewPage.map((element) -> modelMapper.map(element, ReviewDto.class));
+        return ResponseEntity.status(FOUND).body(new ApiResponse(FeedBackMessage.RESOURCE_FOUND, reviewDtos));
     }
 
 
@@ -65,5 +69,11 @@ public class ReviewController {
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
+    }
+
+    @GetMapping(UrlMapping.GET_AVERAGE_RATING_FOR_VET)
+    public ResponseEntity<ApiResponse> getAverageRatingForVet(@PathVariable("veterinarianId") Long veterinarianID) {
+        double averageRating = reviewService.getAverageRatingForVet(veterinarianID);
+        return ResponseEntity.ok(new ApiResponse(FeedBackMessage.RESOURCE_FOUND, averageRating));
     }
 }
