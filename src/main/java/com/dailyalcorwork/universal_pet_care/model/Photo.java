@@ -22,4 +22,5 @@ public class Photo {
     @Lob
     private Blob image;
 
+
 }

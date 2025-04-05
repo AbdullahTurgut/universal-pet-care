@@ -29,7 +29,7 @@ public class PhotoController {
                                                    @RequestParam("userId") Long userId) throws SQLException, IOException {
         try {
             Photo photo = photoService.savePhoto(file, userId);
-            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.CREATE_SUCCESS, userId));
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.CREATE_SUCCESS, photo.getId()));
         } catch (IOException | SQLException e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(FeedBackMessage.SERVER_ERROR, null));
         }

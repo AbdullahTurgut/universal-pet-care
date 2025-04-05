@@ -35,12 +35,14 @@ public class PhotoService implements IPhotoService {
             Blob photoBlob = new SerialBlob(photoBytes);
             photo.setImage(photoBlob);
             photo.setFileType(file.getContentType());
+            photo.setFileName(file.getOriginalFilename());
         }
         Photo savedPhoto = photoRepository.save(photo);
         // user optional olduğu için bir if
         theUser.ifPresent(user -> {
             user.setPhoto(savedPhoto);
         });
+        userRepository.save(theUser.get());
 
         return savedPhoto;
     }
