@@ -5,6 +5,7 @@ import com.dailyalcorwork.universal_pet_care.model.User;
 import com.dailyalcorwork.universal_pet_care.request.RegistrationRequest;
 import com.dailyalcorwork.universal_pet_care.request.UserUpdateRequest;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface IUserService {
@@ -18,4 +19,6 @@ public interface IUserService {
     void delete(Long userId);
 
     List<UserDto> getAllUsers();
+
+    UserDto getUserWithDetails(Long userId) throws SQLException;
 }
