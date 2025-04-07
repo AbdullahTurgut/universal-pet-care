@@ -1,5 +1,6 @@
 import React from "react";
 import d5 from "../../assets/images/d5.jpg";
+import vett from "../../assets/images/vett.jpg";
 import { Container, Col, Row, Button, Card, ListGroup } from "react-bootstrap";
 
 const Home = () => {
@@ -27,7 +28,7 @@ const Home = () => {
                 training, and personalized wellness plans, we have got
                 everything your pet needs under one roof.
               </Card.Text>
-              <Card.Text className="mt-4">
+              <Card.Text>
                 Your pet deserves the best — and we're here to help make that
                 happen. At Universal Pet Care, we provide a full range of
                 services to keep your furry friends healthy, happy, and loved.
@@ -47,7 +48,7 @@ const Home = () => {
           <Card>
             <Card.Img
               variant="top"
-              src={d5}
+              src={vett}
               alt="About Us"
               className="hero-image"
             />
