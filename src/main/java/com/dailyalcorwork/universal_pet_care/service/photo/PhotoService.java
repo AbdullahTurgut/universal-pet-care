@@ -86,7 +86,8 @@ public class PhotoService implements IPhotoService {
         if (thePhoto.isPresent()) {
             Blob photoBlob = thePhoto.get().getImage();
             int bloblength = (int) photoBlob.length();
-            return new byte[bloblength];
+            //return new byte[bloblength]; bu sekilde frontend de hata alıyoruz
+            return photoBlob.getBytes(1, bloblength);
         }
         return null;
     }
