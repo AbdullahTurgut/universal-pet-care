@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import VeterinarianCard from "./VeterinarianCard";
+import { getVeterinarians } from "./VeterinarianService";
 
 const VeterinarianListing = () => {
   const [veterinarians, setVeterinarians] = useState([]);
@@ -9,7 +10,7 @@ const VeterinarianListing = () => {
   useEffect(() => {
     getVeterinarians()
       .then((data) => {
-        setVeterinarians(data);
+        setVeterinarians(data.data);
       })
       .catch((error) => {
         setErrorMessage(error.message);
@@ -20,25 +21,21 @@ const VeterinarianListing = () => {
     return <p>No veterinarians found at this time</p>;
   }
   return (
-    <Row>
-      <h6>Meet Our Veterinarians</h6>
-      <Col>
-        <Container>
-          <Row>
-            <h5>The search goes here</h5>
-          </Row>
-        </Container>
-      </Col>
-      <Col>
-        <Container>
-          <Row>
-            {veterinarians.map((veterinarian, index) => (
-              <VeterinarianCard key={index} veterinarian={veterinarian} />
-            ))}
-          </Row>
-        </Container>
-      </Col>
-    </Row>
+    <Container>
+      <Row className="justify-content-center">
+        <h6 className="text-center mb-4 mt-4">Meet Our Veterinarians</h6>
+      </Row>
+      <Row className="justify-content-center">
+        <Col md={4}>
+          <h5>The search goes here</h5>
+        </Col>
+        <Col md={7}>
+          {veterinarians.map((veterinarian, index) => (
+            <VeterinarianCard key={index} veterinarian={veterinarian} />
+          ))}
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

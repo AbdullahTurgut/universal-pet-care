@@ -1,5 +1,5 @@
 import React from "react";
-import { Accordion, Col } from "react-bootstrap";
+import { Accordion, Col, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import placeholder from "../../assets/images/placeholder.jpg";
 
