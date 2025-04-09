@@ -23,7 +23,7 @@ const VeterinarianListing = () => {
   return (
     <Container>
       <Row className="justify-content-center">
-        <h6 className="text-center mb-4 mt-4">Meet Our Veterinarians</h6>
+        <h2 className="text-center mb-4 mt-4">Meet Our Veterinarians</h2>
       </Row>
       <Row className="justify-content-center">
         <Col md={4}>
