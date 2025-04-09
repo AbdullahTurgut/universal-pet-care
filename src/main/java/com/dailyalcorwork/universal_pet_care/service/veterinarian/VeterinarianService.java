@@ -58,11 +58,23 @@ public class VeterinarianService implements IVeterinarianService {
 
     // search appointment area for frontend
 
+    @Override
+    public List<UserDto> findAvailableVeterinariansForAppointment(String specialization,
+                                                                  LocalDate date,
+                                                                  LocalTime time) {
+        List<Veterinarian> filteredVeterinarians = getAvailableVeterinarians(specialization, date, time);
+        return filteredVeterinarians
+                .stream()
+                .map(this::mapVeterinarianToUserDto)
+                .toList();
+    }
+
+    @Override
     public List<Veterinarian> getVeterinariansBySpecialization(String specialization) {
         return veterinarianRepository.findBySpecialization(specialization);
     }
 
-    private List<Veterinarian> checkAvailableVeterinarians(String specialization, LocalDate date, LocalTime time) {
+    private List<Veterinarian> getAvailableVeterinarians(String specialization, LocalDate date, LocalTime time) {
         List<Veterinarian> veterinarians = getVeterinariansBySpecialization(specialization);
         return veterinarians
                 .stream()
