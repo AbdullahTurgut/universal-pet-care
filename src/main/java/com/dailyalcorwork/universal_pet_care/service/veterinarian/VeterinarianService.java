@@ -2,7 +2,9 @@ package com.dailyalcorwork.universal_pet_care.service.veterinarian;
 
 import com.dailyalcorwork.universal_pet_care.dto.EntityConverter;
 import com.dailyalcorwork.universal_pet_care.dto.UserDto;
+import com.dailyalcorwork.universal_pet_care.model.Appointment;
 import com.dailyalcorwork.universal_pet_care.model.Veterinarian;
+import com.dailyalcorwork.universal_pet_care.repository.AppointmentRepository;
 import com.dailyalcorwork.universal_pet_care.repository.ReviewRepository;
 import com.dailyalcorwork.universal_pet_care.repository.UserRepository;
 import com.dailyalcorwork.universal_pet_care.repository.VeterinarianRepository;
@@ -12,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -23,8 +27,9 @@ public class VeterinarianService implements IVeterinarianService {
     private final ReviewRepository reviewRepository;
     private final PhotoService photoService;
     private final UserRepository userRepository;
+    private final AppointmentRepository appointmentRepository;
 
-    
+
     @Override
     public List<UserDto> getAllVeterinariansWithDetails() {
         List<Veterinarian> veterinarians = userRepository.findAllByUserType("VET");
@@ -49,5 +54,44 @@ public class VeterinarianService implements IVeterinarianService {
             }
         }
         return userDto;
+    }
+
+    // search appointment area for frontend
+
+    public List<Veterinarian> getVeterinariansBySpecialization(String specialization) {
+        return veterinarianRepository.findBySpecialization(specialization);
+    }
+
+    private List<Veterinarian> checkAvailableVeterinarians(String specialization, LocalDate date, LocalTime time) {
+        List<Veterinarian> veterinarians = getVeterinariansBySpecialization(specialization);
+        return veterinarians
+                .stream()
+                .filter(veterinarian -> isVeterinarianAvailable(veterinarian, date, time))
+                .toList();
+    }
+
+    private boolean isVeterinarianAvailable(Veterinarian veterinarian,
+                                            LocalDate requestedDate,
+                                            LocalTime requestedTime) {
+        if (requestedDate != null && requestedTime != null) {
+            LocalTime requestedEndTime = requestedTime.plusHours(2);
+            return appointmentRepository.findByVeterinarianAndAppointmentDate(veterinarian, requestedDate)
+                    .stream()
+                    .noneMatch(existingAppointment -> doesAppointmentOverLap(existingAppointment, requestedTime, requestedEndTime));
+        }
+        return true;
+    }
+
+
+    private boolean doesAppointmentOverLap(Appointment existingAppointment,
+                                           LocalTime requestedStartTime,
+                                           LocalTime requestedEndTime) {
+        LocalTime existingStartTime = existingAppointment.getTime(); // exp - 11:00
+        LocalTime existingEndTime = existingStartTime.plusHours(2); // end - 13:00
+        LocalTime unavailableStartTime = existingStartTime.minusHours(1); // unv-start - 10:00
+        LocalTime unavailableEndTime = existingEndTime.plusMinutes(170); // unv-end - 15:50
+
+        return !requestedStartTime.isBefore(unavailableStartTime) && !requestedEndTime.isAfter(unavailableEndTime);
+
     }
 }
