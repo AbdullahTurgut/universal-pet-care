@@ -22,7 +22,7 @@ h6 {
   height: 100px;
 }
 
-
+/*Start Project background image slider*/
 .background-slider {
   position: fixed;
   top: 0;
@@ -31,25 +31,15 @@ h6 {
   height: 100vh;
   z-index: -1;
 }
-
 .carousel-item img {
   object-fit: cover;
   width: 100%;
   height: 100vh;
 }
+/*End Project background image slider*/
 
-.footer {
-  background-color: var(--color-modal);
-  color: var(--color-white);
-  padding: 10px;
-  text-align: center;
-  width: 100%;
-  position: relative;
-  bottom: 0;
-  height: 2.5rem;
-  margin-top: auto;
-}
 
+/*For modals*/
 .modal-footer {
   background-color: var(--color-modal);
   color: var(--color-white);
@@ -63,6 +53,7 @@ h6 {
 
 }
 
+/* Start Navbar*/
 .nav-bg {
   background-color: var(--color-modal);
 }
@@ -78,13 +69,6 @@ h6 {
   font-size: 24px;
   font-style: italic;
 }
-
-.page-title {
-  font-size: 20px;
-  font-weight: bold;
-  color: var(--color-title)
-}
-
 .link {
   text-decoration: none;
   margin-bottom: 4px;
@@ -96,6 +80,14 @@ h6 {
   text-decoration: none;
   color: #3aa0e0;
   font-size: 16px;
+}
+/*End Navbar*/
+
+
+.page-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--color-title)
 }
 
 .field-set {
@@ -156,3 +148,35 @@ h6 {
   background-position: center;
   margin: 10px;
 }
+.footer {
+  background-color: var(--color-modal);
+  color: var(--color-white);
+  padding: 10px;
+  text-align: center;
+  width: 100%;
+  position: relative;
+  bottom: 0;
+  height: 2.5rem;
+  margin-top: auto;
+}
+
+/* Start search component*/
+.searchText {
+  color: #daa520;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.stickyFormContainer {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: white;
+  padding: 50px;
+  border-radius: 5%;
+  margin-bottom: 20px;
+  margin-top: 100px;
+
+}
+
+/* End search component*/

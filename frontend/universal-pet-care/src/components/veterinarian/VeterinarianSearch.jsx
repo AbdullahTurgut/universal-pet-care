@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import format from "date-fns";
+import { format } from "date-fns";
+import UseMessageAlerts from "../hooks/UseMessageAlerts";
+import { Button, Col, Form, Row } from "react-bootstrap";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const VeterinarianSearch = ({ onSearchResult }) => {
   const [searchQuery, setSearchQuery] = useState({
@@ -9,7 +13,9 @@ const VeterinarianSearch = ({ onSearchResult }) => {
   });
 
   const [showDateTime, setShowDateTime] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  //const [errorMessage, setErrorMessage] = useState(""); // bunun yerine
+  const { errorMessage, setErrorMessage, showErrorAlert, setShowErrorAlert } =
+    UseMessageAlerts();
 
   const handleInputChange = (e) => {
     setSearchQuery({
@@ -20,11 +26,13 @@ const VeterinarianSearch = ({ onSearchResult }) => {
 
   const handleDateChange = (date) => {
     setSearchQuery({
+      ...searchQuery,
       date,
     });
   };
   const handleTimeChange = (time) => {
     setSearchQuery({
+      ...searchQuery,
       time,
     });
   };
@@ -58,10 +66,101 @@ const VeterinarianSearch = ({ onSearchResult }) => {
     try {
       const response = await findAvailableVeterinarians(searchParams);
       onSearchResult(response.data);
-    } catch (error) {}
+    } catch (error) {
+      setErrorMessage(error.message);
+      setShowErrorAlert(true);
+    }
   };
 
-  return <div>VeterinarianSearch</div>;
+  const handleClearSearch = () => {
+    setSearchQuery({
+      date: null,
+      time: null,
+      specialization: "",
+    });
+    setShowDateTime(false);
+    onSearchResult([]);
+  };
+
+  return (
+    <section className="stickyFormContainer">
+      <h3>Find a Veterinarian</h3>
+      <Form onSubmit={handleSearch}>
+        <Form.Group>
+          <Form.Label>Specialization</Form.Label>
+          <Form.Control
+            as="select"
+            name="specialization"
+            value={searchQuery.specialization}
+            onChange={handleInputChange}
+          >
+            <option value="">Select specialization</option>
+            <option value="Surgeon">Surgeon</option>
+            <option value="Other">Other</option>
+          </Form.Control>
+          <fieldset>
+            <Row className="mb-3">
+              <Col>
+                <Form.Group className="mb-3">
+                  <Form.Check
+                    type="checkbox"
+                    label="Include Date and Time Availability"
+                    checked={showDateTime}
+                    onChange={handleDateTimeToggle}
+                  />
+                </Form.Group>
+                {showDateTime && (
+                  <React.Fragment>
+                    <legend>Include Date and Time</legend>
+                    <Form.Group className="mb-3">
+                      <Form.Label className="searchText">Date</Form.Label>
+                      <DatePicker
+                        selected={searchQuery.date}
+                        onChange={handleDateChange}
+                        dateFormat="yyyy/MM/dd"
+                        minDate={new Date()}
+                        className="form-control"
+                        placeholderText="Select a date"
+                      />
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                      <Form.Label className="searchText">Time</Form.Label>
+                      <DatePicker
+                        selected={searchQuery.time}
+                        onChange={handleTimeChange}
+                        showTimeSelect
+                        showTimeSelectOnly
+                        timeIntervals={30}
+                        dateFormat="HH:mm"
+                        className="form-control"
+                        placeholderText="Select time"
+                        required
+                      />
+                    </Form.Group>
+                  </React.Fragment>
+                )}
+              </Col>
+            </Row>
+          </fieldset>
+
+          <div className="d-flex justify-content-center mb-4">
+            <Button type="submit" variant="outline-primary">
+              Search
+            </Button>
+            <div className="mx-2">
+              <Button
+                type="button"
+                variant="outline-info"
+                onClick={handleClearSearch}
+              >
+                Clear Search
+              </Button>
+            </div>
+          </div>
+        </Form.Group>
+      </Form>
+    </section>
+  );
 };
 
 export default VeterinarianSearch;
