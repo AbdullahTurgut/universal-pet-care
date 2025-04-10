@@ -3,18 +3,22 @@ import { Col, Container, Row } from "react-bootstrap";
 import VeterinarianCard from "./VeterinarianCard";
 import { getVeterinarians } from "./VeterinarianService";
 import VeterinarianSearch from "./VeterinarianSearch";
-
+import UseMessageAlerts from "../hooks/UseMessageAlerts";
 const VeterinarianListing = () => {
   const [veterinarians, setVeterinarians] = useState([]);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [allVeterinarians, setAllVeterinarians] = useState([]);
+  const { errorMessage, setErrorMessage, showErrorAlert, setShowErrorAlert } =
+    UseMessageAlerts();
   // call all the veterinarians from the backend
   useEffect(() => {
     getVeterinarians()
       .then((data) => {
         setVeterinarians(data.data);
+        setAllVeterinarians(data.data);
       })
       .catch((error) => {
-        setErrorMessage(error.message);
+        setErrorMessage(error.response.data.message);
+        setShowErrorAlert(true);
       });
   }, []);
 
@@ -22,7 +26,16 @@ const VeterinarianListing = () => {
     return <p>No veterinarians found at this time</p>;
   }
 
-  const handleSearchResult = (searchResult) => {};
+  const handleSearchResult = (veterinarians) => {
+    if (veterinarians === null) {
+      setVeterinarians(allVeterinarians);
+      setShowErrorAlert(false);
+    } else if (Array.isArray(veterinarians) && veterinarians.length > 0) {
+      setVeterinarians(veterinarians);
+    } else {
+      setVeterinarians([]);
+    }
+  };
   return (
     <Container>
       <Row className="justify-content-center">

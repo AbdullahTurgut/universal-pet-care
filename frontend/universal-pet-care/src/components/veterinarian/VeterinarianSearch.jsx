@@ -4,6 +4,8 @@ import UseMessageAlerts from "../hooks/UseMessageAlerts";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import AlertMessage from "../common/AlertMessage";
+import { findAvailableVeterinarians } from "./VeterinarianService";
 
 const VeterinarianSearch = ({ onSearchResult }) => {
   const [searchQuery, setSearchQuery] = useState({
@@ -57,17 +59,17 @@ const VeterinarianSearch = ({ onSearchResult }) => {
       const formattedDate = format(searchQuery.date, "yyyy-MM-dd");
       searchParams.date = formattedDate;
     }
-
     if (searchQuery.time) {
       const formattedTime = format(searchQuery.time, "HH:mm");
       searchParams.time = formattedTime;
     }
-
     try {
       const response = await findAvailableVeterinarians(searchParams);
       onSearchResult(response.data);
+      setShowErrorAlert(false); // Clear any previous error messages
     } catch (error) {
-      setErrorMessage(error.message);
+      console.log("error", error);
+      setErrorMessage(error.response.data.message);
       setShowErrorAlert(true);
     }
   };
@@ -79,7 +81,7 @@ const VeterinarianSearch = ({ onSearchResult }) => {
       specialization: "",
     });
     setShowDateTime(false);
-    onSearchResult([]);
+    onSearchResult(null);
   };
 
   return (
@@ -95,7 +97,8 @@ const VeterinarianSearch = ({ onSearchResult }) => {
             onChange={handleInputChange}
           >
             <option value="">Select specialization</option>
-            <option value="Surgeon">Surgeon</option>
+            <option value="Surgery">Surgery</option>
+            <option value="Urologist">Urologist</option>
             <option value="Other">Other</option>
           </Form.Control>
           <fieldset>
@@ -118,7 +121,7 @@ const VeterinarianSearch = ({ onSearchResult }) => {
                         selected={searchQuery.date}
                         onChange={handleDateChange}
                         dateFormat="yyyy/MM/dd"
-                        minDate={new Date()}
+                        minDate={new Date()} // bu sekilde gecmis tarih secilemez
                         className="form-control"
                         placeholderText="Select a date"
                       />
@@ -159,6 +162,11 @@ const VeterinarianSearch = ({ onSearchResult }) => {
           </div>
         </Form.Group>
       </Form>
+      <div>
+        {showErrorAlert && (
+          <AlertMessage type={"danger"} message={errorMessage} />
+        )}
+      </div>
     </section>
   );
 };
