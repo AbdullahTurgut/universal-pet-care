@@ -1,6 +1,7 @@
 package com.dailyalcorwork.universal_pet_care.controller;
 
 import com.dailyalcorwork.universal_pet_care.dto.UserDto;
+import com.dailyalcorwork.universal_pet_care.exception.ResourceNotFoundException;
 import com.dailyalcorwork.universal_pet_care.response.ApiResponse;
 import com.dailyalcorwork.universal_pet_care.service.veterinarian.IVeterinarianService;
 import com.dailyalcorwork.universal_pet_care.utils.FeedBackMessage;
@@ -32,10 +33,14 @@ public class VeterinarianController {
     public ResponseEntity<ApiResponse> searchVeterinariansForAppointment(@RequestParam(required = false) LocalDate date,
                                                                          @RequestParam(required = false) LocalTime time,
                                                                          @RequestParam String specialization) {
-        List<UserDto> availableVeterinarians = veterinarianService.findAvailableVeterinariansForAppointment(specialization, date, time);
-        if (availableVeterinarians.isEmpty()) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(FeedBackMessage.NO_VETERINARIANS_AVAILABLE, null));
+        try {
+            List<UserDto> availableVeterinarians = veterinarianService.findAvailableVeterinariansForAppointment(specialization, date, time);
+            if (availableVeterinarians.isEmpty()) {
+                return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(FeedBackMessage.NO_VETERINARIANS_AVAILABLE, null));
+            }
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.RESOURCE_FOUND, availableVeterinarians));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
-        return ResponseEntity.ok(new ApiResponse(FeedBackMessage.RESOURCE_FOUND, availableVeterinarians));
     }
 }

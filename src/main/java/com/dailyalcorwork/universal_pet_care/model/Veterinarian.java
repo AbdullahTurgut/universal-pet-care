@@ -16,6 +16,6 @@ import lombok.Setter;
 public class Veterinarian extends User {
 
     private Long id;
-    // veterinarian will has another attribute
+    
     private String specialization;
 }

@@ -2,6 +2,7 @@ package com.dailyalcorwork.universal_pet_care.service.veterinarian;
 
 import com.dailyalcorwork.universal_pet_care.dto.EntityConverter;
 import com.dailyalcorwork.universal_pet_care.dto.UserDto;
+import com.dailyalcorwork.universal_pet_care.exception.ResourceNotFoundException;
 import com.dailyalcorwork.universal_pet_care.model.Appointment;
 import com.dailyalcorwork.universal_pet_care.model.Veterinarian;
 import com.dailyalcorwork.universal_pet_care.repository.AppointmentRepository;
@@ -71,6 +72,9 @@ public class VeterinarianService implements IVeterinarianService {
 
     @Override
     public List<Veterinarian> getVeterinariansBySpecialization(String specialization) {
+        if (!veterinarianRepository.existsBySpecialization(specialization)) {
+            throw new ResourceNotFoundException("No veterinarian found with " + specialization + " in the system");
+        }
         return veterinarianRepository.findBySpecialization(specialization);
     }
 
@@ -87,7 +91,7 @@ public class VeterinarianService implements IVeterinarianService {
                                             LocalTime requestedTime) {
         if (requestedDate != null && requestedTime != null) {
             LocalTime requestedEndTime = requestedTime.plusHours(2);
-            return appointmentRepository.findByVeterinarianAndAppointmentDate(veterinarian, requestedDate)
+            return appointmentRepository.findByVeterinarianAndDate(veterinarian, requestedDate)
                     .stream()
                     .noneMatch(existingAppointment -> doesAppointmentOverLap(existingAppointment, requestedTime, requestedEndTime));
         }
