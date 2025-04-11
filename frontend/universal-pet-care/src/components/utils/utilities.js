@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { format } from "date-fns";
 
 export const useAlertWithTimeout = (
   initialVisibility = false,
@@ -17,4 +18,18 @@ export const useAlertWithTimeout = (
   }, [isVisible, duration]);
 
   return [isVisible, setIsVisible];
+};
+
+/**
+ * Formats the given date and time
+ * @param {Date | string} date - The date to format
+ * @param {Time | string} time - The time to format
+ * @returns {Object} An object containing the formatted date and time
+ */
+
+export const formatDateAndTime = (date, time) => {
+  const formattedDAte = format(date, "yyyy-MM-dd");
+  const formattedTime = format(time, "HH:mm");
+
+  return { formattedDAte, formattedTime };
 };
