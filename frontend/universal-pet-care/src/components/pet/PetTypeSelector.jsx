@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Form } from "react-bootstrap";
+import { Col, Form } from "react-bootstrap";
 import AddItemModal from "../modals/AddItemModal";
 
 const PetTypeSelector = ({ value, onChange }) => {
-  const [petType, setPetType] = useState([]);
+  const [petTypes, setPetTypes] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
   // 1. handle Type Change
@@ -16,14 +16,14 @@ const PetTypeSelector = ({ value, onChange }) => {
   };
   // handle save item
   const handleSaveNewTypeItem = (newItem) => {
-    if (newItem && !petType.includes(newItem)) {
-      setPetType([...petType, newItem]);
+    if (newItem && !petTypes.includes(newItem)) {
+      setPetTypes([...petTypes, newItem]);
       onChange({ target: { name: "petType", value: newItem } });
     }
   };
   return (
     <React.Fragment>
-      <Form.Group>
+      <Form.Group as={Col} controlId="petType">
         <Form.Control
           as="select"
           name="petType"

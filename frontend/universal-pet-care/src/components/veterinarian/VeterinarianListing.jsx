@@ -4,6 +4,7 @@ import VeterinarianCard from "./VeterinarianCard";
 import { getVeterinarians } from "./VeterinarianService";
 import VeterinarianSearch from "./VeterinarianSearch";
 import UseMessageAlerts from "../hooks/UseMessageAlerts";
+
 const VeterinarianListing = () => {
   const [veterinarians, setVeterinarians] = useState([]);
   const [allVeterinarians, setAllVeterinarians] = useState([]);

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Form } from "react-bootstrap";
+import { Col, Form } from "react-bootstrap";
 import AddItemModal from "../modals/AddItemModal";
 
 const PetBreedSelector = ({ value, onChange }) => {
-  const [petBreed, setPetBreed] = useState([]);
+  const [petBreeds, setPetBreeds] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
   // 1. handle Breed Change
@@ -16,14 +16,14 @@ const PetBreedSelector = ({ value, onChange }) => {
   };
   // handle save item
   const handleSaveNewBreedItem = (newItem) => {
-    if (newItem && !petBreed.includes(newItem)) {
-      setPetBreed([...petBreed, newItem]);
+    if (newItem && !petBreeds.includes(newItem)) {
+      setPetBreeds([...petBreeds, newItem]);
       onChange({ target: { name: "petBreed", value: newItem } });
     }
   };
   return (
     <React.Fragment>
-      <Form.Group>
+      <Form.Group as={Col} controlId="petBreed">
         <Form.Control
           as="select"
           name="petBreed"

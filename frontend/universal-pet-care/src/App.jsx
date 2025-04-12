@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import RootLayout from "./components/layout/RootLayout";
 import VeterinarianListing from "./components/veterinarian/VeterinarianListing";
+import BookAppointment from "./components/appointment/BookAppointment";
 
 function App() {
   const router = createBrowserRouter(
@@ -16,6 +17,10 @@ function App() {
       <Route path="/" element={<RootLayout />}>
         <Route index element={<Home />} />
         <Route path="/doctors" element={<VeterinarianListing />} />
+        <Route
+          path="/book-appointment/:recipientId/new-appointment"
+          element={<BookAppointment />}
+        />
       </Route>
     )
   );

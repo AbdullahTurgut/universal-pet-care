@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Form } from "react-bootstrap";
+import { Col, Form } from "react-bootstrap";
 import AddItemModal from "../modals/AddItemModal";
 
 const PetColorSelector = ({ value, onChange }) => {
-  const [petColor, setPetColor] = useState([]);
+  const [petColors, setPetColors] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
   // 1. handle Color Change
@@ -16,14 +16,14 @@ const PetColorSelector = ({ value, onChange }) => {
   };
   // handle save item
   const handleSaveNewItem = (newItem) => {
-    if (newItem && !petColor.includes(newItem)) {
-      setPetColor([...petColor, newItem]);
+    if (newItem && !petColors.includes(newItem)) {
+      setPetColors([...petColors, newItem]);
       onChange({ target: { name: "petColor", value: newItem } });
     }
   };
   return (
     <React.Fragment>
-      <Form.Group>
+      <Form.Group as={Col} controlId="petColor">
         <Form.Control
           as="select"
           name="petColor"

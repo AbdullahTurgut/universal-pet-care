@@ -23,7 +23,7 @@ export const useAlertWithTimeout = (
 /**
  * Formats the given date and time
  * @param {Date | string} date - The date to format
- * @param {Time | string} time - The time to format
+ * @param {Date | string} time - The time to format
  * @returns {Object} An object containing the formatted date and time
  */
 

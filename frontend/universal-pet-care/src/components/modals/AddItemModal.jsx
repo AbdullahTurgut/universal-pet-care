@@ -21,7 +21,7 @@ const AddItemModal = ({ show, handleClose, handleSave, itemLabel }) => {
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <Form.Group>
+          <Form.Group className="mb-3">
             <Form.Label>{itemLabel} Name</Form.Label>
             <Form.Control
               type="text"

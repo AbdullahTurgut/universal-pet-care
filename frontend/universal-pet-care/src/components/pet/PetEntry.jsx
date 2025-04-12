@@ -14,35 +14,39 @@ import { FaMinus } from "react-icons/fa";
 
 const PetEntry = ({ pet, index, removePet, canRemove, handleInputChange }) => {
   return (
-    <fieldset>
+    <fieldset className="field-set mb-3">
       <legend className="legend">{`Pet #${index + 1} details`}</legend>
-      <Form.Group>
-        <Form.Control
-          type="text"
-          name="petName"
-          id={`petName - ${index}`}
-          value={pet.petName}
-          placeholder="Enter pet name"
-          onChange={handleInputChange}
-          required
-        />
-
-        <Form.Control
-          type="number"
-          name="petAge"
-          id="petAge"
-          value={pet.petAge}
-          placeholder="Enter pet age"
-          onChange={handleInputChange}
-          required
-        />
-      </Form.Group>
-
-      <Form.Group as={Col} className="mb-2">
+      <fieldset className="mb-4">
+        <Form.Group as={Row}>
+          <Col md={6}>
+            <Form.Control
+              type="text"
+              name="petName"
+              id={`petName - ${index}`}
+              value={pet.petName}
+              placeholder="Enter pet name"
+              onChange={handleInputChange}
+              required
+            />
+          </Col>
+          <Col md={6}>
+            <Form.Control
+              type="number"
+              name="petAge"
+              id="petAge"
+              value={pet.petAge}
+              placeholder="Enter pet age"
+              onChange={handleInputChange}
+              required
+            />
+          </Col>
+        </Form.Group>
+      </fieldset>
+      <Form.Group as={Col} className="mb-4">
         <PetColorSelector value={pet.petColor} onChange={handleInputChange} />
       </Form.Group>
 
-      <fieldset className="field-set">
+      <fieldset className="field-set mb-4">
         <legend className="legend">Pet Type and Breed</legend>
         <Form.Group as={Row} className="mb-2 d-flex">
           <Col>

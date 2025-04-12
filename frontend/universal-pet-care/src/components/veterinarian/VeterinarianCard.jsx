@@ -29,7 +29,10 @@ const VeterinarianCard = ({ veterinarian }) => {
               <Card.Text className="review rating-stars">
                 Reviews: Some stars
               </Card.Text>
-              <Link to={""} className="link">
+              <Link
+                to={`/book-appointment/${veterinarian.id}/new-appointment`}
+                className="link"
+              >
                 Book appointment
               </Link>
             </div>
