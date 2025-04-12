@@ -1,10 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Form } from "react-bootstrap";
 import AddItemModal from "../modals/AddItemModal";
+import { getPetTypes } from "./PetService";
 
 const PetTypeSelector = ({ value, onChange }) => {
   const [petTypes, setPetTypes] = useState([]);
   const [showModal, setShowModal] = useState(false);
+
+  // Fetch existing pet types from the server or local storage
+  useEffect(() => {
+    const fetchPetTypes = async () => {
+      try {
+        const response = await getPetTypes();
+        setPetTypes(response.data);
+      } catch (error) {
+        console.error(error.response.data.message);
+      }
+    };
+    fetchPetTypes();
+  }, []);
 
   // 1. handle Type Change
   const handleTypeChange = (e) => {
@@ -33,7 +47,11 @@ const PetTypeSelector = ({ value, onChange }) => {
         >
           <option value="">Select Pet Type</option>
           <option value="add-new-type">Add a new Type</option>
-          <option value="Type">Type</option>
+          {petTypes.map((type) => (
+            <option key={type} value={type}>
+              {type}
+            </option>
+          ))}
         </Form.Control>
       </Form.Group>
       <AddItemModal
