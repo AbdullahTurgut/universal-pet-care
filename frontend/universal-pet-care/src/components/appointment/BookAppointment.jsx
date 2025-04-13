@@ -16,8 +16,11 @@ import PetEntry from "../pet/PetEntry";
 import { formatDateAndTime } from "../utils/utilities";
 import { bookAppointment } from "./AppointmentService";
 import { FaPlus } from "react-icons/fa";
+import AlertMessage from "../common/AlertMessage";
+import ProcessSpinner from "../common/ProcessSpinner";
 
 const BookAppointment = () => {
+  const [isProcessing, setIsProcessing] = useState(false); // islem yapildiginda butonlarin disable edilmesi icin
   // backend cekecegimiz veriler icin
   const [formData, setFormData] = useState({
     date: "",
@@ -46,6 +49,7 @@ const BookAppointment = () => {
   } = UseMessageAlerts();
 
   const { recipientId } = useParams(); // recipientId  useParams() ile alıyoruz
+  const senderId = 3;
 
   const handleDateChange = (date) => {
     setFormData((prevData) => ({
@@ -126,15 +130,17 @@ const BookAppointment = () => {
       },
       pets: pets,
     };
-
+    setIsProcessing(true);
     try {
       const response = await bookAppointment(senderId, recipientId, request);
       setSuccessMessage(response.data.message);
-      handleReset();
+      handleReset(); // Reset the form after successful booking
       setShowSuccessAlert(true);
     } catch (error) {
       setErrorMessage(error.response.data.message);
       setShowErrorAlert(true);
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -221,6 +227,14 @@ const BookAppointment = () => {
                   />
                 ))}
 
+                {showErrorAlert && (
+                  <AlertMessage type={"danger"} message={errorMessage} />
+                )}
+
+                {showSuccessAlert && (
+                  <AlertMessage type={"success"} message={successMessage} />
+                )}
+
                 <div className="d-flex justify-content-center mb-3">
                   <OverlayTrigger overlay={<Tooltip>Add more pets</Tooltip>}>
                     <Button size="sm" onClick={addPet} className="me-2">
@@ -233,8 +247,13 @@ const BookAppointment = () => {
                     variant="outline-primary"
                     size="sm"
                     className="me-2"
+                    disabled={isProcessing}
                   >
-                    Book Appointment
+                    {isProcessing ? (
+                      <ProcessSpinner message="Booking appointment, please wait..." />
+                    ) : (
+                      "Book Appointment"
+                    )}
                   </Button>
 
                   <Button

@@ -28,8 +28,8 @@ export const useAlertWithTimeout = (
  */
 
 export const formatDateAndTime = (date, time) => {
-  const formattedDAte = format(date, "yyyy-MM-dd");
+  const formattedDate = format(date, "yyyy-MM-dd");
   const formattedTime = format(time, "HH:mm");
 
-  return { formattedDAte, formattedTime };
+  return { formattedDate, formattedTime };
 };
