@@ -48,4 +48,22 @@ public class PetService implements IPetService {
         return petRepository.findById(petId)
                 .orElseThrow(() -> new ResourceNotFoundException(FeedBackMessage.RESOURCE_NOT_FOUND));
     }
+
+    // api's for selectors
+
+    @Override
+    public List<String> getPetTypes() {
+        return petRepository.getDistinctPetTypes();
+    }
+
+    @Override
+    public List<String> getPetColors() {
+        return petRepository.getDistinctPetColors();
+    }
+
+    @Override
+    public List<String> getPetBreeds(String petType) {
+        return petRepository.getDistinctPetBreedsByPetType(petType);
+    }
+
 }

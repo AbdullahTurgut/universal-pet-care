@@ -29,7 +29,9 @@ public class UrlMapping {
     public static final String GET_PET_BY_ID = "/{petId}/pet";
     public static final String DELETE_PET_BY_ID = "/{petId}/delete";
     public static final String UPDATE_PET = "/{petId}/update";
-
+    public static final String GET_PET_TYPES = "/get-types";
+    public static final String GET_PET_COLORS = "/get-pet-colors";
+    public static final String GET_PET_BREEDS = "/get-pet-breeds";
     /*====================== END PET API ==========================================*/
 
     /*====================== START PHOTO API ==========================================*/
@@ -55,7 +57,8 @@ public class UrlMapping {
     public static final String VETERINARIANS = API + "/veterinarians";
     public static final String GET_ALL_VETERINARIANS = "/get-all-veterinarians";
     public static final String SEARCH_VETERINARIAN_FOR_APPOINTMENT = "/search-veterinarian";
-    
+
+
     /*====================== END VETERINARIAN API ==========================================*/
 
 

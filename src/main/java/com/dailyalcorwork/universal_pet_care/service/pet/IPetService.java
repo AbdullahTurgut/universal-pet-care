@@ -14,4 +14,9 @@ public interface IPetService {
 
     Pet getPetById(Long petId);
 
+    List<String> getPetTypes();
+
+    List<String> getPetColors();
+
+    List<String> getPetBreeds(String petType);
 }
