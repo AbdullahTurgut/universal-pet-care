@@ -18,7 +18,7 @@ const RatingStars = ({ rating }) => {
   for (let i = stars.length + 1; i <= totalStars; i++) {
     stars.push(<FaRegStar key={i} color="#e4e5e9" />);
   }
-  return <div>RatingStars</div>;
+  return <span className="me-2 ms-2">{stars}</span>;
 };
 
 export default RatingStars;
