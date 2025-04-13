@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import UseMessageAlerts from "../hooks/UseMessageAlerts";
-import { Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { FaStar } from "react-icons/fa";
+import AlertMessage from "../common/AlertMessage";
 
 const Rating = ({ veterinarianId, onReviewSubmit }) => {
   const [hover, setHover] = useState(null);
@@ -46,7 +47,13 @@ const Rating = ({ veterinarianId, onReviewSubmit }) => {
 
   return (
     <React.Fragment>
-      <Form>
+      {showErrorAlert && (
+        <AlertMessage type={"danger"} message={errorMessage} />
+      )}
+      {showSuccessAlert && (
+        <AlertMessage type={"success"} message={successMessage} />
+      )}
+      <Form onSubmit={handleSubmit}>
         <h3>Rate this doctor: </h3>
         <div>
           {[...Array(5)].map((_, index) => {
@@ -76,6 +83,23 @@ const Rating = ({ veterinarianId, onReviewSubmit }) => {
             );
           })}
         </div>
+        <div>
+          <Form.Control
+            as="textarea"
+            rows={4}
+            value={reviewInfo.feedback}
+            required
+            onChange={handleInputChange}
+            placeholder="Write your feedback here..."
+          />
+        </div>
+        <div>
+          <Button variant="secondary">Submit Review</Button>
+        </div>
+        <p>
+          You have rated this doctor with{" "}
+          <span style={{ color: "orange" }}>{reviewInfo.rating} stars</span>
+        </p>
       </Form>
     </React.Fragment>
   );
