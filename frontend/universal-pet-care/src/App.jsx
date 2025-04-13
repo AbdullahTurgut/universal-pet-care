@@ -10,6 +10,7 @@ import {
 import RootLayout from "./components/layout/RootLayout";
 import VeterinarianListing from "./components/veterinarian/VeterinarianListing";
 import BookAppointment from "./components/appointment/BookAppointment";
+import Veterinarian from "./components/veterinarian/Veterinarian";
 
 function App() {
   const router = createBrowserRouter(
@@ -20,6 +21,10 @@ function App() {
         <Route
           path="/book-appointment/:recipientId/new-appointment"
           element={<BookAppointment />}
+        />
+        <Route
+          path="/veterinarian/:veterinarianId/veterinarian"
+          element={<Veterinarian />}
         />
       </Route>
     )
