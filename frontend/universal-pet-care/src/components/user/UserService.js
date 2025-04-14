@@ -9,3 +9,12 @@ export async function getUserById(userId) {
     throw error;
   }
 }
+
+export async function registerUser(user) {
+  try {
+    const result = await api.post("/users/register", user);
+    return result.data;
+  } catch (error) {
+    throw error;
+  }
+}

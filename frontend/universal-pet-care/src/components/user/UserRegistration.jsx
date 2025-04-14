@@ -5,6 +5,7 @@ import ProcessSpinner from "../common/ProcessSpinner";
 import AlertMessage from "../common/AlertMessage";
 import { Link } from "react-router-dom";
 import VetSpecializationSelector from "./VetSpecializationSelector";
+import { registerUser } from "./UserService";
 
 const UserRegistration = () => {
   const [user, setUser] = useState({
@@ -42,15 +43,18 @@ const UserRegistration = () => {
   // feedback from backend
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsProcessing(true);
     // Perform registration logic here
     try {
       const response = await registerUser(user); // Assuming you have a registerUser function
       setSuccessMessage(response.message);
       setShowSuccessAlert(true);
+      setIsProcessing(false);
       handleReset(); // Reset the form after successful registration
     } catch (error) {
       setErrorMessage(error.message);
       setShowErrorAlert(true);
+      setIsProcessing(false);
     }
   };
 
@@ -126,7 +130,7 @@ const UserRegistration = () => {
                         type="email"
                         name="email"
                         required
-                        placeholder="....email adress..."
+                        placeholder="....email address..."
                         value={user.email}
                         onChange={handleInputChange}
                       />

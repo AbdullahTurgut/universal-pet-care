@@ -31,7 +31,7 @@ const VetSpecializationSelector = ({ value, onChange }) => {
   // handle save item
   const handleSaveSpecialization = (newItem) => {
     if (newItem && !specializations.includes(newItem)) {
-      setPetTypes([...specializations, newItem]);
+      setSpecializations([...specializations, newItem]);
       onChange({ target: { name: "specialization", value: newItem } });
     }
   };
@@ -45,22 +45,20 @@ const VetSpecializationSelector = ({ value, onChange }) => {
           required
           onChange={handleSpecializationChange}
         >
-          <option value="">Select Specialization</option>
-          <option value="add-new-specialization">
-            Add a new Specialization
-          </option>
-          {specializations.map((type) => (
-            <option key={type} value={type}>
-              {type}
+          <option value="">...select specialization...</option>
+          {specializations.map((specialization) => (
+            <option key={specialization} value={specialization}>
+              {specialization}
             </option>
           ))}
+          <option value="add-new-specialization">Add a new</option>
         </Form.Control>
       </Form.Group>
       <AddItemModal
         show={showModal}
         handleClose={() => setShowModal(false)}
         handleSave={handleSaveSpecialization}
-        itemLabel={"Type"}
+        itemLabel={"specialization"}
       />
     </React.Fragment>
   );
