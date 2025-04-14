@@ -8,6 +8,7 @@ import RatingStars from "../rating/RatingStars";
 import Rating from "../rating/Rating";
 import Review from "../review/Review";
 import { getUserById } from "../user/UserService";
+import Paginator from "../common/Paginator";
 
 const Veterinarian = () => {
   const [veterinarian, setVeterinarian] = useState(null);
@@ -15,6 +16,9 @@ const Veterinarian = () => {
   const { veterinarianId } = useParams();
   const { errorMessage, setErrorMessage, showErrorAlert, setShowErrorAlert } =
     UseMessageAlerts();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [reviewPerPage] = useState(5);
 
   const getUser = async () => {
     setIsLoading(true);
@@ -36,6 +40,11 @@ const Veterinarian = () => {
   if (isLoading) {
     return <h1>Loading...</h1>;
   }
+
+  const indexOfLastReview = currentPage * reviewPerPage;
+  const indexOfFirstReview = indexOfLastReview - reviewPerPage;
+  const currentReviews =
+    veterinarian.reviews.slice(indexOfFirstReview, indexOfLastReview) || [];
 
   return (
     <Container className="d-flex justify-content-center align-items-center mt-4">
@@ -100,8 +109,8 @@ const Veterinarian = () => {
             <hr />
 
             {/* Render paginated reviews */}
-            {veterinarian && veterinarian.reviews.length > 0 ? (
-              veterinarian.reviews.map((review) => (
+            {currentReviews && currentReviews.length > 0 ? (
+              currentReviews.map((review) => (
                 <Review
                   key={review.id}
                   review={review}
@@ -111,6 +120,13 @@ const Veterinarian = () => {
             ) : (
               <p>No reviews yet.</p>
             )}
+
+            <Paginator
+              itemsPerPage={reviewPerPage}
+              totalItems={veterinarian.reviews.length}
+              paginate={setCurrentPage}
+              currentPage={currentPage}
+            />
           </Card.Body>
         </Card>
       )}
