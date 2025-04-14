@@ -21,3 +21,12 @@ export async function findAvailableVeterinarians(searchParams) {
     throw error;
   }
 }
+
+export async function getSpecializations() {
+  try {
+    const result = await api.get("/veterinarians/get-specializations");
+    return result.data;
+  } catch (error) {
+    throw error;
+  }
+}

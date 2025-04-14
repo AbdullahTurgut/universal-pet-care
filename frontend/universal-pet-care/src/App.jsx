@@ -11,6 +11,7 @@ import RootLayout from "./components/layout/RootLayout";
 import VeterinarianListing from "./components/veterinarian/VeterinarianListing";
 import BookAppointment from "./components/appointment/BookAppointment";
 import Veterinarian from "./components/veterinarian/Veterinarian";
+import UserRegistration from "./components/user/UserRegistration";
 
 function App() {
   const router = createBrowserRouter(
@@ -26,6 +27,8 @@ function App() {
           path="/veterinarian/:veterinarianId/veterinarian"
           element={<Veterinarian />}
         />
+
+        <Route path="/register-user" element={<UserRegistration />} />
       </Route>
     )
   );
