@@ -27,14 +27,14 @@ const Review = ({ review, userType }) => {
         )}
         <div className="ms-4">
           <div>
-            <h5 className="title">
+            <h5 className="title ms-3">
               <RatingStars rating={review.stars} />
             </h5>
             <div className="mt-4">
-              <p className="review-text">{review.feedback}</p>
+              <p className="review-text ms-4">{review.feedback}</p>
             </div>
             <div>
-              <p>{displayName}</p>
+              <p className="ms-4">{displayName}</p>
             </div>
           </div>
         </div>

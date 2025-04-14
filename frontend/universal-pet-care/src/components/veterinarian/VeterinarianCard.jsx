@@ -3,6 +3,7 @@ import { Accordion, Col, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import UserImage from "../common/UserImage";
 import placeholder from "../../assets/images/placeholder.jpg";
+import RatingStars from "../rating/RatingStars";
 
 const VeterinarianCard = ({ veterinarian }) => {
   return (
@@ -27,7 +28,8 @@ const VeterinarianCard = ({ veterinarian }) => {
                 <h6>{veterinarian.specialization}</h6>
               </Card.Title>
               <Card.Text className="review rating-stars">
-                Reviews: Some stars
+                Reviews: <RatingStars rating={veterinarian.averageRating} /> (
+                {veterinarian.totalReviewers} )
               </Card.Text>
               <Link
                 to={`/book-appointment/${veterinarian.id}/new-appointment`}

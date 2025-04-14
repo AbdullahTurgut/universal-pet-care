@@ -5,7 +5,7 @@ const RatingStars = ({ rating }) => {
   let stars = [];
 
   // Add full stars
-  for (let i = 1; i < Math.floor(rating); i++) {
+  for (let i = 1; i <= Math.floor(rating); i++) {
     stars.push(<FaStar key={i} color="#ffc107" />);
   }
 

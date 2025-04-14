@@ -1,17 +1,16 @@
 import React, { useState } from "react";
-import UseMessageAlerts from "../hooks/UseMessageAlerts";
 import { Button, Form } from "react-bootstrap";
 import { FaStar } from "react-icons/fa";
 import AlertMessage from "../common/AlertMessage";
+import UseMessageAlerts from "../hooks/UseMessageAlerts";
+import { set } from "date-fns";
 
 const Rating = ({ veterinarianId, onReviewSubmit }) => {
   const [hover, setHover] = useState(null);
-  const [reviewInfo, setReviewInfo] = useState({
-    rating: null,
-    feedback: null,
-  });
+  const [rating, setRating] = useState(null);
+  const [feedback, setFeedback] = useState("");
 
-  const [
+  const {
     successMessage,
     setSuccessMessage,
     showSuccessAlert,
@@ -20,18 +19,32 @@ const Rating = ({ veterinarianId, onReviewSubmit }) => {
     setErrorMessage,
     showErrorAlert,
     setShowErrorAlert,
-  ] = UseMessageAlerts();
+  } = UseMessageAlerts();
 
-  const handleInputChange = (e) => {
+  /*const handleInputChange = (e) => {
     const { name, value } = e.target;
     setReviewInfo((prevState) => ({
       ...prevState,
       [name]: value,
     }));
+  }; */
+
+  const handleRatingChange = (value) => {
+    setRating(value);
+  };
+
+  const handleFeedbackChange = (e) => {
+    setFeedback(e.target.value);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const reviewInfo = {
+      rating: rating,
+      feedback: feedback,
+    };
+
     try {
       const response = await addReview(veterinarianId, reviewerId, reviewInfo);
       setSuccessMessage(response.data.message);
@@ -55,26 +68,24 @@ const Rating = ({ veterinarianId, onReviewSubmit }) => {
       )}
       <Form onSubmit={handleSubmit}>
         <h3>Rate this doctor: </h3>
-        <div>
+        <div className="mb-2">
           {[...Array(5)].map((_, index) => {
             const ratingValue = index + 1;
             return (
-              <Form.Label key={index}>
+              <Form.Label key={index} className="me-2">
                 <Form.Check
                   type="radio"
                   name="rating"
                   value={ratingValue}
-                  onChange={handleInputChange}
-                  checked={reviewInfo.rating === ratingValue}
+                  onChange={() => handleRatingChange(ratingValue)}
+                  checked={rating === ratingValue}
                   inline
                 />
                 <FaStar
                   size={20}
                   className="star"
                   color={
-                    ratingValue <= (hover || reviewInfo.rating)
-                      ? "#ffc107"
-                      : "#e4e5e9"
+                    ratingValue <= (hover || rating) ? "#ffc107" : "#e4e5e9"
                   }
                   onMouseEnter={() => setHover(ratingValue)}
                   onMouseLeave={() => setHover(null)}
@@ -87,18 +98,18 @@ const Rating = ({ veterinarianId, onReviewSubmit }) => {
           <Form.Control
             as="textarea"
             rows={4}
-            value={reviewInfo.feedback}
+            value={feedback}
             required
-            onChange={handleInputChange}
+            onChange={handleFeedbackChange}
             placeholder="Write your feedback here..."
           />
         </div>
-        <div>
-          <Button variant="secondary">Submit Review</Button>
+        <div className="mt-2">
+          <Button variant="outline-primary">Submit Review</Button>
         </div>
         <p>
           You have rated this doctor with{" "}
-          <span style={{ color: "orange" }}>{reviewInfo.rating} stars</span>
+          <span style={{ color: "orange" }}>{rating} stars</span>
         </p>
       </Form>
     </React.Fragment>
