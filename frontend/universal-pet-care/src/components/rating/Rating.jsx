@@ -3,12 +3,14 @@ import { Button, Form } from "react-bootstrap";
 import { FaStar } from "react-icons/fa";
 import AlertMessage from "../common/AlertMessage";
 import UseMessageAlerts from "../hooks/UseMessageAlerts";
-import { set } from "date-fns";
+import { addReview } from "../review/ReviewService";
 
 const Rating = ({ veterinarianId, onReviewSubmit }) => {
   const [hover, setHover] = useState(null);
   const [rating, setRating] = useState(null);
   const [feedback, setFeedback] = useState("");
+
+  const reviewerId = 4;
 
   const {
     successMessage,
@@ -41,19 +43,19 @@ const Rating = ({ veterinarianId, onReviewSubmit }) => {
     e.preventDefault();
 
     const reviewInfo = {
-      rating: rating,
+      stars: rating,
       feedback: feedback,
     };
 
     try {
       const response = await addReview(veterinarianId, reviewerId, reviewInfo);
-      setSuccessMessage(response.data.message);
+      setSuccessMessage(response.message);
       setShowSuccessAlert(true);
       if (onReviewSubmit) {
         onReviewSubmit(); // Call the parent function with the new review
       }
     } catch (error) {
-      setErrorMessage(error.response.data.message);
+      setErrorMessage(error.message);
       setShowErrorAlert(true);
     }
   };
@@ -105,7 +107,9 @@ const Rating = ({ veterinarianId, onReviewSubmit }) => {
           />
         </div>
         <div className="mt-2">
-          <Button variant="outline-primary">Submit Review</Button>
+          <Button type="submit" variant="outline-primary">
+            Submit Review
+          </Button>
         </div>
         <p>
           You have rated this doctor with{" "}

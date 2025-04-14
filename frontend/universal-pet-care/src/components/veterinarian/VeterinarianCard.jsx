@@ -2,7 +2,6 @@ import React from "react";
 import { Accordion, Col, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import UserImage from "../common/UserImage";
-import placeholder from "../../assets/images/placeholder.jpg";
 import RatingStars from "../rating/RatingStars";
 
 const VeterinarianCard = ({ veterinarian }) => {
@@ -16,7 +15,6 @@ const VeterinarianCard = ({ veterinarian }) => {
                 <UserImage
                   userId={veterinarian.id}
                   userPhoto={veterinarian.photo}
-                  placeholder={placeholder}
                 />
               </Link>
             </div>
