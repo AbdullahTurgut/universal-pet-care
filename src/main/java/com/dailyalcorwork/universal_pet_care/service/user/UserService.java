@@ -8,6 +8,7 @@ import com.dailyalcorwork.universal_pet_care.exception.ResourceNotFoundException
 import com.dailyalcorwork.universal_pet_care.factory.UserFactory;
 import com.dailyalcorwork.universal_pet_care.model.Review;
 import com.dailyalcorwork.universal_pet_care.model.User;
+import com.dailyalcorwork.universal_pet_care.repository.ReviewRepository;
 import com.dailyalcorwork.universal_pet_care.repository.UserRepository;
 import com.dailyalcorwork.universal_pet_care.request.RegistrationRequest;
 import com.dailyalcorwork.universal_pet_care.request.UserUpdateRequest;
@@ -31,6 +32,7 @@ public class UserService implements IUserService {
     private final AppointmentService appointmentService;
     private final IPhotoService photoService;
     private final ReviewService reviewService;
+    private final ReviewRepository reviewRepository;
 
     @Override
     public User register(RegistrationRequest request) {
@@ -76,6 +78,7 @@ public class UserService implements IUserService {
         User user = findById(userId);
         // 2. convert the user to userDto
         UserDto userDto = entityConverter.mapEntityToDto(user, UserDto.class);
+        userDto.setTotalReviewers(reviewRepository.countByVeterinarianId(userId));
         // 3. get user appointments  ( users ( patient and veterinarian) )
         setUserAppointment(userDto);
         // 4. get user photo
@@ -99,7 +102,7 @@ public class UserService implements IUserService {
             userDto.setPhoto(photoService.getImageData(user.getPhoto().getId()));
         }
     }
-    
+
     private void setUserReviews(Long userId, UserDto userDto) {
         Page<Review> reviewPage = reviewService.findAllReviewsByUserId(userId, 0, Integer.MAX_VALUE);
         List<ReviewDto> reviewDto = reviewPage.getContent()
@@ -107,6 +110,7 @@ public class UserService implements IUserService {
                 .map(this::mapReviewToDto).toList();
         if (!reviewDto.isEmpty()) {
             double averageRating = reviewService.getAverageRatingForVet(userId);
+            userDto.setAverageRating(averageRating);
         }
         userDto.setReviews(reviewDto);
     }

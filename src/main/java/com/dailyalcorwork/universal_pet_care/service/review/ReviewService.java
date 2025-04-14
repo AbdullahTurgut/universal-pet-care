@@ -1,7 +1,5 @@
 package com.dailyalcorwork.universal_pet_care.service.review;
 
-import com.dailyalcorwork.universal_pet_care.enums.AppointmentStatus;
-import com.dailyalcorwork.universal_pet_care.exception.AlreadyExistsException;
 import com.dailyalcorwork.universal_pet_care.exception.ResourceNotFoundException;
 import com.dailyalcorwork.universal_pet_care.model.Review;
 import com.dailyalcorwork.universal_pet_care.model.User;
@@ -17,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +31,7 @@ public class ReviewService implements IReviewService {
             throw new IllegalArgumentException(FeedBackMessage.VET_CANNOT_REVIEW_THEMSELVES);
         }
 
+        /*
         // 2. Check if the reviewer has previously submitted a review for this doctor.
 
         Optional<Review> existingReview = reviewRepository.findByVeterinarianIdAndPatientId(veterinarianId, reviewerId);
@@ -48,15 +46,15 @@ public class ReviewService implements IReviewService {
         if (!hadCompletedAppointments) {
             throw new IllegalStateException(FeedBackMessage.NOT_ALLOWED);
         }
-
+        */
         // 4. Get the veterinarian from the database
-        User vet = userRepository.findById(veterinarianId).orElseThrow(() -> new ResourceNotFoundException(FeedBackMessage.VET_OR_PATIENT_NOT_FOUND));
+        User veterinarian = userRepository.findById(veterinarianId).orElseThrow(() -> new ResourceNotFoundException(FeedBackMessage.VET_OR_PATIENT_NOT_FOUND));
 
         // 5. Get the patient from the database
         User user = userRepository.findById(reviewerId).orElseThrow(() -> new ResourceNotFoundException(FeedBackMessage.VET_OR_PATIENT_NOT_FOUND));
 
         // Set both to the review
-        review.setVeterinarian(vet);
+        review.setVeterinarian(veterinarian);
         review.setPatient(user);
         // Save the review
         return reviewRepository.save(review);

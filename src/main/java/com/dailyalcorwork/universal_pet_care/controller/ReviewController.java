@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.*;
 
+@CrossOrigin("http://localhost:5173")
 @RequiredArgsConstructor
 @RequestMapping(UrlMapping.REVIEWS)
 @RestController
@@ -24,12 +25,12 @@ public class ReviewController {
     private final org.modelmapper.ModelMapper modelMapper;
 
     @PostMapping(UrlMapping.SUBMIT_REVIEW)
-    public ResponseEntity<ApiResponse> saveReview(@RequestBody Review review,
-                                                  @RequestParam Long reviewerId,
-                                                  @RequestParam Long veterinarianId) {
+    public ResponseEntity<ApiResponse> saveReview(@RequestParam Long reviewerId,
+                                                  @RequestParam Long veterinarianId,
+                                                  @RequestBody Review review) {
         try {
             Review savedReview = reviewService.saveReview(review, reviewerId, veterinarianId);
-            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.CREATE_SUCCESS, savedReview));
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.CREATE_SUCCESS, savedReview.getId()));
         } catch (IllegalArgumentException | IllegalStateException e) {
             return ResponseEntity.status(NOT_ACCEPTABLE).body(new ApiResponse(e.getMessage(), null));
         } catch (AlreadyExistsException e) {
