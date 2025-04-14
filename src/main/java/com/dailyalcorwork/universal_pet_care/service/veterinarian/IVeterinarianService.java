@@ -15,4 +15,7 @@ public interface IVeterinarianService {
                                                            LocalTime time);
 
     List<Veterinarian> getVeterinariansBySpecialization(String specialization);
+
+    // method for get and add specialization to frontend
+    List<String> getSpecializations();
 }

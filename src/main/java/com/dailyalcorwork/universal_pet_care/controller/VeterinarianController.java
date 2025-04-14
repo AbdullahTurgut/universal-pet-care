@@ -43,4 +43,10 @@ public class VeterinarianController {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
+
+    // get mapping for specialization to frontend side
+    @GetMapping(UrlMapping.GET_VETERINARIAN_SPECIALIZATIONS)
+    public ResponseEntity<ApiResponse> getAllSpecialization() {
+        return ResponseEntity.ok(new ApiResponse(FeedBackMessage.RESOURCE_FOUND, veterinarianService.getSpecializations()));
+    }
 }
