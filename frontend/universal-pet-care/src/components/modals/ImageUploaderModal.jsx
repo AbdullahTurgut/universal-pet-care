@@ -73,7 +73,9 @@ const ImageUploaderModal = ({ userId, show, handleClose }) => {
 
   return (
     <Modal show={show} onHide={handleClose}>
-      <Modal.Header closeButton>Upload Photo</Modal.Header>
+      <Modal.Header closeButton>
+        <Modal.Title>Upload Profile Photo</Modal.Title>
+      </Modal.Header>
       <Modal.Body>
         {showErrorAlert && (
           <AlertMessage type={"danger"} message={errorMessage} />
