@@ -4,7 +4,7 @@ import { Form, InputGroup, Modal, Button } from "react-bootstrap";
 import AlertMessage from "../common/AlertMessage";
 import { updateUserPhoto, uploadUserPhoto } from "./ImageUploaderService";
 
-const ImageUploader = ({ userId, show, handleClose }) => {
+const ImageUploaderModal = ({ userId, show, handleClose }) => {
   // 1. get the user
   // 2. check if user already has a profile image
   // 3. if yes, the update the existing photo else create a new one
@@ -96,4 +96,4 @@ const ImageUploader = ({ userId, show, handleClose }) => {
   );
 };
 
-export default ImageUploader;
+export default ImageUploaderModal;
