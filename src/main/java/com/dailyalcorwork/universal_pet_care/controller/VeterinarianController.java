@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
@@ -47,6 +48,11 @@ public class VeterinarianController {
     // get mapping for specialization to frontend side
     @GetMapping(UrlMapping.GET_VETERINARIAN_SPECIALIZATIONS)
     public ResponseEntity<ApiResponse> getAllSpecialization() {
-        return ResponseEntity.ok(new ApiResponse(FeedBackMessage.RESOURCE_FOUND, veterinarianService.getSpecializations()));
+        try {
+            List<String> specializations = veterinarianService.getSpecializations();
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.RESOURCE_FOUND, specializations));
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        }
     }
 }

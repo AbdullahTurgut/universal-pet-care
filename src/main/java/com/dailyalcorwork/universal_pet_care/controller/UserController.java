@@ -5,9 +5,11 @@ import com.dailyalcorwork.universal_pet_care.dto.UserDto;
 import com.dailyalcorwork.universal_pet_care.exception.ResourceNotFoundException;
 import com.dailyalcorwork.universal_pet_care.exception.UserAlreadyExistsException;
 import com.dailyalcorwork.universal_pet_care.model.User;
+import com.dailyalcorwork.universal_pet_care.request.ChangePasswordRequest;
 import com.dailyalcorwork.universal_pet_care.request.RegistrationRequest;
 import com.dailyalcorwork.universal_pet_care.request.UserUpdateRequest;
 import com.dailyalcorwork.universal_pet_care.response.ApiResponse;
+import com.dailyalcorwork.universal_pet_care.service.password.IChangePasswordService;
 import com.dailyalcorwork.universal_pet_care.service.user.UserService;
 import com.dailyalcorwork.universal_pet_care.utils.FeedBackMessage;
 import com.dailyalcorwork.universal_pet_care.utils.UrlMapping;
@@ -27,7 +29,7 @@ public class UserController {
 
     private final UserService userService;
     private final EntityConverter<User, UserDto> entityConverter;
-
+    private final IChangePasswordService changePasswordService;
 
     //---------------- REGISTER ----------------
     // Dto ile beraber User geri döndürmek yerine ApiResponse döndürecegiz
@@ -100,9 +102,29 @@ public class UserController {
         return ResponseEntity.ok(new ApiResponse(FeedBackMessage.GET_ALL_SUCCESS, theUsers));
     }
 
+    // changing user password above there
+    @PutMapping(UrlMapping.CHANGE_PASSWORD)
+    public ResponseEntity<ApiResponse> changeUserPassword(@PathVariable Long userId,
+                                                          @RequestBody ChangePasswordRequest request) {
+        try {
+            changePasswordService.changePassword(userId, request);
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.CREATE_SUCCESS, null));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(new ApiResponse(e.getMessage(), null));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+
+
 
    /* @PostMapping("/add")
     public User addUser(@RequestBody RegistrationRequest request) {
         return userService.add(request);
     }*/
+
+
 }

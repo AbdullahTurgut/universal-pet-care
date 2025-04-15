@@ -63,5 +63,10 @@ public class UrlMapping {
     /*====================== END VETERINARIAN API ==========================================*/
 
 
+    /*===================== START CHANGE USER PASSWORD API ================================= */
+    public static final String CHANGE_PASSWORD = "/user/{userId}/change-password";
+    /*====================== END CHANGE USER PASSWORD API ==========================================*/
+
+
 }
 
