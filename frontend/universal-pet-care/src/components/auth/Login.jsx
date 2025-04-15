@@ -70,13 +70,10 @@ const Login = () => {
               </Form>
               <div className="text-center mt-2">
                 Don't have an account yet?{" "}
+                <Link to={"/register-user"} style={{ textDecoration: "none" }}>
+                  Register here
+                </Link>
               </div>
-              <Link
-                to={"/user-registration"}
-                style={{ textDecoration: "none" }}
-              >
-                Register here
-              </Link>
             </Card.Body>
           </Card>
         </Col>
