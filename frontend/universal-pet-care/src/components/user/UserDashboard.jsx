@@ -20,7 +20,7 @@ const UserDashboard = () => {
   } = UseMessageAlerts();
 
   // const {userId} = useParams();
-  const userId = 6;
+  const userId = 1;
 
   useEffect(() => {
     const getUser = async () => {

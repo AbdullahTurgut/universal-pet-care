@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import UseMessageAlerts from "../hooks/UseMessageAlerts";
-import { Form, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getUserById } from "./UserService";
-import { Card, Container } from "react-bootstrap";
+import { Form, Card, Container, Col, Button } from "react-bootstrap";
+import VetSpecializationSelector from "./VetSpecializationSelector";
+import ProcessSpinner from "../common/ProcessSpinner";
 
 const UserUpdate = () => {
   const [isProcessing, setIsProcessing] = useState(false);
@@ -50,7 +52,7 @@ const UserUpdate = () => {
     }));
   };
 
-  const handleUserUpdateSubmit = async (e) => {
+  const handleUserUpdate = async (e) => {
     e.preventDefault();
     const updatedUserData = {
       firstName: user.firstName,
@@ -80,17 +82,132 @@ const UserUpdate = () => {
   };
 
   return (
-    <Container>
-      <div>
-        <Form>
-          <div>
-            <Card>
-              <Card.Header></Card.Header>
-              <Card.Body> </Card.Body>
-            </Card>
-          </div>
+    <Container md={6} className="d-flex justify-content-center mt-5">
+      <Col md={6}>
+        <Form onSubmit={handleUserUpdate}>
+          <Card className="shadow mb-5">
+            <Card.Header className="text-center mb-2">
+              Update User Information
+            </Card.Header>
+            <Card.Body>
+              <fieldset className="field-set">
+                <legend>Full Name</legend>
+                <Form.Group
+                  as={Col}
+                  controlId="nameFields"
+                  className="mb-2 d-flex"
+                >
+                  <Form.Control
+                    type="text"
+                    name="firstName"
+                    value={user.firstName}
+                    onChange={handleUserInputChange}
+                    style={{ marginRight: "10px" }}
+                  />
+                  <Form.Control
+                    type="text"
+                    name="lastName"
+                    value={user.lastName}
+                    onChange={handleUserInputChange}
+                  />
+                </Form.Group>
+              </fieldset>
+
+              <Form.Group as={Col} controlId="gender" className="mb-2">
+                <Form.Label className="legend">Gender</Form.Label>
+                <Form.Control
+                  as="select"
+                  name="gender"
+                  value={user.gender}
+                  onChange={handleUserInputChange}
+                >
+                  <option value="">Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </Form.Control>
+              </Form.Group>
+
+              <Form.Group as={Col} controlId="userType" className="mb-2">
+                <Form.Label className="legend">UserType</Form.Label>
+                <Form.Control
+                  as="text"
+                  name="userType"
+                  value={user.userType}
+                  onChange={handleUserInputChange}
+                  disabled
+                >
+                  {user.userType}
+                </Form.Control>
+              </Form.Group>
+
+              <fieldset className="field-set mb-2 mt-2">
+                <legend>Contact Information</legend>
+                <Form.Group
+                  as={Col}
+                  controlId="emailPhoneFields"
+                  className="mb-2 d-flex"
+                >
+                  <Form.Control
+                    as="email"
+                    name="email"
+                    value={user.email}
+                    onChange={handleUserInputChange}
+                    style={{ marginRight: "10px" }}
+                    disabled
+                  >
+                    {user.email}
+                  </Form.Control>
+                  <Form.Control
+                    type="text"
+                    name="phoneNumber"
+                    placeholder="Mobile Contact"
+                    value={user.phoneNumber}
+                    onChange={handleUserInputChange}
+                  />
+                </Form.Group>
+              </fieldset>
+
+              {user.userType === "VET" && (
+                <Form.Group controlId="specialization" className="mb-4">
+                  <Form.Label className="legend">Specialization</Form.Label>
+                  <VetSpecializationSelector
+                    handleAddSpecialization={handleUserInputChange}
+                    user={user}
+                    setUser={setUser}
+                  />
+                </Form.Group>
+              )}
+
+              {/* Action Buttons  */}
+              <div className="d-flex justify-content-center">
+                <div className="mx-2">
+                  <Button
+                    type="submit"
+                    variant="outline-warning"
+                    size="sm"
+                    disabled={isProcessing}
+                  >
+                    {isProcessing ? (
+                      <ProcessSpinner message="Processing..." />
+                    ) : (
+                      "Update"
+                    )}
+                  </Button>
+                </div>
+                <div className="mx-2">
+                  <Button
+                    variant="outline-info"
+                    size="sm"
+                    onClick={handleCancelEdit}
+                  >
+                    Back to Profile
+                  </Button>
+                </div>
+              </div>
+            </Card.Body>
+          </Card>
         </Form>
-      </div>
+      </Col>
     </Container>
   );
 };
