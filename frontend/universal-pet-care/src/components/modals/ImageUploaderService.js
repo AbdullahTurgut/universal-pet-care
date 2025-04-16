@@ -35,3 +35,14 @@ export async function deleteUserPhoto(photoId, userId) {
     throw error;
   }
 }
+
+// delete user photo(remove)
+export async function deleteUserPhotoById(photoId, userId) {
+  try {
+    // backend API call to fetch user data by ID
+    const result = await api.delete(`/photos/${photoId}/user/${userId}/delete`);
+    return result.data;
+  } catch (error) {
+    throw error;
+  }
+}

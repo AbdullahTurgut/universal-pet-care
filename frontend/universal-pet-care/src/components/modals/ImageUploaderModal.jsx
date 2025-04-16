@@ -3,6 +3,7 @@ import { getUserById } from "../user/UserService";
 import { Form, InputGroup, Modal, Button } from "react-bootstrap";
 import AlertMessage from "../common/AlertMessage";
 import { updateUserPhoto, uploadUserPhoto } from "./ImageUploaderService";
+import UseMessageAlerts from "../hooks/UseMessageAlerts";
 
 const ImageUploaderModal = ({ userId, show, handleClose }) => {
   // 1. get the user
@@ -29,7 +30,7 @@ const ImageUploaderModal = ({ userId, show, handleClose }) => {
     // Fetch user data from the backend or context
     // setUser(response.data);
     try {
-      const result = getUserById(userId); // Assuming you have a function to get user by ID
+      const result = await getUserById(userId); // Assuming you have a function to get user by ID
       setSuccessMessage(result.data);
     } catch (error) {
       setErrorMessage(error.response.data.message);
@@ -59,7 +60,7 @@ const ImageUploaderModal = ({ userId, show, handleClose }) => {
           setShowSuccessAlert(true);
         };
       } else {
-        const response = await uploadUserPhoto(userId, fileBytes); // Assuming you have a function to upload the photo
+        const response = await uploadUserPhoto(userId, file); // Assuming you have a function to upload the photo
         setSuccessMessage(response.data);
         window.location.reload(); // Reload the page to see the updated photo
         setShowSuccessAlert(true);
@@ -86,11 +87,10 @@ const ImageUploaderModal = ({ userId, show, handleClose }) => {
         <Form>
           <h6>Select the photo you would like to display on your profile</h6>
           <InputGroup>
-            <Form.Control type="file" onChange={handleFileChange}>
-              <Button variant="secondary" onClick={handleImageUpload}>
-                Upload
-              </Button>
-            </Form.Control>
+            <Form.Control type="file" onChange={handleFileChange} />
+            <Button variant="secondary" onClick={handleImageUpload}>
+              Upload
+            </Button>
           </InputGroup>
         </Form>
       </Modal.Body>

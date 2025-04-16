@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Icon } from "react-icons-kit";
-import { eyeOn, eyeOff } from "react-icons-kit/feather";
 import UseMessageAlerts from "../hooks/UseMessageAlerts";
 import { Button, Form, InputGroup, Modal } from "react-bootstrap";
-const ChangePasswordModal = () => {
+import { changeUserPassword } from "../user/UserService";
+import AlertMessage from "../common/AlertMessage";
+
+const ChangePasswordModal = ({ userId, show, handleClose }) => {
   const [type, setType] = useState("password");
-  const { icon, setIcon } = useState(eyeOff);
+  const { icon, setIcon } = useState(null);
 
   const [passwords, setPasswords] = useState({
     currentPassword: "",
@@ -26,7 +27,7 @@ const ChangePasswordModal = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setPassword((prevState) => ({
+    setPasswords((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -34,9 +35,13 @@ const ChangePasswordModal = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { currentPassword, newPassword, confirmNewPassword } = passwords;
     try {
-      const response = await changeUserPassword(userId, passwords);
+      const response = await changeUserPassword(
+        userId,
+        passwords.currentPassword,
+        passwords.newPassword,
+        passwords.confirmNewPassword
+      );
       console.log(response);
       setSuccessMessage(response.message);
       handleReset();
@@ -47,17 +52,17 @@ const ChangePasswordModal = () => {
       setShowErrorAlert(true);
     }
   };
-
+  /*
   const handleShowPassword = () => {
     if (type === "password") {
       setType("text");
-      setIcon(eyeOn);
+      setIcon(eye);
     } else {
       setType("password");
       setIcon(eyeOff);
     }
   };
-
+*/
   const handleReset = () => {
     setPasswords({
       currentPassword: "",
@@ -69,11 +74,17 @@ const ChangePasswordModal = () => {
   };
 
   return (
-    <Modal>
-      <Modal.Header>
+    <Modal show={show} onHide={handleClose}>
+      <Modal.Header closeButton>
         <Modal.Title>Change Password</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        {showErrorAlert && (
+          <AlertMessage type={"danger"} message={errorMessage} />
+        )}
+        {showSuccessAlert && (
+          <AlertMessage type={"success"} message={successMessage} />
+        )}
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="currentPassword">
             <Form.Label>Current Password</Form.Label>
@@ -81,13 +92,13 @@ const ChangePasswordModal = () => {
               <Form.Control
                 type={type}
                 name="currentPassword"
-                value={currentPassword}
+                value={passwords.currentPassword}
                 onChange={handleInputChange}
                 placeholder="Enter current password"
               />
-              <InputGroup.Text onClick={handleShowPassword}>
-                <Icon icon={icon} size={20} />
-              </InputGroup.Text>
+              {/*<InputGroup.Text onClick={handleShowPassword}>
+                <Icon icon={icon} />
+              </InputGroup.Text> */}
             </InputGroup>
           </Form.Group>
 
@@ -96,7 +107,7 @@ const ChangePasswordModal = () => {
             <Form.Control
               type={type}
               name="newPassword"
-              value={newPassword}
+              value={passwords.newPassword}
               onChange={handleInputChange}
               placeholder="Enter new password"
             />
@@ -106,7 +117,7 @@ const ChangePasswordModal = () => {
             <Form.Control
               type={type}
               name="confirmNewPassword"
-              value={confirmNewPassword}
+              value={passwords.confirmNewPassword}
               onChange={handleInputChange}
               placeholder="Confirm new password"
             />
