@@ -25,10 +25,8 @@ const UserDashboard = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        console.log("userId", userId);
         const data = await getUserById(userId);
         setUser(data.data);
-        console.log("the user from dashboard", data);
       } catch (error) {
         setErrorMessage(error.message);
         setShowErrorAlert(true);
