@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import UseMessageAlerts from "../hooks/UseMessageAlerts";
 import { useNavigate, useParams } from "react-router-dom";
-import { getUserById } from "./UserService";
+import { getUserById, updateUser } from "./UserService";
 import { Form, Card, Container, Col, Button } from "react-bootstrap";
 import VetSpecializationSelector from "./VetSpecializationSelector";
 import ProcessSpinner from "../common/ProcessSpinner";
+import AlertMessage from "../common/AlertMessage";
 
 const UserUpdate = () => {
   const [isProcessing, setIsProcessing] = useState(false);
@@ -176,6 +177,13 @@ const UserUpdate = () => {
                     setUser={setUser}
                   />
                 </Form.Group>
+              )}
+
+              {showErrorAlert && (
+                <AlertMessage type={"danger"} message={errorMessage} />
+              )}
+              {showSuccessAlert && (
+                <AlertMessage type={"success"} message={successMessage} />
               )}
 
               {/* Action Buttons  */}

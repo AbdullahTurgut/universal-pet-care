@@ -40,3 +40,15 @@ export async function changeUserPassword(
     throw error;
   }
 }
+
+export async function updateUser(userId, updatedUserData) {
+  try {
+    const response = await api.put(
+      `/users/update-user/${userId}`,
+      updatedUserData
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
