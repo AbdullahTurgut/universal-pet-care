@@ -52,3 +52,12 @@ export async function updateUser(userId, updatedUserData) {
     throw error;
   }
 }
+
+export async function deleteUser(userId) {
+  try {
+    const response = await api.delete(`/users/delete/${userId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}

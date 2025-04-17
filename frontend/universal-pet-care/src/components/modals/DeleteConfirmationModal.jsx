@@ -1,14 +1,7 @@
 import React from "react";
 import { Button, Modal } from "react-bootstrap";
-import ProcessSpinner from "../common/ProcessSpinner";
 
-const DeleteConfirmationModal = ({
-  show,
-  onHide,
-  onConfirm,
-  itemToDelete,
-  loading,
-}) => {
+const DeleteConfirmationModal = ({ show, onHide, onConfirm, itemToDelete }) => {
   return (
     <Modal show={show} onHide={onHide}>
       <Modal.Header closeButton>

@@ -3,7 +3,7 @@ import UseMessageAlerts from "../hooks/UseMessageAlerts";
 import { deleteUserPhotoById } from "../modals/ImageUploaderService";
 import { Container } from "react-bootstrap";
 import UserProfile from "./UserProfile";
-import { getUserById } from "./UserService";
+import { deleteUser, getUserById } from "./UserService";
 
 const UserDashboard = () => {
   const [user, setUser] = useState({});
@@ -20,7 +20,7 @@ const UserDashboard = () => {
   } = UseMessageAlerts();
 
   // const {userId} = useParams();
-  const userId = 1;
+  const userId = 4;
 
   useEffect(() => {
     const getUser = async () => {
@@ -45,10 +45,28 @@ const UserDashboard = () => {
       setShowErrorAlert(true);
     }
   };
+
+  const handleDeleteAccount = async () => {
+    try {
+      const response = await deleteUser(userId);
+      setSuccessMessage(response.message);
+      setShowSuccessAlert(true);
+    } catch (error) {
+      console.log("this is the error from the delete account:", error);
+      setErrorMessage(error.message);
+      setShowErrorAlert(true);
+      console.error(error.message);
+    }
+  };
+
   return (
     <Container>
       {user && (
-        <UserProfile user={user} handleRemovePhoto={handleRemovePhoto} />
+        <UserProfile
+          user={user}
+          handleRemovePhoto={handleRemovePhoto}
+          handleDeleteAccount={handleDeleteAccount}
+        />
       )}
     </Container>
   );
