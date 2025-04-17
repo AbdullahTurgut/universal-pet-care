@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import UseMessageAlerts from "../hooks/UseMessageAlerts";
 import { deleteUserPhotoById } from "../modals/ImageUploaderService";
-import { Container } from "react-bootstrap";
+import { Card, Col, Container, Row, Tab, Tabs } from "react-bootstrap";
 import UserProfile from "./UserProfile";
 import { deleteUser, getUserById } from "./UserService";
+import AlertMessage from "../common/AlertMessage";
+import Review from "../review/Review";
 
 const UserDashboard = () => {
   const [user, setUser] = useState({});
@@ -20,7 +22,7 @@ const UserDashboard = () => {
   } = UseMessageAlerts();
 
   // const {userId} = useParams();
-  const userId = 5;
+  const userId = 2;
 
   useEffect(() => {
     const getUser = async () => {
@@ -28,7 +30,7 @@ const UserDashboard = () => {
         const data = await getUserById(userId);
         setUser(data.data);
       } catch (error) {
-        setErrorMessage(error.message);
+        setErrorMessage(error.response.data.message);
         setShowErrorAlert(true);
       }
     };
@@ -60,14 +62,45 @@ const UserDashboard = () => {
   };
 
   return (
-    <Container>
-      {user && (
-        <UserProfile
-          user={user}
-          handleRemovePhoto={handleRemovePhoto}
-          handleDeleteAccount={handleDeleteAccount}
-        />
+    <Container className="mt-2 user-dashboard">
+      {showErrorAlert && (
+        <AlertMessage type={"danger"} message={errorMessage} />
       )}
+      {showSuccessAlert && (
+        <AlertMessage type={"success"} message={successMessage} />
+      )}
+
+      <Tabs className="mb-2" justify>
+        <Tab eventKey="profile" title={<h3>Profile</h3>}>
+          {user && (
+            <UserProfile
+              user={user}
+              handleRemovePhoto={handleRemovePhoto}
+              handleDeleteAccount={handleDeleteAccount}
+            />
+          )}
+        </Tab>
+        <Tab eventKey="status" title={<h3>Appointments</h3>}></Tab>
+        <Tab eventKey="appointments" title={<h3>Appointment Details</h3>}></Tab>
+        <Tab eventKey="reviews" title={<h3>Reviews</h3>}>
+          <Container className="d-flex justify-content-center align-items-center">
+            <Card className="mt-5 mb-4 review-card">
+              <h4 className="text-center mb-2">Your Reviews</h4>
+              <Row>
+                <Col>
+                  {user && user.reviews && user.reviews.length > 0 ? (
+                    user.reviews.map((review, index) => (
+                      <Review key={index} review={review} />
+                    ))
+                  ) : (
+                    <p>No reviews found at this time.</p>
+                  )}
+                </Col>
+              </Row>
+            </Card>
+          </Container>
+        </Tab>
+      </Tabs>
     </Container>
   );
 };
