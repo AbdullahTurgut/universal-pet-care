@@ -3,20 +3,20 @@ import { Accordion, Button, Col, Container, Row } from "react-bootstrap";
 import ReactDatePicker from "react-datepicker";
 const UserAppointments = ({ appointments }) => {
   return (
-    <Container>
-      <Accordion>
+    <Container className="p-5">
+      <Accordion className="mt-4 mb-5">
         {appointments.map((appointment, index) => {
           return (
-            <Accordion.Item eventKey={index} key={index}>
+            <Accordion.Item eventKey={index} key={index} className="mb-2">
               <Accordion.Header>
                 <div>
-                  <div>Date: {appointment.date}</div>
+                  <div className="mb-3">Date: {appointment.date}</div>
                   <div>Status: {appointment.status}</div>
                 </div>
               </Accordion.Header>
               <Accordion.Body>
                 <Row>
-                  <Col md={4}>
+                  <Col md={4} className="mt-2">
                     <p>
                       Appointment No:{" "}
                       <span className="text-info">

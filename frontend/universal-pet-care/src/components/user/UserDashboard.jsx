@@ -6,9 +6,11 @@ import UserProfile from "./UserProfile";
 import { deleteUser, getUserById } from "./UserService";
 import AlertMessage from "../common/AlertMessage";
 import Review from "../review/Review";
+import UserAppointments from "../appointment/UserAppointments";
 
 const UserDashboard = () => {
   const [user, setUser] = useState({});
+  const [appointments, setAppointments] = useState([]);
 
   const {
     successMessage,
@@ -29,6 +31,7 @@ const UserDashboard = () => {
       try {
         const data = await getUserById(userId);
         setUser(data.data);
+        setAppointments(data.data.appointments);
       } catch (error) {
         setErrorMessage(error.response.data.message);
         setShowErrorAlert(true);
@@ -81,7 +84,21 @@ const UserDashboard = () => {
           )}
         </Tab>
         <Tab eventKey="status" title={<h3>Appointments</h3>}></Tab>
-        <Tab eventKey="appointments" title={<h3>Appointment Details</h3>}></Tab>
+        <Tab eventKey="appointments" title={<h3>Appointment Details</h3>}>
+          <Row>
+            <Col>
+              {user && (
+                <React.Fragment>
+                  {appointments && appointments.length > 0 ? (
+                    <UserAppointments appointments={appointments} />
+                  ) : (
+                    <p>No data </p>
+                  )}
+                </React.Fragment>
+              )}
+            </Col>
+          </Row>
+        </Tab>
         <Tab eventKey="reviews" title={<h3>Reviews</h3>}>
           <Container className="d-flex justify-content-center align-items-center">
             <Card className="mt-5 mb-4 review-card">
