@@ -26,19 +26,16 @@ const ImageUploaderModal = ({ userId, show, handleClose }) => {
     setFile(e.target.files[0]);
   };
 
-  const getUser = async () => {
-    // Fetch user data from the backend or context
-    // setUser(response.data);
-    try {
-      const result = await getUserById(userId); // Assuming you have a function to get user by ID
-      setSuccessMessage(result.data);
-    } catch (error) {
-      setErrorMessage(error.response.data.message);
-      setShowErrorAlert(true);
-    }
-  };
-
   useEffect(() => {
+    const getUser = async () => {
+      try {
+        const data = await getUserById(userId);
+        setUser(data.data);
+      } catch (error) {
+        setErrorMessage(error.message);
+        setShowErrorAlert(true);
+      }
+    };
     getUser();
   }, [userId]);
 
