@@ -6,8 +6,10 @@ import com.dailyalcorwork.universal_pet_care.dto.ReviewDto;
 import com.dailyalcorwork.universal_pet_care.dto.UserDto;
 import com.dailyalcorwork.universal_pet_care.exception.ResourceNotFoundException;
 import com.dailyalcorwork.universal_pet_care.factory.UserFactory;
+import com.dailyalcorwork.universal_pet_care.model.Appointment;
 import com.dailyalcorwork.universal_pet_care.model.Review;
 import com.dailyalcorwork.universal_pet_care.model.User;
+import com.dailyalcorwork.universal_pet_care.repository.AppointmentRepository;
 import com.dailyalcorwork.universal_pet_care.repository.ReviewRepository;
 import com.dailyalcorwork.universal_pet_care.repository.UserRepository;
 import com.dailyalcorwork.universal_pet_care.request.RegistrationRequest;
@@ -15,11 +17,13 @@ import com.dailyalcorwork.universal_pet_care.request.UserUpdateRequest;
 import com.dailyalcorwork.universal_pet_care.service.appointment.AppointmentService;
 import com.dailyalcorwork.universal_pet_care.service.photo.IPhotoService;
 import com.dailyalcorwork.universal_pet_care.service.review.ReviewService;
+import com.dailyalcorwork.universal_pet_care.utils.FeedBackMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +37,7 @@ public class UserService implements IUserService {
     private final IPhotoService photoService;
     private final ReviewService reviewService;
     private final ReviewRepository reviewRepository;
+    private final AppointmentRepository appointmentRepository;
 
     @Override
     public User register(RegistrationRequest request) {
@@ -58,8 +63,19 @@ public class UserService implements IUserService {
 
     @Override
     public void delete(Long userId) {
-        userRepository.findById(userId).ifPresentOrElse(userRepository::delete, () -> {
-            throw new ResourceNotFoundException("User not found");
+        // bu methodu frontend de delete account islemini yapabilmek icin revize edecegim
+
+//        userRepository.findById(userId).ifPresentOrElse(userRepository::delete, () -> {
+//            throw new ResourceNotFoundException("User not found");
+//        });
+        userRepository.findById(userId).ifPresentOrElse(userToDelete -> {
+            List<Review> reviews = new ArrayList<>(reviewRepository.findAllByUserId(userId));
+            reviewRepository.deleteAll(reviews);
+            List<Appointment> appointments = new ArrayList<>(appointmentRepository.findAllByUserId(userId));
+            appointmentRepository.deleteAll(appointments);
+            userRepository.deleteById(userId);
+        }, () -> {
+            throw new ResourceNotFoundException(FeedBackMessage.RESOURCE_NOT_FOUND);
         });
     }
 
