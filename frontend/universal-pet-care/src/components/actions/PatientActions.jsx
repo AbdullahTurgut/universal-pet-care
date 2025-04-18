@@ -25,18 +25,18 @@ const PatientActions = ({ onCancel, onUpdate, isDisabled }) => {
     }
   };
   return (
-    <section>
+    <section className="d-flex justify-content-end gap-2 mt-2 mb-2">
       <ActionButtons
-        title={"Cancel Appointment"}
-        variant={"danger"}
-        onClick={() => handleActionClick("Cancel")}
+        title={"Update Appointment"}
+        variant={"warning"}
+        onClick={() => handleActionClick("Update")}
         disabled={isDisabled}
         isProcessing={isProcessing}
       />
       <ActionButtons
-        title={"Update Appointment"}
+        title={"Cancel Appointment"}
         variant={"danger"}
-        onClick={() => handleActionClick("Update")}
+        onClick={() => handleActionClick("Cancel")}
         disabled={isDisabled}
         isProcessing={isProcessing}
       />

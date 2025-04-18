@@ -10,17 +10,15 @@ const ActionButtons = ({
   className = " ",
 }) => {
   return (
-    <div className="d-flex justify-content-end gap-2 mt-2 mb-2">
-      <Button
-        variant={variant}
-        size="sm"
-        disabled={disabled || isProcessing}
-        onClick={onClick}
-        className={className}
-      >
-        {isProcessing ? "Processing..." : title}
-      </Button>
-    </div>
+    <Button
+      variant={variant}
+      size="sm"
+      disabled={disabled || isProcessing}
+      onClick={onClick}
+      className={className}
+    >
+      {isProcessing ? "Processing..." : title}
+    </Button>
   );
 };
 

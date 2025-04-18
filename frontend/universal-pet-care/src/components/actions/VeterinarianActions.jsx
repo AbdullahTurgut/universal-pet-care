@@ -26,18 +26,18 @@ const VeterinarianActions = ({ onApprove, onDecline, isDisabled }) => {
   };
 
   return (
-    <section>
+    <section className="d-flex justify-content-end gap-2 mt-2 mb-2">
       <ActionButtons
-        title={"Decline Appointment"}
-        variant={"danger"}
-        onClick={() => handleActionClick("Decline")}
+        title={"Approve Appointment"}
+        variant={"success"}
+        onClick={() => handleActionClick("Approve")}
         disabled={isDisabled}
         isProcessing={isProcessing}
       />
       <ActionButtons
-        title={"Approve Appointment"}
-        variant={"danger"}
-        onClick={() => handleActionClick("Approve")}
+        title={"Decline Appointment"}
+        variant={"secondary"}
+        onClick={() => handleActionClick("Decline")}
         disabled={isDisabled}
         isProcessing={isProcessing}
       />

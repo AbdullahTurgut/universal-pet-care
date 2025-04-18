@@ -4,19 +4,26 @@ import ReactDatePicker from "react-datepicker";
 import PetsTable from "../pet/PetsTable";
 import { formatAppointmentStatus, UserType } from "../utils/utilities";
 import useColorMapping from "../hooks/ColorMapping";
+import PatientActions from "../actions/PatientActions";
+import VeterinarianActions from "../actions/VeterinarianActions";
 
 const UserAppointments = ({ user, appointments }) => {
   const handlePetsUpdate = () => {};
   const colors = useColorMapping();
   // for VETs
 
-  // Approve appointment
+  // Approve appointment,
+  const handleApproveAppointment = () => {};
   // Decline appointment
+  const handleDeclineAppointment = () => {};
+
   // -------------------------------------
   // for PATIENT
 
   // Cancel appointment
+  const handleCancelAppointment = () => {};
   // update appointment
+  const handleUpdateAppointment = () => {};
 
   return (
     <Container className="p-5">
@@ -78,15 +85,24 @@ const UserAppointments = ({ user, appointments }) => {
                     />
                   </Col>
                 </Row>
-                <div>
-                  <Button variant="warning" size="sm">
-                    {" "}
-                    Update Appointment{" "}
-                  </Button>
-                  <Button variant="danger" size="sm" className="ms-2">
-                    Cancel Appointment
-                  </Button>
-                </div>
+                {user && user.userType === UserType.PATIENT && (
+                  <div>
+                    <PatientActions
+                      onCancel={handleCancelAppointment}
+                      onUpdate={handleUpdateAppointment}
+                      isDisabled={!isWaitingForApproval}
+                    />
+                  </div>
+                )}
+                {user && user.userType === UserType.VET && (
+                  <div>
+                    <VeterinarianActions
+                      onApprove={handleApproveAppointment}
+                      onDecline={handleDeclineAppointment}
+                      isDisabled={!isWaitingForApproval}
+                    />
+                  </div>
+                )}
               </Accordion.Body>
             </Accordion.Item>
           );
