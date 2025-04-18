@@ -8,6 +8,16 @@ import useColorMapping from "../hooks/ColorMapping";
 const UserAppointments = ({ user, appointments }) => {
   const handlePetsUpdate = () => {};
   const colors = useColorMapping();
+  // for VETs
+
+  // Approve appointment
+  // Decline appointment
+  // -------------------------------------
+  // for PATIENT
+
+  // Cancel appointment
+  // update appointment
+
   return (
     <Container className="p-5">
       <Accordion className="mt-4 mb-5">
