@@ -6,7 +6,13 @@ import { Button, Table } from "react-bootstrap";
 import EditablePetRow from "./EditablePetRow";
 import { BsPencilFill, BsTrashFill } from "react-icons/bs";
 
-const PetsTable = ({ pets, appointmentId, onPetsUpdate, isEditable }) => {
+const PetsTable = ({
+  pets,
+  appointmentId,
+  onPetsUpdate,
+  isEditable,
+  isPatient,
+}) => {
   const [editModeId, setEditModeId] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [petToDelete, setPetToDelete] = useState(null);
@@ -75,7 +81,7 @@ const PetsTable = ({ pets, appointmentId, onPetsUpdate, isEditable }) => {
         <AlertMessage type={"success"} message={successMessage} />
       )}
 
-      <Table>
+      <Table striped bordered hover size="sm">
         <thead>
           <tr>
             <th>Name</th>
@@ -83,7 +89,11 @@ const PetsTable = ({ pets, appointmentId, onPetsUpdate, isEditable }) => {
             <th>Breed</th>
             <th>Color</th>
             <th>Age</th>
-            <th colSpan={3}>Actions</th>
+            {isPatient && (
+              <th colSpan={3} className="text-center">
+                Actions
+              </th>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -105,26 +115,28 @@ const PetsTable = ({ pets, appointmentId, onPetsUpdate, isEditable }) => {
                   <td>{pet.color}</td>
                   <td>{pet.age}</td>
 
-                  <React.Fragment>
-                    <td>
-                      <Button
-                        className="btn btn-sm btn-warning"
-                        disabled={!isEditable}
-                        onClick={() => handleEditClick(pet.id)}
-                      >
-                        <BsPencilFill />
-                      </Button>
-                    </td>
-                    <td>
-                      <Button
-                        className="btn btn-sm btn-danger"
-                        disabled={!isEditable}
-                        onClick={() => handleShowDeleteModal(pet.id)}
-                      >
-                        <BsTrashFill />
-                      </Button>
-                    </td>
-                  </React.Fragment>
+                  {isPatient && (
+                    <React.Fragment>
+                      <td className="text-center">
+                        <Button
+                          className="btn btn-sm btn-warning"
+                          disabled={!isEditable}
+                          onClick={() => handleEditClick(pet.id)}
+                        >
+                          <BsPencilFill />
+                        </Button>
+                      </td>
+                      <td className="text-center">
+                        <Button
+                          className="btn btn-sm btn-danger"
+                          disabled={!isEditable}
+                          onClick={() => handleShowDeleteModal(pet.id)}
+                        >
+                          <BsTrashFill />
+                        </Button>
+                      </td>
+                    </React.Fragment>
+                  )}
                 </tr>
               )
             )}

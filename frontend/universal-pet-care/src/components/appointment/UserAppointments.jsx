@@ -1,17 +1,31 @@
 import React from "react";
 import { Accordion, Button, Col, Container, Row } from "react-bootstrap";
 import ReactDatePicker from "react-datepicker";
-const UserAppointments = ({ appointments }) => {
+import PetsTable from "../pet/PetsTable";
+import { formatAppointmentStatus, UserType } from "../utils/utilities";
+import useColorMapping from "../hooks/ColorMapping";
+
+const UserAppointments = ({ user, appointments }) => {
+  const handlePetsUpdate = () => {};
+  const colors = useColorMapping();
   return (
     <Container className="p-5">
       <Accordion className="mt-4 mb-5">
         {appointments.map((appointment, index) => {
+          const formattedStatus = formatAppointmentStatus(appointment.status);
+
+          const statusColor = colors[formattedStatus] || colors["default"];
+
+          const isWaitingForApproval =
+            formattedStatus === "waiting-for-approval";
           return (
             <Accordion.Item eventKey={index} key={index} className="mb-2">
               <Accordion.Header>
                 <div>
                   <div className="mb-3">Date: {appointment.date}</div>
-                  <div>Status: {appointment.status}</div>
+                  <div style={{ color: statusColor }}>
+                    Status: {formattedStatus}
+                  </div>
                 </div>
               </Accordion.Header>
               <Accordion.Body>
@@ -45,7 +59,13 @@ const UserAppointments = ({ appointments }) => {
                   <Col md={8} className="mt-2">
                     {" "}
                     <h4>Pets:</h4>
-                    The pet table is coming here
+                    <PetsTable
+                      pets={appointment.pets}
+                      appointmentId={appointment.id}
+                      onPetsUpdate={handlePetsUpdate}
+                      isPatient={user.userType === UserType.PATIENT}
+                      isEditable={isWaitingForApproval}
+                    />
                   </Col>
                 </Row>
                 <div>

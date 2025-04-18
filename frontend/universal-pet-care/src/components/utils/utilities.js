@@ -34,6 +34,11 @@ export const formatDateAndTime = (date, time) => {
   return { formattedDate, formattedTime };
 };
 
+/* enum constants converter */
+export const formatAppointmentStatus = (status) => {
+  return status.toLowerCase().replace(/_/g, "-");
+};
+
 export const UserType = {
   PATIENT: "PATIENT",
   VET: "VET",

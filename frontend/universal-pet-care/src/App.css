@@ -347,6 +347,7 @@ input[type="radio"] {
   --color-white: #ffffff;
   --color-primary: #87cefa;
   --user-dashboard-background: #f5f5f5e0;
+  --pet-entry-form-background: #f5f5f5;
   /* Default color */
 }
 

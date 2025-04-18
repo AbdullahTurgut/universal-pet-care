@@ -31,15 +31,15 @@ const AddItemModal = ({ show, handleClose, handleSave, itemLabel }) => {
             />
           </Form.Group>
         </Form>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleSaveItem}>
-            Add
-          </Button>
-          <Button variant="danger" onClick={handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
       </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleSaveItem}>
+          Add
+        </Button>
+        <Button variant="danger" onClick={handleClose}>
+          Close
+        </Button>
+      </Modal.Footer>
     </Modal>
   );
 };

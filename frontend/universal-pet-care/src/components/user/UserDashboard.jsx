@@ -24,7 +24,7 @@ const UserDashboard = () => {
   } = UseMessageAlerts();
 
   // const {userId} = useParams();
-  const userId = 2;
+  const userId = 8;
 
   useEffect(() => {
     const getUser = async () => {
@@ -90,7 +90,7 @@ const UserDashboard = () => {
               {user && (
                 <React.Fragment>
                   {appointments && appointments.length > 0 ? (
-                    <UserAppointments appointments={appointments} />
+                    <UserAppointments appointments={appointments} user={user} />
                   ) : (
                     <p>No data </p>
                   )}
