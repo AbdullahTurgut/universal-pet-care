@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Accordion, Button, Col, Container, Row } from "react-bootstrap";
 import ReactDatePicker from "react-datepicker";
 import PetsTable from "../pet/PetsTable";
@@ -6,10 +6,25 @@ import { formatAppointmentStatus, UserType } from "../utils/utilities";
 import useColorMapping from "../hooks/ColorMapping";
 import PatientActions from "../actions/PatientActions";
 import VeterinarianActions from "../actions/VeterinarianActions";
+import UseMessageAlerts from "../hooks/UseMessageAlerts";
+import { updateAppointment } from "./AppointmentService";
+import AlertMessage from "../common/AlertMessage";
 
-const UserAppointments = ({ user, appointments }) => {
+const UserAppointments = ({ user, appointments: initialAppointments }) => {
+  const [appointments, setAppointments] = useState(initialAppointments);
   const handlePetsUpdate = () => {};
   const colors = useColorMapping();
+
+  const {
+    successMessage,
+    setSuccessMessage,
+    showSuccessAlert,
+    setShowSuccessAlert,
+    errorMessage,
+    setErrorMessage,
+    showErrorAlert,
+    setShowErrorAlert,
+  } = UseMessageAlerts();
   // for VETs
 
   // Approve appointment,
@@ -23,10 +38,35 @@ const UserAppointments = ({ user, appointments }) => {
   // Cancel appointment
   const handleCancelAppointment = () => {};
   // update appointment
-  const handleUpdateAppointment = () => {};
+  const handleUpdateAppointment = async (updatedAppointment) => {
+    try {
+      const result = await updateAppointment(
+        updatedAppointment.id,
+        updatedAppointment
+      );
+      setAppointments(
+        appointments.map((appointment) =>
+          appointment.id === updatedAppointment.id
+            ? updatedAppointment
+            : appointment
+        )
+      );
+      console.log("the result from update : ", result);
+      setSuccessMessage(result.data.message);
+      setShowSuccessAlert(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <Container className="p-5">
+      {showSuccessAlert && (
+        <AlertMessage type={"success"} message={successMessage} />
+      )}
+      {showErrorAlert && (
+        <AlertMessage type={"danger"} message={errorMessage} />
+      )}
       <Accordion className="mt-4 mb-5">
         {appointments.map((appointment, index) => {
           const formattedStatus = formatAppointmentStatus(appointment.status);
@@ -91,6 +131,7 @@ const UserAppointments = ({ user, appointments }) => {
                       onCancel={handleCancelAppointment}
                       onUpdate={handleUpdateAppointment}
                       isDisabled={!isWaitingForApproval}
+                      appointment={appointment}
                     />
                   </div>
                 )}

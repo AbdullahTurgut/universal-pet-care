@@ -18,3 +18,16 @@ export async function bookAppointment(
 }
 
 /*   `/appointments/book-appointment/${senderId}/${recipientId}` */
+
+export const updateAppointment = async (appointmentId, appointmentData) => {
+  try {
+    const response = await api.put(
+      `/appointments/${appointmentId}/update`,
+      appointmentData
+    );
+    console.log("Two : ", response.data.message);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

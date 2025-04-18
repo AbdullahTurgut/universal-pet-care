@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Modal } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 
 const AppointmentUpdateModal = ({
@@ -14,24 +14,24 @@ const AppointmentUpdateModal = ({
   );
   const [reason, setReason] = useState(appointment.reason);
 
-  const handleUpdateSubmit = () => {
+  const handleSubmit = () => {
     const updateAppointment = {
       ...appointment,
       date: date.toISOString().split("T")[0],
       time: time.toTimeString().split(" ")[0].substring(0, 5),
       reason,
     };
-    handleUpdateSubmit(updateAppointment);
+    handleUpdate(updateAppointment);
   };
 
   return (
-    <Modal>
-      <Modal.Header>
+    <Modal show={show} onHide={handleClose}>
+      <Modal.Header closeButton>
         <Modal.Title>Update Appointment</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <Form.Group controlId="appointmentDate">
+          <Form.Group controlId="date">
             <Form.Label className="me-2">Date</Form.Label>
             <DatePicker
               selected={date}
@@ -40,8 +40,8 @@ const AppointmentUpdateModal = ({
               className="form-control"
             />
           </Form.Group>
-          <Form.Group>
-            <Form.Label>Time</Form.Label>
+          <Form.Group controlId="time" className="mt-4">
+            <Form.Label className="me-2">Time</Form.Label>
             <DatePicker
               selected={time}
               onChange={(time) => setTime(time)}
@@ -55,8 +55,26 @@ const AppointmentUpdateModal = ({
               required
             />
           </Form.Group>
+          <Form.Group controlId="reason" className="mt-2">
+            <Form.Label>Reason</Form.Label>
+            <Form.Control
+              as={"textarea"}
+              rows={3}
+              placeholder="Enter your reason"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+            />
+          </Form.Group>
         </Form>
       </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleClose}>
+          Close
+        </Button>
+        <Button variant="info" onClick={handleSubmit}>
+          Save Update
+        </Button>
+      </Modal.Footer>
     </Modal>
   );
 };
