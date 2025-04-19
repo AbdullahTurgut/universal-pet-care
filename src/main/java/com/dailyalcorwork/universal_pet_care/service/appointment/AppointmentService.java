@@ -123,7 +123,7 @@ public class AppointmentService implements IAppointmentService {
                 }).orElseThrow(() -> new IllegalStateException(FeedBackMessage.APPOINTMENT_CANNOT_BE_CANCELLED));
     }
 
-    // THE APPROVE OF THE APPOINTMENT
+    // THE APPROVE OF THE APPOINTMENTA
     @Override
     public Appointment approveAppointment(Long appointmentId) {
         return appointmentRepository.findById(appointmentId)

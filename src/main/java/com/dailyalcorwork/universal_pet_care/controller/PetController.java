@@ -24,6 +24,7 @@ public class PetController {
 
     private final IPetService petService;
 
+
     @GetMapping(UrlMapping.SAVE_PETS_FOR_APPOINTMENT)
     public ResponseEntity<ApiResponse> savePets(@RequestBody List<Pet> pets) {
         try {

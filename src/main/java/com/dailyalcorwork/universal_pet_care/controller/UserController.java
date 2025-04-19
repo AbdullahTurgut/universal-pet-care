@@ -119,7 +119,21 @@ public class UserController {
     }
 
 
+    // count of users and vets and patients
+    @GetMapping(UrlMapping.COUNT_ALL_VETS)
+    public long countVeterinarians() {
+        return userService.countVeterinarians();
+    }
 
+    @GetMapping(UrlMapping.COUNT_ALL_PATIENTS)
+    public long countPatients() {
+        return userService.countPatients();
+    }
+
+    @GetMapping(UrlMapping.COUNT_ALL_USERS)
+    public long countUsers() {
+        return userService.countAllUsers();
+    }
 
    /* @PostMapping("/add")
     public User addUser(@RequestBody RegistrationRequest request) {

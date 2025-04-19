@@ -9,6 +9,11 @@ public class UrlMapping {
     public static final String DELETE_USER_BY_ID = "/delete/{userId}";
     public static final String GET_ALL_USERS = "/all-users";
 
+
+    public static final String COUNT_ALL_VETS = "/count/veterinarians";
+    public static final String COUNT_ALL_PATIENTS = "/count/patients";
+    public static final String COUNT_ALL_USERS = "/count/users";
+    
     /*======================= START APPOINTMENT API =================================*/
 
     public static final String APPOINTMENT = API + "/appointments";
@@ -67,6 +72,7 @@ public class UrlMapping {
 
     /*===================== START CHANGE USER PASSWORD API ================================= */
     public static final String CHANGE_PASSWORD = "/user/{userId}/change-password";
+
 
     /*====================== END CHANGE USER PASSWORD API ==========================================*/
 

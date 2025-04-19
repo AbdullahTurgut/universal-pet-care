@@ -21,4 +21,10 @@ public interface IUserService {
     List<UserDto> getAllUsers();
 
     UserDto getUserWithDetails(Long userId) throws SQLException;
+
+    long countVeterinarians();
+
+    long countPatients();
+
+    long countAllUsers();
 }

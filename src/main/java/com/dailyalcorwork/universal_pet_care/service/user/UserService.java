@@ -182,4 +182,22 @@ public class UserService implements IUserService {
             reviewDto.setVeterinarianImage(null);
         }
     }
+
+
+    // count of veterinarians,patients
+
+    @Override
+    public long countVeterinarians() {
+        return userRepository.countByUserType("VET");
+    }
+
+    @Override
+    public long countPatients() {
+        return userRepository.countByUserType("PATIENT");
+    }
+
+    @Override
+    public long countAllUsers() {
+        return userRepository.count();
+    }
 }
