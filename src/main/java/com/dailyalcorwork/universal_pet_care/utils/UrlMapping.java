@@ -19,7 +19,8 @@ public class UrlMapping {
     public static final String UPDATE_APPOINTMENT = "/{id}/update";
     public static final String DELETE_APPOINTMENT_BY_ID = "/{id}/delete";
     public static final String CANCEL_APPOINTMENT = "/{appointmentId}/cancel";
-
+    public static final String APPROVE_APPOINTMENT = "/{appointmentId}/approve";
+    public static final String DECLINE_APPOINTMENT = "/{appointmentId}/decline";
     /*======================= END APPOINTMENT API =================================*/
 
 
@@ -66,6 +67,7 @@ public class UrlMapping {
 
     /*===================== START CHANGE USER PASSWORD API ================================= */
     public static final String CHANGE_PASSWORD = "/user/{userId}/change-password";
+
     /*====================== END CHANGE USER PASSWORD API ==========================================*/
 
 

@@ -19,6 +19,7 @@ public class FeedBackMessage {
     public static final String NO_VETERINARIANS_AVAILABLE = "Sorry, there is no veterinarian for this search.";
 
     public static final String APPOINTMENT_CANNOT_BE_CANCELLED = "Error cancelling appointment";
+    public static final String APPOINTMENT_ALREADY_APPROVED = "Already approved";
 }
 
 

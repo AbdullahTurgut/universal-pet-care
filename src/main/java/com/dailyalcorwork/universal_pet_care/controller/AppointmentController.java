@@ -115,4 +115,25 @@ public class AppointmentController {
             return ResponseEntity.status(NOT_ACCEPTABLE).body(new ApiResponse(e.getMessage(), null));
         }
     }
+
+    // ----------- CANCEL APPOINTMENT -------------------
+    @PutMapping(UrlMapping.APPROVE_APPOINTMENT)
+    public ResponseEntity<ApiResponse> approveAppointment(@PathVariable Long appointmentId) {
+        try {
+            Appointment appointment = appointmentService.approveAppointment(appointmentId);
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.UPDATE_SUCCESS, appointment));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(NOT_ACCEPTABLE).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    @PutMapping(UrlMapping.DECLINE_APPOINTMENT)
+    public ResponseEntity<ApiResponse> declineAppointment(@PathVariable Long appointmentId) {
+        try {
+            Appointment appointment = appointmentService.declineAppointment(appointmentId);
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.UPDATE_SUCCESS, appointment));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
 }
