@@ -7,7 +7,12 @@ import useColorMapping from "../hooks/ColorMapping";
 import PatientActions from "../actions/PatientActions";
 import VeterinarianActions from "../actions/VeterinarianActions";
 import UseMessageAlerts from "../hooks/UseMessageAlerts";
-import { cancelAppointment, updateAppointment } from "./AppointmentService";
+import {
+  cancelAppointment,
+  updateAppointment,
+  declineAppointment,
+  approveAppointment,
+} from "./AppointmentService";
 import AlertMessage from "../common/AlertMessage";
 
 const UserAppointments = ({ user, appointments: initialAppointments }) => {
@@ -28,9 +33,27 @@ const UserAppointments = ({ user, appointments: initialAppointments }) => {
   // for VETs
 
   // Approve appointment,
-  const handleApproveAppointment = () => {};
+  const handleApproveAppointment = async (appointmentId) => {
+    try {
+      const response = await approveAppointment(appointmentId);
+      setSuccessMessage(response.message);
+      setShowSuccessAlert(true);
+    } catch (error) {
+      setErrorMessage(error.response.message);
+      setShowErrorAlert(true);
+    }
+  };
   // Decline appointment
-  const handleDeclineAppointment = () => {};
+  const handleDeclineAppointment = async (appointmentId) => {
+    try {
+      const response = await declineAppointment(appointmentId);
+      setSuccessMessage(response.message);
+      setShowSuccessAlert(true);
+    } catch (error) {
+      setErrorMessage(error.response.message);
+      setShowErrorAlert(true);
+    }
+  };
 
   // -------------------------------------
   // for PATIENT
@@ -151,6 +174,7 @@ const UserAppointments = ({ user, appointments: initialAppointments }) => {
                       onApprove={handleApproveAppointment}
                       onDecline={handleDeclineAppointment}
                       isDisabled={!isWaitingForApproval}
+                      appointment={appointment}
                     />
                   </div>
                 )}

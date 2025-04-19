@@ -40,3 +40,21 @@ export const cancelAppointment = async (appointmentId) => {
     throw error;
   }
 };
+
+export const approveAppointment = async (appointmentId) => {
+  try {
+    const response = await api.put(`/appointments/${appointmentId}/approve`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const declineAppointment = async (appointmentId) => {
+  try {
+    const response = await api.put(`/appointments/${appointmentId}/decline`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

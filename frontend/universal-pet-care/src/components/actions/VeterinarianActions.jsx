@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 import ActionButtons from "./ActionButtons";
 
-const VeterinarianActions = ({ onApprove, onDecline, isDisabled }) => {
+const VeterinarianActions = ({
+  onApprove,
+  onDecline,
+  isDisabled,
+  appointment,
+}) => {
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleActionClick = (actionType) => {
     setIsProcessing(true);
     if (actionType === "Approve") {
-      onApprove()
+      onApprove(appointment.id)
         .then(() => {
           setIsProcessing(false);
         })
@@ -15,7 +20,7 @@ const VeterinarianActions = ({ onApprove, onDecline, isDisabled }) => {
           setIsProcessing(false);
         });
     } else {
-      onDecline()
+      onDecline(appointment.id)
         .then(() => {
           setIsProcessing(false);
         })
