@@ -11,7 +11,10 @@ import UserAppointments from "../appointment/UserAppointments";
 const UserDashboard = () => {
   const [user, setUser] = useState({});
   const [appointments, setAppointments] = useState([]);
-
+  const [activeKey, setActiveKey] = useState(() => {
+    const storedActiveKey = localStorage.getItem("active");
+    return storedActiveKey ? storedActiveKey : "profile";
+  });
   const {
     successMessage,
     setSuccessMessage,
@@ -64,6 +67,11 @@ const UserDashboard = () => {
     }
   };
 
+  const handleTabSelect = (key) => {
+    setActiveKey(key);
+    localStorage.setItem("activeKey", key);
+  };
+
   return (
     <Container className="mt-2 user-dashboard">
       {showErrorAlert && (
@@ -73,7 +81,12 @@ const UserDashboard = () => {
         <AlertMessage type={"success"} message={successMessage} />
       )}
 
-      <Tabs className="mb-2" justify>
+      <Tabs
+        className="mb-2"
+        justify
+        activeKey={activeKey}
+        onSelect={handleTabSelect}
+      >
         <Tab eventKey="profile" title={<h3>Profile</h3>}>
           {user && (
             <UserProfile

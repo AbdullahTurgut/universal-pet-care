@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { Accordion, Button, Col, Container, Row } from "react-bootstrap";
 import ReactDatePicker from "react-datepicker";
 import PetsTable from "../pet/PetsTable";
@@ -14,9 +14,14 @@ import {
   approveAppointment,
 } from "./AppointmentService";
 import AlertMessage from "../common/AlertMessage";
+import { UserInformation } from "../common/UserInformation";
+import { Link, useParams } from "react-router-dom";
+import AppointmentFilter from "./AppointmentFilter";
 
 const UserAppointments = ({ user, appointments: initialAppointments }) => {
   const [appointments, setAppointments] = useState(initialAppointments);
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [filteredAppointments, setFilteredAppointments] = useState([]);
   const handlePetsUpdate = () => {};
   const colors = useColorMapping();
 
@@ -30,6 +35,8 @@ const UserAppointments = ({ user, appointments: initialAppointments }) => {
     showErrorAlert,
     setShowErrorAlert,
   } = UseMessageAlerts();
+
+  const { recipientId } = useParams();
   // for VETs
 
   // Approve appointment,
@@ -92,6 +99,28 @@ const UserAppointments = ({ user, appointments: initialAppointments }) => {
     }
   };
 
+  const onSelectStatus = (status) => {
+    setSelectedStatus(status);
+  };
+
+  const handleClearFilter = () => {
+    setSelectedStatus("all");
+  };
+
+  const statues = Array.from(
+    new Set(appointments.map((appointment) => appointment.status))
+  );
+
+  useEffect(() => {
+    let filter = appointments;
+    if (selectedStatus && selectedStatus !== "all") {
+      filter = appointments.filter(
+        (appointment) => appointment.status === selectedStatus
+      );
+    }
+    setFilteredAppointments(filter);
+  }, [selectedStatus, appointments]);
+
   return (
     <Container className="p-5">
       {showSuccessAlert && (
@@ -100,14 +129,21 @@ const UserAppointments = ({ user, appointments: initialAppointments }) => {
       {showErrorAlert && (
         <AlertMessage type={"danger"} message={errorMessage} />
       )}
+
+      <AppointmentFilter
+        onClearFilters={handleClearFilter}
+        statuses={statues}
+        onSelectStatus={onSelectStatus}
+      />
       <Accordion className="mt-4 mb-5">
-        {appointments.map((appointment, index) => {
+        {filteredAppointments.map((appointment, index) => {
           const formattedStatus = formatAppointmentStatus(appointment.status);
 
           const statusColor = colors[formattedStatus] || colors["default"];
 
           const isWaitingForApproval =
             formattedStatus === "waiting-for-approval";
+          const isApproved = formattedStatus === "approved";
           return (
             <Accordion.Item eventKey={index} key={index} className="mb-2">
               <Accordion.Header>
@@ -147,7 +183,6 @@ const UserAppointments = ({ user, appointments: initialAppointments }) => {
                     <p>Reason: {appointment.reason}</p>
                   </Col>
                   <Col md={8} className="mt-2">
-                    {" "}
                     <h4>Pets:</h4>
                     <PetsTable
                       pets={appointment.pets}
@@ -157,7 +192,20 @@ const UserAppointments = ({ user, appointments: initialAppointments }) => {
                       isEditable={isWaitingForApproval}
                     />
                   </Col>
+                  {isApproved && (
+                    <UserInformation
+                      userType={user.userType}
+                      appointment={appointment}
+                    />
+                  )}
                 </Row>
+
+                {user.userType === UserType.PATIENT && (
+                  <Link to={`/book-appointment/${recipientId}/new-appointment`}>
+                    Book New Appointment
+                  </Link>
+                )}
+
                 {user && user.userType === UserType.PATIENT && (
                   <div>
                     <PatientActions
