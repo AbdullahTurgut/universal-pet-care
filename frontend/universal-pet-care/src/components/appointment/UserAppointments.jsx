@@ -12,19 +12,50 @@ import {
   updateAppointment,
   declineAppointment,
   approveAppointment,
+  getAppointmentById,
 } from "./AppointmentService";
 import AlertMessage from "../common/AlertMessage";
 import { UserInformation } from "../common/UserInformation";
 import { Link, useParams } from "react-router-dom";
 import AppointmentFilter from "./AppointmentFilter";
+import Paginator from "../common/Paginator";
 
 const UserAppointments = ({ user, appointments: initialAppointments }) => {
   const [appointments, setAppointments] = useState(initialAppointments);
   const [selectedStatus, setSelectedStatus] = useState("");
   const [filteredAppointments, setFilteredAppointments] = useState([]);
-  const handlePetsUpdate = () => {};
-  const colors = useColorMapping();
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [appointmentsPerPage] = useState(4);
+
+  const fetchAppointment = async (appointmentId) => {
+    try {
+      const response = await getAppointmentById(appointmentId);
+      const updatedAppointment = response.data;
+      setAppointments(
+        appointments.map((appointment) =>
+          appointment.id === updatedAppointment.id
+            ? updatedAppointment
+            : appointment
+        )
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAppointment();
+  }, []);
+
+  const handlePetsUpdate = async (updatedAppointmentId) => {
+    try {
+      await fetchAppointment(updatedAppointmentId);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const colors = useColorMapping();
   const {
     successMessage,
     setSuccessMessage,
@@ -121,6 +152,14 @@ const UserAppointments = ({ user, appointments: initialAppointments }) => {
     setFilteredAppointments(filter);
   }, [selectedStatus, appointments]);
 
+  const indexOfLastVet = currentPage * appointmentsPerPage;
+  const indexOfFirstVet = indexOfLastVet - appointmentsPerPage;
+
+  const currentAppointments = filteredAppointments.slice(
+    indexOfFirstVet,
+    indexOfLastVet
+  );
+
   return (
     <Container className="p-5">
       {showSuccessAlert && (
@@ -136,7 +175,7 @@ const UserAppointments = ({ user, appointments: initialAppointments }) => {
         onSelectStatus={onSelectStatus}
       />
       <Accordion className="mt-4 mb-5">
-        {filteredAppointments.map((appointment, index) => {
+        {currentAppointments.map((appointment, index) => {
           const formattedStatus = formatAppointmentStatus(appointment.status);
 
           const statusColor = colors[formattedStatus] || colors["default"];
@@ -231,6 +270,12 @@ const UserAppointments = ({ user, appointments: initialAppointments }) => {
           );
         })}
       </Accordion>
+      <Paginator
+        itemsPerPage={appointmentsPerPage}
+        totalItems={filteredAppointments.length}
+        paginate={setCurrentPage}
+        currentPage={currentPage}
+      />
     </Container>
   );
 };

@@ -58,3 +58,12 @@ export const declineAppointment = async (appointmentId) => {
     throw error;
   }
 };
+
+export const getAppointmentById = async (appointmentId) => {
+  try {
+    const result = await api.get(`/appointments/${appointmentId}/appointment`);
+    return result.data;
+  } catch (error) {
+    throw error;
+  }
+};

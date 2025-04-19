@@ -5,6 +5,7 @@ import AlertMessage from "../common/AlertMessage";
 import { Button, Table } from "react-bootstrap";
 import EditablePetRow from "./EditablePetRow";
 import { BsPencilFill, BsTrashFill } from "react-icons/bs";
+import { updatePet, deletePet } from "./PetService";
 
 const PetsTable = ({
   pets,
@@ -44,10 +45,10 @@ const PetsTable = ({
     if (petToDelete) {
       try {
         const response = await deletePet(petToDelete);
+        onPetsUpdate(appointmentId);
         setSuccessMessage(response.message);
         setShowDeleteModal(false);
         setShowSuccessAlert(true);
-        onPetsUpdate(appointmentId);
       } catch (error) {
         setErrorMessage(error.message);
         setShowErrorAlert(true);
@@ -58,6 +59,7 @@ const PetsTable = ({
   const handleSavePetUpdate = async (petId, updatedPet) => {
     try {
       const response = await updatePet(petId, updatedPet);
+      onPetsUpdate(appointmentId);
       setSuccessMessage(response.message);
       setEditModeId(null);
       setShowSuccessAlert(true);
@@ -72,7 +74,7 @@ const PetsTable = ({
         show={showDeleteModal}
         onHide={() => setShowDeleteModal(false)}
         onConfirm={handleDeletePet}
-        itemToDelete={"pet"}
+        itemToDelete="pet"
       />
       {showErrorAlert && (
         <AlertMessage type={"danger"} message={errorMessage} />
