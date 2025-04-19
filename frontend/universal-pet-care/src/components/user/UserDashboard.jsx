@@ -7,10 +7,13 @@ import { deleteUser, getUserById } from "./UserService";
 import AlertMessage from "../common/AlertMessage";
 import Review from "../review/Review";
 import UserAppointments from "../appointment/UserAppointments";
+import { CustomPieChart } from "../charts/CustomPieChart";
+import { formatAppointmentStatus } from "../utils/utilities";
 
 const UserDashboard = () => {
   const [user, setUser] = useState({});
   const [appointments, setAppointments] = useState([]);
+  const [appointmentData, setAppointmentData] = useState([]);
   const [activeKey, setActiveKey] = useState(() => {
     const storedActiveKey = localStorage.getItem("active");
     return storedActiveKey ? storedActiveKey : "profile";
@@ -42,6 +45,28 @@ const UserDashboard = () => {
     };
     getUser();
   }, [userId]);
+
+  useEffect(() => {
+    if (user && user.appointments) {
+      const statusCounts = user.appointments.reduce((acc, appointment) => {
+        const formattedStatus = formatAppointmentStatus(appointment.status);
+        if (!acc[formattedStatus]) {
+          acc[formattedStatus] = {
+            name: formattedStatus,
+            value: 1,
+          };
+        } else {
+          acc[formattedStatus].value += 1;
+        }
+        return acc;
+      }, {});
+
+      const transformedData = Object.values(statusCounts);
+      setAppointmentData(transformedData);
+      setAppointments(user.appointments);
+      console.log("Here is the transform data: ", transformedData);
+    }
+  }, [user]);
 
   const handleRemovePhoto = async () => {
     try {
@@ -96,7 +121,13 @@ const UserDashboard = () => {
             />
           )}
         </Tab>
-        <Tab eventKey="status" title={<h3>Appointments</h3>}></Tab>
+        <Tab eventKey="status" title={<h3>Appointments Overview</h3>}>
+          <Row>
+            <Col>
+              <CustomPieChart data={appointmentData} />
+            </Col>
+          </Row>
+        </Tab>
         <Tab eventKey="appointments" title={<h3>Appointment Details</h3>}>
           <Row>
             <Col>
