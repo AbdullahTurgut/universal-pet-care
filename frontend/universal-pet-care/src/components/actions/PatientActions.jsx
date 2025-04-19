@@ -13,7 +13,7 @@ const PatientActions = ({ onCancel, onUpdate, isDisabled, appointment }) => {
         setShowUpdateModal(true);
         setIsProcessing(false);
       } else {
-        onCancel();
+        onCancel(appointment.id);
         setIsProcessing(false);
       }
     } catch (error) {
@@ -51,7 +51,7 @@ const PatientActions = ({ onCancel, onUpdate, isDisabled, appointment }) => {
         <ActionButtons
           title={"Cancel Appointment"}
           variant={"danger"}
-          onClick={() => handleActionClick("Cancel")}
+          onClick={() => onCancel(appointment.id)}
           disabled={isDisabled}
           isProcessing={isProcessing}
         />

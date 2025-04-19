@@ -7,7 +7,7 @@ import useColorMapping from "../hooks/ColorMapping";
 import PatientActions from "../actions/PatientActions";
 import VeterinarianActions from "../actions/VeterinarianActions";
 import UseMessageAlerts from "../hooks/UseMessageAlerts";
-import { updateAppointment } from "./AppointmentService";
+import { cancelAppointment, updateAppointment } from "./AppointmentService";
 import AlertMessage from "../common/AlertMessage";
 
 const UserAppointments = ({ user, appointments: initialAppointments }) => {
@@ -36,7 +36,17 @@ const UserAppointments = ({ user, appointments: initialAppointments }) => {
   // for PATIENT
 
   // Cancel appointment
-  const handleCancelAppointment = () => {};
+  const handleCancelAppointment = async (id) => {
+    try {
+      const response = await cancelAppointment(id);
+      console.log("the cancel response from : ", response);
+      setSuccessMessage(response.message);
+      setShowSuccessAlert(true);
+    } catch (error) {
+      setErrorMessage(error.response.message);
+      setShowErrorAlert(true);
+    }
+  };
   // update appointment
   const handleUpdateAppointment = async (updatedAppointment) => {
     try {

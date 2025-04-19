@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { getUserById } from "../user/UserService";
 import { Form, InputGroup, Modal, Button } from "react-bootstrap";
 import AlertMessage from "../common/AlertMessage";
 import { updateUserPhoto, uploadUserPhoto } from "./ImageUploaderService";
 import UseMessageAlerts from "../hooks/UseMessageAlerts";
+import { getUserById } from "../user/UserService";
 
 const ImageUploaderModal = ({ userId, show, handleClose }) => {
   // 1. get the user

@@ -31,3 +31,12 @@ export const updateAppointment = async (appointmentId, appointmentData) => {
     throw error;
   }
 };
+
+export const cancelAppointment = async (appointmentId) => {
+  try {
+    const response = await api.put(`/appointments/${appointmentId}/cancel`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
