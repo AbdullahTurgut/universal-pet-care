@@ -9,6 +9,7 @@ import Review from "../review/Review";
 import UserAppointments from "../appointment/UserAppointments";
 import { CustomPieChart } from "../charts/CustomPieChart";
 import { formatAppointmentStatus } from "../utils/utilities";
+import { NoDataAvailable } from "../common/NoDataAvailable";
 
 const UserDashboard = () => {
   const [user, setUser] = useState({});
@@ -124,7 +125,11 @@ const UserDashboard = () => {
         <Tab eventKey="status" title={<h3>Appointments Overview</h3>}>
           <Row>
             <Col>
-              <CustomPieChart data={appointmentData} />
+              {appointmentData && appointmentData.length > 0 ? (
+                <CustomPieChart data={appointmentData} />
+              ) : (
+                <NoDataAvailable dataType={"appointment data"} />
+              )}
             </Col>
           </Row>
         </Tab>
@@ -136,7 +141,7 @@ const UserDashboard = () => {
                   {appointments && appointments.length > 0 ? (
                     <UserAppointments appointments={appointments} user={user} />
                   ) : (
-                    <p>No data </p>
+                    <NoDataAvailable dataType={"appointment data"} />
                   )}
                 </React.Fragment>
               )}
@@ -154,7 +159,7 @@ const UserDashboard = () => {
                       <Review key={index} review={review} />
                     ))
                   ) : (
-                    <p>No reviews found at this time.</p>
+                    <NoDataAvailable dataType={"review data"} />
                   )}
                 </Col>
               </Row>

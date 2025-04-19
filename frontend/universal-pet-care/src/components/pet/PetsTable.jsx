@@ -4,7 +4,7 @@ import DeleteConfirmationModal from "../modals/DeleteConfirmationModal";
 import AlertMessage from "../common/AlertMessage";
 import { Button, Table } from "react-bootstrap";
 import EditablePetRow from "./EditablePetRow";
-import { BsPencilFill, BsTrashFill } from "react-icons/bs";
+import { BsPencilFill, BsPlusCircleFill, BsTrashFill } from "react-icons/bs";
 import { updatePet, deletePet } from "./PetService";
 
 const PetsTable = ({

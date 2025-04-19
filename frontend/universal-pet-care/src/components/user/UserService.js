@@ -61,3 +61,30 @@ export async function deleteUser(userId) {
     throw error;
   }
 }
+
+// count vets-patients-users
+export async function countVeterinarians() {
+  try {
+    const response = await api.get("/users/count/veterinarians");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+export async function countPatients() {
+  try {
+    const response = await api.get("/users/count/patients");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function countAllUsers() {
+  try {
+    const response = await api.get("/users/count/users");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
