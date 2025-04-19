@@ -103,4 +103,16 @@ public class AppointmentController {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
     }
+
+
+    // ----------- CANCEL APPOINTMENT -------------------
+    @PutMapping(UrlMapping.CANCEL_APPOINTMENT)
+    public ResponseEntity<ApiResponse> cancelAppointment(@PathVariable Long appointmentId) {
+        try {
+            Appointment appointment = appointmentService.cancelAppointment(appointmentId);
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.UPDATE_SUCCESS, appointment));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(NOT_ACCEPTABLE).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
 }

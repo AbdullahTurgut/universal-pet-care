@@ -111,4 +111,15 @@ public class AppointmentService implements IAppointmentService {
 //                .map((element) -> modelMapper.map(element, AppointmentDto.class))
 //                .toList();
     }
+
+    // THE CANCELLING OF THE APPOINTMENT
+    @Override
+    public Appointment cancelAppointment(Long appointmentId) {
+        return appointmentRepository.findById(appointmentId)
+                .filter(appointment -> appointment.getStatus().equals(AppointmentStatus.WAITING_FOR_APPROVAL))
+                .map(appointment -> {
+                    appointment.setStatus(AppointmentStatus.CANCELLED);
+                    return appointmentRepository.saveAndFlush(appointment);
+                }).orElseThrow(() -> new IllegalStateException(FeedBackMessage.APPOINTMENT_CANNOT_BE_CANCELLED));
+    }
 }

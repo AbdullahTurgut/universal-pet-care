@@ -22,4 +22,7 @@ public interface IAppointmentService {
     Appointment getAppointmentByNo(String appointmentNo);
 
     List<AppointmentDto> getUserAppointments(Long userId);
+
+    // THE CANCELLING OF THE APPOINTMENT
+    Appointment cancelAppointment(Long appointmentId);
 }

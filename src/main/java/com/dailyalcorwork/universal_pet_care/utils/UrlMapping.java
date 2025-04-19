@@ -18,6 +18,7 @@ public class UrlMapping {
     public static final String GET_ALL_APPOINTMENTS = "/all";
     public static final String UPDATE_APPOINTMENT = "/{id}/update";
     public static final String DELETE_APPOINTMENT_BY_ID = "/{id}/delete";
+    public static final String CANCEL_APPOINTMENT = "/{appointmentId}/cancel";
 
     /*======================= END APPOINTMENT API =================================*/
 
