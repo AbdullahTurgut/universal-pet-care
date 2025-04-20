@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -140,5 +141,17 @@ public class AppointmentController {
     @GetMapping(UrlMapping.COUNT_APPOINTMENTS)
     public long countAppointments() {
         return appointmentService.countAppointments();
+    }
+
+    // start controller method for getAppointmentsSummary
+
+    @GetMapping("/summary/appointments-summary")
+    public ResponseEntity<ApiResponse> getAppointmentsSummary() {
+        try {
+            List<Map<String, Object>> summary = appointmentService.getAppointmentsSummary();
+            return ResponseEntity.ok(new ApiResponse("Appointment summary retrieved successfully", summary));
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Error retrieving appointment summary: " + e.getMessage(), null));
+        }
     }
 }

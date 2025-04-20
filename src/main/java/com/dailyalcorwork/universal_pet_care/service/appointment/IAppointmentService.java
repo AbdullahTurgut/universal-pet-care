@@ -6,6 +6,7 @@ import com.dailyalcorwork.universal_pet_care.request.AppointmentUpdateRequest;
 import com.dailyalcorwork.universal_pet_care.request.BookAppointmentRequest;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IAppointmentService {
 
@@ -32,4 +33,7 @@ public interface IAppointmentService {
     Appointment declineAppointment(Long appointmentId);
 
     long countAppointments();
+
+    // start of getAppointmentsSummary function to frontend
+    List<Map<String, Object>> getAppointmentsSummary();
 }
