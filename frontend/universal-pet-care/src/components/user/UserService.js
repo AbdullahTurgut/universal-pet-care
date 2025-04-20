@@ -88,3 +88,12 @@ export async function countAllUsers() {
     throw error;
   }
 }
+
+export async function getAggregatedUsers() {
+  try {
+    const response = await api.get("/users/aggregated-users");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}

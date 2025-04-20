@@ -7,6 +7,7 @@ import {
 import { CardComponent } from "../cards/CardComponent";
 import { BsPeopleFill } from "react-icons/bs";
 import { countAppointments } from "../appointment/AppointmentService";
+import { RegistrationChart } from "../charts/RegistrationChart";
 
 export const AdminOverview = () => {
   const [userCount, setUserCount] = useState(0);
@@ -55,6 +56,10 @@ export const AdminOverview = () => {
           count={patientCount}
           IconComponent={BsPeopleFill}
         />
+      </div>
+
+      <div className="charts">
+        <RegistrationChart />
       </div>
     </main>
   );
