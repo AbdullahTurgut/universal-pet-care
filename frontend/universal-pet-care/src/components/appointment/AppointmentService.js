@@ -67,3 +67,12 @@ export const getAppointmentById = async (appointmentId) => {
     throw error;
   }
 };
+
+export async function countAppointments() {
+  try {
+    const result = await api.get("/appointments/count/appointment");
+    return result.data;
+  } catch (error) {
+    throw error;
+  }
+}

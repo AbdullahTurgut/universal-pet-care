@@ -37,11 +37,11 @@ const NavBar = () => {
                 My Dashboard
               </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item to={"/user-dashboard"} as={Link}>
+              <NavDropdown.Item to={"/admin-dashboard"} as={Link}>
                 Admin Dashboard
               </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item to={"/user-dashboard"} as={Link}>
+              <NavDropdown.Item to={"/admin-dashboard"} as={Link}>
                 Logout
               </NavDropdown.Item>
             </NavDropdown>
