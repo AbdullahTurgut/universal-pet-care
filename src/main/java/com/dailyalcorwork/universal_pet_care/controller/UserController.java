@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -134,6 +135,20 @@ public class UserController {
     public long countUsers() {
         return userService.countAllUsers();
     }
+
+    // Aggregate User by month
+    @GetMapping(UrlMapping.AGGREGATE_USERS)
+    public ResponseEntity<ApiResponse> aggregateUsersByMonthAndType() {
+        try {
+            Map<String, Map<String, Long>> aggregateUsers = userService.aggregateUsersByMonthAndType();
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.RESOURCE_FOUND, aggregateUsers));
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+
+
 
    /* @PostMapping("/add")
     public User addUser(@RequestBody RegistrationRequest request) {

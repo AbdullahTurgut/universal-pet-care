@@ -30,4 +30,6 @@ public interface IAppointmentService {
     Appointment approveAppointment(Long appointmentId);
 
     Appointment declineAppointment(Long appointmentId);
+
+    long countAppointments();
 }

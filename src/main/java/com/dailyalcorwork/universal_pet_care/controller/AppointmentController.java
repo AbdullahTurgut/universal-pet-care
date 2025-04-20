@@ -136,4 +136,9 @@ public class AppointmentController {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
+
+    @GetMapping(UrlMapping.COUNT_APPOINTMENTS)
+    public long countAppointments() {
+        return appointmentService.countAppointments();
+    }
 }

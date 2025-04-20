@@ -23,8 +23,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.time.Month;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -199,5 +203,14 @@ public class UserService implements IUserService {
     @Override
     public long countAllUsers() {
         return userRepository.count();
+    }
+
+    // for mapping the users by month
+    @Override
+    public Map<String, Map<String, Long>> aggregateUsersByMonthAndType() {
+        List<User> users = userRepository.findAll();
+        return users.stream().collect(Collectors.groupingBy(user -> Month.of(user.getCreatedAt().getMonthValue())
+                        .getDisplayName(TextStyle.FULL, Locale.ENGLISH),
+                Collectors.groupingBy(User::getUserType, Collectors.counting())));
     }
 }

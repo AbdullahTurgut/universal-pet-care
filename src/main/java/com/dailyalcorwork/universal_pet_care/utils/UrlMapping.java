@@ -13,7 +13,8 @@ public class UrlMapping {
     public static final String COUNT_ALL_VETS = "/count/veterinarians";
     public static final String COUNT_ALL_PATIENTS = "/count/patients";
     public static final String COUNT_ALL_USERS = "/count/users";
-    
+    public static final String AGGREGATE_USERS = "/aggregated-users";
+
     /*======================= START APPOINTMENT API =================================*/
 
     public static final String APPOINTMENT = API + "/appointments";
@@ -26,6 +27,7 @@ public class UrlMapping {
     public static final String CANCEL_APPOINTMENT = "/{appointmentId}/cancel";
     public static final String APPROVE_APPOINTMENT = "/{appointmentId}/approve";
     public static final String DECLINE_APPOINTMENT = "/{appointmentId}/decline";
+    public static final String COUNT_APPOINTMENTS = "/count/appointment";
     /*======================= END APPOINTMENT API =================================*/
 
 
@@ -72,6 +74,7 @@ public class UrlMapping {
 
     /*===================== START CHANGE USER PASSWORD API ================================= */
     public static final String CHANGE_PASSWORD = "/user/{userId}/change-password";
+
 
 
     /*====================== END CHANGE USER PASSWORD API ==========================================*/

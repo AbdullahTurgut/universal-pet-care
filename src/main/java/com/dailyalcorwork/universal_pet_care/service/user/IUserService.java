@@ -7,6 +7,7 @@ import com.dailyalcorwork.universal_pet_care.request.UserUpdateRequest;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 public interface IUserService {
 
@@ -27,4 +28,7 @@ public interface IUserService {
     long countPatients();
 
     long countAllUsers();
+
+    // for mapping the users by month
+    Map<String, Map<String, Long>> aggregateUsersByMonthAndType();
 }

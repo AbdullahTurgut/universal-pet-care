@@ -143,4 +143,9 @@ public class AppointmentService implements IAppointmentService {
                     return appointmentRepository.saveAndFlush(appointment);
                 }).orElseThrow(() -> new ResourceNotFoundException(FeedBackMessage.RESOURCE_NOT_FOUND));
     }
+
+    @Override
+    public long countAppointments() {
+        return appointmentRepository.count();
+    }
 }
