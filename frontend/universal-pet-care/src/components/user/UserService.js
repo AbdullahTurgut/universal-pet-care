@@ -106,3 +106,14 @@ export const getAggregatedUsersAccountByActiveStatus = async () => {
     throw error;
   }
 };
+
+export const aggregateVetBySpecialization = async () => {
+  try {
+    const response = await api.get(
+      "/veterinarians/aggregate-vets-by-specialization"
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
