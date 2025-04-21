@@ -9,6 +9,7 @@ import { BsPeopleFill } from "react-icons/bs";
 import { countAppointments } from "../appointment/AppointmentService";
 import { RegistrationChart } from "../charts/RegistrationChart";
 import { AppointmentChart } from "../charts/AppointmentChart";
+import { AccountChart } from "../charts/AccountChart";
 
 export const AdminOverview = () => {
   const [userCount, setUserCount] = useState(0);
@@ -65,6 +66,9 @@ export const AdminOverview = () => {
         </div>
         <div className="chart-container">
           <AppointmentChart />
+        </div>
+        <div className="chart-container">
+          <AccountChart />
         </div>
       </div>
     </main>
