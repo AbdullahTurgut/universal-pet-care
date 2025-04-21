@@ -147,7 +147,16 @@ public class UserController {
         }
     }
 
-
+    // Aggregate users account chart to frontend
+    @GetMapping("/account/aggregated-by-status")
+    public ResponseEntity<ApiResponse> aggregateUsersByEnableStatusAndType() {
+        try {
+            Map<String, Map<String, Long>> aggregatedUsers = userService.aggregateUsersByEnableStatusAndType();
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.RESOURCE_FOUND, aggregatedUsers));
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
 
 
    /* @PostMapping("/add")

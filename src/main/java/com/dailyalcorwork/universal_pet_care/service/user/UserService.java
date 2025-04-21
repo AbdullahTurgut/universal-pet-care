@@ -213,4 +213,14 @@ public class UserService implements IUserService {
                         .getDisplayName(TextStyle.FULL, Locale.ENGLISH),
                 Collectors.groupingBy(User::getUserType, Collectors.counting())));
     }
+
+    // for mapping user accounts chart to frontend
+    @Override
+    public Map<String, Map<String, Long>> aggregateUsersByEnableStatusAndType() {
+        List<User> users = userRepository.findAll();
+        return users
+                .stream()
+                .collect(Collectors.groupingBy(user -> user.isEnable() ? "Enabled" : "Non-Enabled",
+                        Collectors.groupingBy(User::getUserType, Collectors.counting())));
+    }
 }

@@ -31,4 +31,7 @@ public interface IUserService {
 
     // for mapping the users by month
     Map<String, Map<String, Long>> aggregateUsersByMonthAndType();
+
+    // for mapping user accounts chart to frontend
+    Map<String, Map<String, Long>> aggregateUsersByEnableStatusAndType();
 }
