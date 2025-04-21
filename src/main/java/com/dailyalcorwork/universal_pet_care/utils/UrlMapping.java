@@ -67,13 +67,14 @@ public class UrlMapping {
     public static final String GET_ALL_VETERINARIANS = "/get-all-veterinarians";
     public static final String SEARCH_VETERINARIAN_FOR_APPOINTMENT = "/search-veterinarian";
     public static final String GET_VETERINARIAN_SPECIALIZATIONS = "/get-specializations";
-
+    public static final String VET_AGGREGATE_BY_SPECIALIZATION = "/get-by-specialization";
 
     /*====================== END VETERINARIAN API ==========================================*/
 
 
     /*===================== START CHANGE USER PASSWORD API ================================= */
     public static final String CHANGE_PASSWORD = "/user/{userId}/change-password";
+
 
 
 
