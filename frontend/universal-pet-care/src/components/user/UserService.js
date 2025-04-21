@@ -97,3 +97,12 @@ export async function getAggregatedUsers() {
     throw error;
   }
 }
+
+export const getAggregatedUsersAccountByActiveStatus = async () => {
+  try {
+    const response = await api.get("/users/account/aggregated-by-status");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

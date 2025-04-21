@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { CustomPieChart } from "./CustomPieChart";
+import { getAppointmentsSummary } from "../appointment/AppointmentService";
 
 export const AppointmentChart = () => {
   const [appointmentData, setAppointmentData] = useState([]);
@@ -16,5 +18,10 @@ export const AppointmentChart = () => {
     getAppointmentsInfo();
   }, []);
 
-  return <div>AppointmentChart</div>;
+  return (
+    <div>
+      <h5 className="mb-4 chart-title">Appointments Overview</h5>
+      <CustomPieChart data={appointmentData} />
+    </div>
+  );
 };

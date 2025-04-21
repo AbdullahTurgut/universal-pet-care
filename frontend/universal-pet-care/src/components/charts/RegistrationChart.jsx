@@ -38,7 +38,7 @@ export const RegistrationChart = () => {
   }, []);
   return (
     <ResponsiveContainer width={"60%"} height={400}>
-      <h5 className="chart-title mb-5">Users Registration</h5>
+      <h5 className="chart-title mb-5">Users Registration Overview</h5>
       <BarChart data={userData}>
         <XAxis dataKey="name" angle={-50} textAnchor="end" height={70} />
         <YAxis />

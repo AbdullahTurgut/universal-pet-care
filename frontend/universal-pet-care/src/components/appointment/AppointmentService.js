@@ -76,3 +76,14 @@ export async function countAppointments() {
     throw error;
   }
 }
+
+export async function getAppointmentsSummary() {
+  try {
+    const response = await api.get(
+      "/appointments/summary/appointments-summary"
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
