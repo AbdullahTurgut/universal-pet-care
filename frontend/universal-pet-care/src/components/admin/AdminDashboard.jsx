@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { AdminOverview } from "./AdminOverview";
 import { AdminDashboardSidebar } from "./AdminDashboardSidebar";
+import { VeterinarianComponent } from "./VeterinarianComponent";
 
 export const AdminDashboard = () => {
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
@@ -23,6 +24,7 @@ export const AdminDashboard = () => {
         />
         <div className="main-container">
           {activeContent === "overview" && <AdminOverview />}
+          {activeContent === "veterinarians" && <VeterinarianComponent />}
         </div>
       </div>
     </main>
