@@ -223,4 +223,15 @@ public class UserService implements IUserService {
                 .collect(Collectors.groupingBy(user -> user.isEnable() ? "Enabled" : "Non-Enabled",
                         Collectors.groupingBy(User::getUserType, Collectors.counting())));
     }
+
+
+    // method for frontend side - "unlock vet"
+    
+    public void lockUserAccount(Long userId) {
+        userRepository.updateUserEnabledStatus(userId, false);
+    }
+
+    public void unlockUserAccount(Long userId) {
+        userRepository.updateUserEnabledStatus(userId, true);
+    }
 }

@@ -159,6 +159,27 @@ public class UserController {
     }
 
 
+    // end point for "lock and unlock Vet"
+    @PutMapping("/account/${userId}/lock-user-account")
+    public ResponseEntity<ApiResponse> lockUserAccount(@PathVariable Long userId) {
+        try {
+            userService.lockUserAccount(userId);
+            return ResponseEntity.ok(new ApiResponse("User account locked successfully", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    @PutMapping("/account/${userId}/unlock-user-account")
+    public ResponseEntity<ApiResponse> unlockUserAccount(@PathVariable Long userId) {
+        try {
+            userService.unlockUserAccount(userId);
+            return ResponseEntity.ok(new ApiResponse("User account unlocked successfully", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
    /* @PostMapping("/add")
     public User addUser(@RequestBody RegistrationRequest request) {
         return userService.add(request);
