@@ -20,12 +20,16 @@ import {
   updateUser,
 } from "../user/UserService";
 import { VetEditableRows } from "../veterinarian/VetEditableRows";
+import { VetFilter } from "../veterinarian/VetFilter";
 
 export const VeterinarianComponent = () => {
   const [veterinarians, setVeterinarians] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [vetToDelete, setVetToDelete] = useState(null);
   const [editVetId, setEditVetId] = useState(null);
+  const [filteredVets, setFilteredVets] = useState([]);
+  const [selectedSpecialization, setSelectedSpecialization] = useState("");
+
   const {
     successMessage,
     setSuccessMessage,
@@ -122,6 +126,23 @@ export const VeterinarianComponent = () => {
     }
   };
 
+  useEffect(() => {
+    let filtered = veterinarians;
+    if (selectedSpecialization) {
+      filtered = filtered.filter(
+        (vet) => vet.specialization === selectedSpecialization
+      );
+    }
+    setFilteredVets(filtered);
+  }, [selectedSpecialization, veterinarians]);
+
+  const specializations = Array.from(
+    new Set(veterinarians.map((vet) => vet.specialization))
+  );
+  const handleClearFilters = () => {
+    setSelectedSpecialization("");
+  };
+
   return (
     <main className="mt-2">
       <DeleteConfirmationModal
@@ -147,6 +168,14 @@ export const VeterinarianComponent = () => {
           </div>
         </Col>
       </Row>
+      <Row>
+        <VetFilter
+          specializations={specializations}
+          selectedSpecialization={selectedSpecialization}
+          onSpecializationChange={setSelectedSpecialization}
+          onClearFilters={handleClearFilters}
+        />
+      </Row>
       <Table>
         <thead>
           <tr>
@@ -161,7 +190,7 @@ export const VeterinarianComponent = () => {
           </tr>
         </thead>
         <tbody>
-          {veterinarians.map((vet, index) =>
+          {filteredVets.map((vet, index) =>
             editVetId === vet.id ? (
               <VetEditableRows
                 key={vet.id}
