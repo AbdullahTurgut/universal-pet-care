@@ -10,9 +10,14 @@ import {
   BsPencilFill,
   BsPlusSquareFill,
   BsTrashFill,
+  BsUnlockFill,
 } from "react-icons/bs";
 import { getVeterinarians } from "../veterinarian/VeterinarianService";
-import { deleteUser } from "../user/UserService";
+import {
+  deleteUser,
+  lockUserAccount,
+  unlockUserAccount,
+} from "../user/UserService";
 
 export const VeterinarianComponent = () => {
   const [veterinarians, setVeterinarians] = useState([]);
@@ -64,6 +69,32 @@ export const VeterinarianComponent = () => {
     setShowDeleteModal(true);
   };
 
+  // Function to toggle lock/unlock
+  const handleToggleAccountLock = async (vet) => {
+    try {
+      let response;
+      if (vet.enabled) {
+        response = await lockUserAccount(vet.id);
+      } else {
+        response = await unlockUserAccount(vet.id);
+      }
+      // Optimistically update the UI to reflect the new "enabled" state
+      setVeterinarians(
+        veterinarians.map((theVet) =>
+          theVet.id === vet.id
+            ? { ...theVet, enabled: !theVet.enabled }
+            : theVet
+        )
+      );
+      setSuccessMessage(response.message);
+      setShowSuccessAlert(true);
+    } catch (error) {
+      setErrorMessage(error.message);
+      setShowErrorAlert(true);
+    }
+    y;
+  };
+
   return (
     <main className="mt-2">
       <DeleteConfirmationModal
@@ -104,7 +135,7 @@ export const VeterinarianComponent = () => {
         </thead>
         <tbody>
           {veterinarians.map((vet, index) => (
-            <tr>
+            <tr key={index}>
               <td>Dr. {vet.firstName}</td>
               <td>{vet.lastName}</td>
               <td>{vet.email}</td>
@@ -120,7 +151,10 @@ export const VeterinarianComponent = () => {
                     </Tooltip>
                   }
                 >
-                  <Link to={"/"} className="text-info">
+                  <Link
+                    to={`/user-dashboard/${vet.id}/my-dashboard`}
+                    className="text-info"
+                  >
                     <BsEyeFill />
                   </Link>
                 </OverlayTrigger>
@@ -145,13 +179,16 @@ export const VeterinarianComponent = () => {
                 <OverlayTrigger
                   overlay={
                     <Tooltip id={`tooltip-view-${index}`}>
-                      Unlock vet account
+                      {vet.enabled ? "Lock" : "Unlock"} vet account
                     </Tooltip>
                   }
                 >
-                  <Link to={"/"}>
-                    <BsLockFill />
-                  </Link>
+                  <span
+                    onClick={() => handleToggleAccountLock(vet)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    {vet.enabled ? <BsUnlockFill /> : <BsLockFill />}
+                  </span>
                 </OverlayTrigger>
               </td>
               <td>

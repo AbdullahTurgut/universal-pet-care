@@ -160,8 +160,8 @@ public class UserController {
 
 
     // end point for "lock and unlock Vet"
-    @PutMapping("/account/${userId}/lock-user-account")
-    public ResponseEntity<ApiResponse> lockUserAccount(@PathVariable Long userId) {
+    @PutMapping("/account/{userId}/lock-user-account")
+    public ResponseEntity<ApiResponse> lockUserAccount(@PathVariable("userId") Long userId) {
         try {
             userService.lockUserAccount(userId);
             return ResponseEntity.ok(new ApiResponse("User account locked successfully", null));
@@ -170,8 +170,8 @@ public class UserController {
         }
     }
 
-    @PutMapping("/account/${userId}/unlock-user-account")
-    public ResponseEntity<ApiResponse> unlockUserAccount(@PathVariable Long userId) {
+    @PutMapping("/account/{userId}/unlock-user-account")
+    public ResponseEntity<ApiResponse> unlockUserAccount(@PathVariable("userId") Long userId) {
         try {
             userService.unlockUserAccount(userId);
             return ResponseEntity.ok(new ApiResponse("User account unlocked successfully", null));

@@ -226,12 +226,12 @@ public class UserService implements IUserService {
 
 
     // method for frontend side - "unlock vet"
-    
+
     public void lockUserAccount(Long userId) {
-        userRepository.updateUserEnabledStatus(userId, false);
+        userRepository.updateUserEnableStatus(userId, false);
     }
 
     public void unlockUserAccount(Long userId) {
-        userRepository.updateUserEnabledStatus(userId, true);
+        userRepository.updateUserEnableStatus(userId, true);
     }
 }

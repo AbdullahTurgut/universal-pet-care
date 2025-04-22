@@ -115,3 +115,25 @@ export const aggregateVetBySpecialization = async () => {
     throw error;
   }
 };
+
+export async function lockUserAccount(userId) {
+  try {
+    const response = await api.put(
+      `/users/account/${userId}/lock-user-account`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function unlockUserAccount(userId) {
+  try {
+    const response = await api.put(
+      `/users/account/${userId}/unlock-user-account`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
