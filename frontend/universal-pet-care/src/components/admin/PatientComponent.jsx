@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import UseMessageAlerts from "../hooks/UseMessageAlerts";
-import { OverlayTrigger, Table, Tooltip } from "react-bootstrap";
+import { Col, OverlayTrigger, Row, Table, Tooltip } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { BsEyeFill } from "react-icons/bs";
+import AlertMessage from "../common/AlertMessage";
+import { getPatients } from "../patient/PatientService";
 
 export const PatientComponent = () => {
   const [patients, setPatients] = useState([]);
@@ -34,6 +36,18 @@ export const PatientComponent = () => {
 
   return (
     <main>
+      <h5>List of Patients</h5>
+      <Row>
+        <Col>The patients filter component is coming here:</Col>
+        <Col>
+          {showErrorAlert && (
+            <AlertMessage type={"danger"} message={errorMessage} />
+          )}
+          {showSuccessAlert && (
+            <AlertMessage type={"success"} message={successMessage} />
+          )}
+        </Col>
+      </Row>
       <Table>
         <thead>
           <tr>
@@ -48,31 +62,33 @@ export const PatientComponent = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>{patients.id}</td>
-            <td>{patients.firstName}</td>
-            <td>{patients.lastName}</td>
-            <td>{patients.email}</td>
-            <td>{patients.phoneNumber}</td>
-            <td>{patients.gender}</td>
-            <td>{patients.createdAt}</td>
-            <td>
-              <OverlayTrigger
-                overlay={
-                  <Tooltip id={`tooltip-view-${index}`}>
-                    View patient details
-                  </Tooltip>
-                }
-              >
-                <Link
-                  to={`/user-dashboard/${patients.id}/my-dashboard`}
-                  className="text-info"
+          {patients.map((patient, index) => (
+            <tr key={index}>
+              <td>{patient.id}</td>
+              <td>{patient.firstName}</td>
+              <td>{patient.lastName}</td>
+              <td>{patient.email}</td>
+              <td>{patient.phoneNumber}</td>
+              <td>{patient.gender}</td>
+              <td>{patient.createdAt}</td>
+              <td>
+                <OverlayTrigger
+                  overlay={
+                    <Tooltip id={`tooltip-view-${index}`}>
+                      View patient details
+                    </Tooltip>
+                  }
                 >
-                  <BsEyeFill />
-                </Link>
-              </OverlayTrigger>
-            </td>
-          </tr>
+                  <Link
+                    to={`/user-dashboard/${patient.id}/my-dashboard`}
+                    className="text-info"
+                  >
+                    <BsEyeFill />
+                  </Link>
+                </OverlayTrigger>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </Table>
     </main>

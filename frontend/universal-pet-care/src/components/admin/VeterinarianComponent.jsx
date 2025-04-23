@@ -20,7 +20,7 @@ import {
   updateUser,
 } from "../user/UserService";
 import { VetEditableRows } from "../veterinarian/VetEditableRows";
-import { VetFilter } from "../veterinarian/VetFilter";
+import { UserFilter } from "../user/UserFilter";
 import Paginator from "../common/Paginator";
 
 export const VeterinarianComponent = () => {
@@ -178,11 +178,12 @@ export const VeterinarianComponent = () => {
       </Row>
       <Row className="mb-2">
         <Col md={6}>
-          <VetFilter
-            specializations={specializations}
-            selectedSpecialization={selectedSpecialization}
-            onSelectSpecialization={setSelectedSpecialization}
+          <UserFilter
+            values={specializations}
+            selectedValue={selectedSpecialization}
+            onSelectedValue={setSelectedSpecialization}
             onClearFilters={handleClearFilters}
+            label={"specialization"}
           />
         </Col>
       </Row>
@@ -209,7 +210,7 @@ export const VeterinarianComponent = () => {
                 onCancel={handleCancelClick}
               />
             ) : (
-              <tr>
+              <tr key={index}>
                 <td>Dr. {vet.firstName}</td>
                 <td>{vet.lastName}</td>
                 <td>{vet.email}</td>
