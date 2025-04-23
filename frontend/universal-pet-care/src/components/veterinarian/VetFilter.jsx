@@ -4,16 +4,16 @@ import { Button, Form, InputGroup } from "react-bootstrap";
 export const VetFilter = ({
   specializations = [],
   selectedSpecialization,
-  onSpecializationChange,
+  onSpecializationChange: onSelectSpecialization,
   onClearFilters,
 }) => {
   return (
-    <InputGroup className="mb-4">
+    <InputGroup className="mb-2">
       <InputGroup.Text>Filter by Specialization</InputGroup.Text>
       <Form.Select
         className="form-control"
         value={selectedSpecialization}
-        onChange={(e) => onSpecializationChange(e.target.value)}
+        onChange={(e) => onSelectSpecialization(e.target.value)}
       >
         <option>Select specialization</option>
         {specializations.map((specialization, index) => (

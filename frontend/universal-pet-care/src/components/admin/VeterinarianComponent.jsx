@@ -21,6 +21,7 @@ import {
 } from "../user/UserService";
 import { VetEditableRows } from "../veterinarian/VetEditableRows";
 import { VetFilter } from "../veterinarian/VetFilter";
+import Paginator from "../common/Paginator";
 
 export const VeterinarianComponent = () => {
   const [veterinarians, setVeterinarians] = useState([]);
@@ -29,6 +30,13 @@ export const VeterinarianComponent = () => {
   const [editVetId, setEditVetId] = useState(null);
   const [filteredVets, setFilteredVets] = useState([]);
   const [selectedSpecialization, setSelectedSpecialization] = useState("");
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [vetsPerPage] = useState(7);
+
+  const indexOfLastVet = currentPage * vetsPerPage;
+  const indexOfFirstVet = indexOfLastVet - vetsPerPage;
+  const currentVets = filteredVets.slice(indexOfFirstVet, indexOfLastVet);
 
   const {
     successMessage,
@@ -168,13 +176,15 @@ export const VeterinarianComponent = () => {
           </div>
         </Col>
       </Row>
-      <Row>
-        <VetFilter
-          specializations={specializations}
-          selectedSpecialization={selectedSpecialization}
-          onSpecializationChange={setSelectedSpecialization}
-          onClearFilters={handleClearFilters}
-        />
+      <Row className="mb-2">
+        <Col md={6}>
+          <VetFilter
+            specializations={specializations}
+            selectedSpecialization={selectedSpecialization}
+            onSelectSpecialization={setSelectedSpecialization}
+            onClearFilters={handleClearFilters}
+          />
+        </Col>
       </Row>
       <Table>
         <thead>
@@ -190,7 +200,7 @@ export const VeterinarianComponent = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredVets.map((vet, index) =>
+          {currentVets.map((vet, index) =>
             editVetId === vet.id ? (
               <VetEditableRows
                 key={vet.id}
@@ -274,6 +284,12 @@ export const VeterinarianComponent = () => {
           )}
         </tbody>
       </Table>
+      <Paginator
+        paginate={setCurrentPage}
+        currentPage={currentPage}
+        itemsPerPage={vetsPerPage}
+        totalItems={filteredVets.length}
+      />
     </main>
   );
 };
