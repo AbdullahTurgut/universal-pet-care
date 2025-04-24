@@ -6,10 +6,23 @@ import { BsEyeFill } from "react-icons/bs";
 import AlertMessage from "../common/AlertMessage";
 import { getPatients } from "../patient/PatientService";
 import { UserFilter } from "../user/UserFilter";
+import Paginator from "../common/Paginator";
+
 export const PatientComponent = () => {
   const [patients, setPatients] = useState([]);
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [selectedEmail, setSelectedEmail] = useState("");
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [patientsPerPage] = useState(7);
+
+  const indexOfLastPatient = currentPage * patientsPerPage;
+  const indexOfFirstPatient = indexOfLastPatient - patientsPerPage;
+  const currentPatients = filteredPatients.slice(
+    indexOfFirstPatient,
+    indexOfLastPatient
+  );
+
   const {
     successMessage,
     setSuccessMessage,
@@ -87,7 +100,7 @@ export const PatientComponent = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredPatients.map((patient, index) => (
+          {currentPatients.map((patient, index) => (
             <tr key={index}>
               <td>{patient.id}</td>
               <td>{patient.firstName}</td>
@@ -116,6 +129,12 @@ export const PatientComponent = () => {
           ))}
         </tbody>
       </Table>
+      <Paginator
+        paginate={setCurrentPage}
+        currentPage={currentPage}
+        itemsPerPage={patientsPerPage}
+        totalItems={filteredPatients.length}
+      />
     </main>
   );
 };
