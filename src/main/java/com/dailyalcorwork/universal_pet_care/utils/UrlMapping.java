@@ -80,6 +80,13 @@ public class UrlMapping {
 
     /*====================== END CHANGE USER PASSWORD API ==========================================*/
 
+    /*====================== START PATIENTS API ==========================================*/
+    public static final String PATIENTS = API + "/patients";
+    public static final String GET_ALL_PATIENTS = "/get-all-patients";
+
+
+    /*====================== END PATIENTS API ==========================================*/
+
 
 }
 

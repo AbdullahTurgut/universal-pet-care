@@ -4,6 +4,7 @@ import com.dailyalcorwork.universal_pet_care.dto.EntityConverter;
 import com.dailyalcorwork.universal_pet_care.dto.UserDto;
 import com.dailyalcorwork.universal_pet_care.exception.ResourceNotFoundException;
 import com.dailyalcorwork.universal_pet_care.model.Appointment;
+import com.dailyalcorwork.universal_pet_care.model.User;
 import com.dailyalcorwork.universal_pet_care.model.Veterinarian;
 import com.dailyalcorwork.universal_pet_care.repository.AppointmentRepository;
 import com.dailyalcorwork.universal_pet_care.repository.ReviewRepository;
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class VeterinarianService implements IVeterinarianService {
     private final VeterinarianRepository veterinarianRepository;
-    private final EntityConverter<Veterinarian, UserDto> entityConverter;
+    private final EntityConverter<User, UserDto> entityConverter;
     private final ReviewService reviewService;
     private final ReviewRepository reviewRepository;
     private final PhotoService photoService;
@@ -35,22 +36,22 @@ public class VeterinarianService implements IVeterinarianService {
 
     @Override
     public List<UserDto> getAllVeterinariansWithDetails() {
-        List<Veterinarian> veterinarians = userRepository.findAllByUserType("VET");
+        List<User> veterinarians = userRepository.findAllByUserType("VET");
         return veterinarians
                 .stream()
                 .map(this::mapVeterinarianToUserDto)
                 .toList();
     }
 
-    private UserDto mapVeterinarianToUserDto(Veterinarian veterinarian) {
-        UserDto userDto = entityConverter.mapEntityToDto(veterinarian, UserDto.class);
-        double averageRating = reviewService.getAverageRatingForVet(veterinarian.getId());
-        Long totalReviewer = reviewRepository.countByVeterinarianId(veterinarian.getId());
+    private UserDto mapVeterinarianToUserDto(User user) {
+        UserDto userDto = entityConverter.mapEntityToDto(user, UserDto.class);
+        double averageRating = reviewService.getAverageRatingForVet(user.getId());
+        Long totalReviewer = reviewRepository.countByVeterinarianId(user.getId());
         userDto.setAverageRating(averageRating);
         userDto.setTotalReviewers(totalReviewer);
-        if (veterinarian.getPhoto() != null) {
+        if (user.getPhoto() != null) {
             try {
-                byte[] photoBytes = photoService.getImageData(veterinarian.getPhoto().getId());
+                byte[] photoBytes = photoService.getImageData(user.getPhoto().getId());
                 userDto.setPhoto(photoBytes);
             } catch (SQLException e) {
                 throw new RuntimeException(e.getMessage());
