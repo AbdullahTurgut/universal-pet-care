@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
@@ -21,4 +22,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Query("UPDATE User u SET u.isEnable =:enabled WHERE u.id =:userId")
     void updateUserEnableStatus(@Param("userId") Long userId, @Param("enabled") boolean enabled);
+
+    Optional<User> findByEmail(String email);
 }
