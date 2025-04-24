@@ -5,10 +5,11 @@ import { Link } from "react-router-dom";
 import { BsEyeFill } from "react-icons/bs";
 import AlertMessage from "../common/AlertMessage";
 import { getPatients } from "../patient/PatientService";
-
+import { UserFilter } from "../user/UserFilter";
 export const PatientComponent = () => {
   const [patients, setPatients] = useState([]);
-
+  const [filteredPatients, setFilteredPatients] = useState([]);
+  const [selectedEmail, setSelectedEmail] = useState("");
   const {
     successMessage,
     setSuccessMessage,
@@ -34,6 +35,19 @@ export const PatientComponent = () => {
     fetchPatients();
   }, []);
 
+  useEffect(() => {
+    let filtered = patients;
+    if (selectedEmail) {
+      filtered = filtered.filter((patient) => patient.email === selectedEmail);
+    }
+    setFilteredPatients(filtered);
+  }, [selectedEmail, patients]);
+
+  const emails = Array.from(new Set(patients.map((patient) => patient.email)));
+  const handleClearFilters = () => {
+    setSelectedEmail("");
+  };
+
   return (
     <main>
       <h5>List of Patients</h5>
@@ -46,6 +60,17 @@ export const PatientComponent = () => {
           {showSuccessAlert && (
             <AlertMessage type={"success"} message={successMessage} />
           )}
+        </Col>
+      </Row>
+      <Row className="mb-2">
+        <Col md={6}>
+          <UserFilter
+            values={emails}
+            selectedValue={selectedEmail}
+            onSelectedValue={setSelectedEmail}
+            onClearFilters={handleClearFilters}
+            label={"email"}
+          />
         </Col>
       </Row>
       <Table>
@@ -62,7 +87,7 @@ export const PatientComponent = () => {
           </tr>
         </thead>
         <tbody>
-          {patients.map((patient, index) => (
+          {filteredPatients.map((patient, index) => (
             <tr key={index}>
               <td>{patient.id}</td>
               <td>{patient.firstName}</td>
