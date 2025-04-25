@@ -34,6 +34,7 @@ public class VerificationTokenController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping(UrlMapping.CHECK_TOKEN_EXPIRATION)
     public ResponseEntity<ApiResponse> checkTokenExpiration(String token) {
         boolean isExpired = verificationTokenService.isTokenExpired(token);
         ApiResponse response;
@@ -46,6 +47,7 @@ public class VerificationTokenController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping(UrlMapping.SAVE_TOKEN)
     public ResponseEntity<ApiResponse> saveVerificationTokenForUser(@RequestBody VerificationTokenRequest request) {
         User user = userRepository.findById(request.getUser().getId())
                 .orElseThrow(() -> new ResourceNotFoundException(FeedBackMessage.RESOURCE_NOT_FOUND));
@@ -63,6 +65,6 @@ public class VerificationTokenController {
     @DeleteMapping(UrlMapping.DELETE_TOKEN)
     public ResponseEntity<ApiResponse> deleteUserToken(@RequestParam Long userId) {
         verificationTokenService.deleteVerificationToken(userId);
-        return ResponseEntity.ok(new ApiResponse("User token deleted successfully", null));
+        return ResponseEntity.ok(new ApiResponse(FeedBackMessage.TOKEN_DELETE_SUCCESS, null));
     }
 }

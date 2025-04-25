@@ -26,6 +26,7 @@ public class FeedBackMessage {
     public static final String VALID_TOKEN = "Valid";
     public static final String TOKEN_VALIDATION_ERROR = "Error validation";
     public static final String TOKEN_SAVED_SUCCESS = "Token saved successfully";
+    public static final String TOKEN_DELETE_SUCCESS = "User token deleted successfully";
 }
 
 

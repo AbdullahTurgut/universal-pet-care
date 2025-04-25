@@ -93,6 +93,8 @@ public class UrlMapping {
     public static final String VALIDATE_TOKEN = "/validate-token";
     public static final String GENERATE_NEW_TOKEN = "/generate-new-token";
     public static final String DELETE_TOKEN = "/delete-token";
+    public static final String SAVE_TOKEN = "/save-token";
+    public static final String CHECK_TOKEN_EXPIRATION = "/check-expiration";
 
 
     /*====================== END verification token ==========================================*/
