@@ -65,7 +65,6 @@ export const PatientComponent = () => {
     <main>
       <h5>List of Patients</h5>
       <Row>
-        <Col>The patients filter component is coming here:</Col>
         <Col>
           {showErrorAlert && (
             <AlertMessage type={"danger"} message={errorMessage} />
@@ -86,7 +85,7 @@ export const PatientComponent = () => {
           />
         </Col>
       </Row>
-      <Table>
+      <Table bordered hover striped>
         <thead>
           <tr>
             <th>Id</th>

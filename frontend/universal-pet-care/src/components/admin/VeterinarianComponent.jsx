@@ -153,6 +153,7 @@ export const VeterinarianComponent = () => {
 
   return (
     <main className="mt-2">
+      <h5>List of Veterinarians</h5>
       <DeleteConfirmationModal
         show={showDeleteModal}
         onHide={() => setShowDeleteModal(false)}
@@ -168,13 +169,6 @@ export const VeterinarianComponent = () => {
             <AlertMessage type={"success"} message={successMessage} />
           )}
         </Col>
-        <Col>
-          <div className="d-flex justify-content-end">
-            <Link to={"/user-registration"}>
-              <BsPlusSquareFill />
-            </Link>
-          </div>
-        </Col>
       </Row>
       <Row className="mb-2">
         <Col md={6}>
@@ -186,8 +180,15 @@ export const VeterinarianComponent = () => {
             label={"specialization"}
           />
         </Col>
+        <Col md={6}>
+          <div className="d-flex justify-content-end mt-2">
+            <Link to={"/register-user"}>
+              <BsPlusSquareFill size={25} />
+            </Link>
+          </div>
+        </Col>
       </Row>
-      <Table>
+      <Table bordered hover striped>
         <thead>
           <tr>
             <th>First Name</th>
