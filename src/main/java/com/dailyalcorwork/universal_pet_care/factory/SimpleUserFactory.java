@@ -5,6 +5,7 @@ import com.dailyalcorwork.universal_pet_care.model.User;
 import com.dailyalcorwork.universal_pet_care.repository.UserRepository;
 import com.dailyalcorwork.universal_pet_care.request.RegistrationRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,7 +16,7 @@ public class SimpleUserFactory implements UserFactory {
     private final VeterinarianFactory veterinarianFactory;
     private final PatientFactory patientFactory;
     private final AdminFactory adminFactory;
-
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User createUser(RegistrationRequest registrationRequest) {
@@ -24,6 +25,9 @@ public class SimpleUserFactory implements UserFactory {
         if (userRepository.existsByEmail(registrationRequest.getEmail())) {
             throw new UserAlreadyExistsException(registrationRequest.getEmail() + " already exists our system.");
         }
+
+        registrationRequest.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
+
         switch (registrationRequest.getUserType()) {
             case "VET" -> {
                 return veterinarianFactory.createVeterinarian(registrationRequest);

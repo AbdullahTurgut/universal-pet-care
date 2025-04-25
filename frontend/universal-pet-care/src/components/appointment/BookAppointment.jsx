@@ -49,7 +49,7 @@ const BookAppointment = () => {
   } = UseMessageAlerts();
 
   const { recipientId } = useParams(); // recipientId  useParams() ile alıyoruz
-  const senderId = 8;
+  const senderId = 10;
 
   const handleDateChange = (date) => {
     setFormData((prevData) => ({
@@ -133,12 +133,18 @@ const BookAppointment = () => {
     setIsProcessing(true);
     try {
       const response = await bookAppointment(senderId, recipientId, request);
-      setSuccessMessage(response.data.message);
+      setSuccessMessage(response.message);
       handleReset(); // Reset the form after successful booking
       setShowSuccessAlert(true);
+      s;
     } catch (error) {
-      setErrorMessage(error.response.data.message);
-      setShowErrorAlert(true);
+      if (error.status === 401) {
+        setErrorMessage("Please, login first to book appointment!");
+        setShowErrorAlert(true);
+      } else {
+        setErrorMessage(error.message);
+        setShowErrorAlert(true);
+      }
     } finally {
       setIsProcessing(false);
     }
@@ -165,6 +171,13 @@ const BookAppointment = () => {
 
   return (
     <Container className="mt-5">
+      {showErrorAlert && (
+        <AlertMessage type={"danger"} message={errorMessage} />
+      )}
+
+      {showSuccessAlert && (
+        <AlertMessage type={"success"} message={successMessage} />
+      )}
       <Row className="justify-content-center">
         <Col lg={6} md={10} sm={12}>
           <Form onSubmit={handleSubmit}>
@@ -226,14 +239,6 @@ const BookAppointment = () => {
                     canRemove={formData.pets.length > 1}
                   />
                 ))}
-
-                {showErrorAlert && (
-                  <AlertMessage type={"danger"} message={errorMessage} />
-                )}
-
-                {showSuccessAlert && (
-                  <AlertMessage type={"success"} message={successMessage} />
-                )}
 
                 <div className="d-flex justify-content-center mb-3">
                   <OverlayTrigger overlay={<Tooltip>Add more pets</Tooltip>}>
