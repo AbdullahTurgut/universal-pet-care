@@ -20,6 +20,12 @@ public class FeedBackMessage {
 
     public static final String APPOINTMENT_CANNOT_BE_CANCELLED = "Error cancelling appointment";
     public static final String APPOINTMENT_ALREADY_APPROVED = "Already approved";
+    public static final String INVALID_TOKEN = "Invalid";
+    public static final String VERIFIED_TOKEN = "Verified";
+    public static final String EXPIRED_TOKEN = "Expired";
+    public static final String VALID_TOKEN = "Valid";
+    public static final String TOKEN_VALIDATION_ERROR = "Error validation";
+    public static final String TOKEN_SAVED_SUCCESS = "Token saved successfully";
 }
 
 

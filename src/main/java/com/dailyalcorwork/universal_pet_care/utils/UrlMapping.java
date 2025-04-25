@@ -88,5 +88,13 @@ public class UrlMapping {
     /*====================== END PATIENTS API ==========================================*/
 
 
+    /*====================== START verification token ==========================================*/
+    public static final String TOKEN_VERIFICATION = API + "/verification";
+    public static final String VALIDATE_TOKEN = "/validate-token";
+    public static final String GENERATE_NEW_TOKEN = "/generate-new-token";
+    public static final String DELETE_TOKEN = "/delete-token";
+
+
+    /*====================== END verification token ==========================================*/
 }
 
