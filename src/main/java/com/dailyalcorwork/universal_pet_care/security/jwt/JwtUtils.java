@@ -51,4 +51,12 @@ public class JwtUtils {
             throw new JwtException(e.getMessage());
         }
     }
+
+    public String getUserNameFromToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key())
+                .build()
+                .parseClaimsJwt(token).getBody().getSubject();
+
+    }
 }
