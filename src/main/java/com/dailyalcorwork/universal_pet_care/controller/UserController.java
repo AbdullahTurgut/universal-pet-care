@@ -2,6 +2,7 @@ package com.dailyalcorwork.universal_pet_care.controller;
 
 import com.dailyalcorwork.universal_pet_care.dto.EntityConverter;
 import com.dailyalcorwork.universal_pet_care.dto.UserDto;
+import com.dailyalcorwork.universal_pet_care.event.RegistrationCompleteEvent;
 import com.dailyalcorwork.universal_pet_care.exception.ResourceNotFoundException;
 import com.dailyalcorwork.universal_pet_care.exception.UserAlreadyExistsException;
 import com.dailyalcorwork.universal_pet_care.model.User;
@@ -14,6 +15,7 @@ import com.dailyalcorwork.universal_pet_care.service.user.UserService;
 import com.dailyalcorwork.universal_pet_care.utils.FeedBackMessage;
 import com.dailyalcorwork.universal_pet_care.utils.UrlMapping;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,12 +34,15 @@ public class UserController {
     private final EntityConverter<User, UserDto> entityConverter;
     private final IChangePasswordService changePasswordService;
 
+    private final ApplicationEventPublisher publisher;
+
     //---------------- REGISTER ----------------
     // Dto ile beraber User geri döndürmek yerine ApiResponse döndürecegiz
     @PostMapping(UrlMapping.REGISTER_USER)
     public ResponseEntity<ApiResponse> register(@RequestBody RegistrationRequest request) {
         try {
             User theUser = userService.register(request);
+            publisher.publishEvent(new RegistrationCompleteEvent(theUser));
             UserDto registeredUser = entityConverter.mapEntityToDto(theUser, UserDto.class);
             return ResponseEntity.ok(new ApiResponse(FeedBackMessage.CREATE_SUCCESS, registeredUser));
         } catch (UserAlreadyExistsException e) {
