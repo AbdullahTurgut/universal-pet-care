@@ -3,6 +3,7 @@ package com.dailyalcorwork.universal_pet_care.event.listener;
 import com.dailyalcorwork.universal_pet_care.email.EmailService;
 import com.dailyalcorwork.universal_pet_care.event.AppointmentApprovedEvent;
 import com.dailyalcorwork.universal_pet_care.event.AppointmentBookedEvent;
+import com.dailyalcorwork.universal_pet_care.event.AppointmentDeclinedEvent;
 import com.dailyalcorwork.universal_pet_care.event.RegistrationCompleteEvent;
 import com.dailyalcorwork.universal_pet_care.model.Appointment;
 import com.dailyalcorwork.universal_pet_care.model.User;
@@ -57,6 +58,18 @@ public class NotificationEventListener implements ApplicationListener<Applicatio
                     }
                 }
                 break;
+            case "AppointmentDeclinedEvent":
+                if (source instanceof Appointment) {
+                    AppointmentDeclinedEvent appointmentDeclinedEvent = (AppointmentDeclinedEvent) event;
+                    try {
+                        handleAppointmentDeclinedNotification(appointmentDeclinedEvent);
+                    } catch (MessagingException | UnsupportedEncodingException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                break;
+            default:
+                break;
         }
     }
 
@@ -102,7 +115,7 @@ public class NotificationEventListener implements ApplicationListener<Applicatio
         String mailContent = "<p> Hi, " + veterinary.getFirstName() + ", </p>" +
                 "<p> You have a new appointment schedule: " +
                 "<a href=\"" + frontendBaseUrl + "\">Please, check the clinic portal to view appointment details.</a>" +
-                "<p> Best Regards. <br> Universal Pet Care Service";
+                "<p> Best Regards. <br /> Universal Pet Care Service";
         emailService.sendEmail(veterinary.getEmail(), subject, senderName, mailContent);
     }
 
@@ -122,10 +135,31 @@ public class NotificationEventListener implements ApplicationListener<Applicatio
         String mailContent = "<p> Hi, " + user.getFirstName() + ", </p>" +
                 "<p> Your appointment has been approved " +
                 "<a href=\"" + frontendBaseUrl + "\">Please, check the clinic portal to view appointment details.</a>" +
-                "and veterinarian information.</a><br>" +
+                "and veterinarian information.</a><br/>" +
                 "<p> Best Regards. <br> Universal Pet Care";
         emailService.sendEmail(user.getEmail(), subject, senderName, mailContent);
     }
 
     /* ========== End approve appointment notifications ============*/
+
+    /* ========== START appointment decline notifications ============*/
+
+    private void handleAppointmentDeclinedNotification(AppointmentDeclinedEvent event) throws MessagingException, UnsupportedEncodingException {
+        Appointment appointment = event.getAppointment();
+        User patient = appointment.getPatient();
+        sendAppointmentBookedNotification(patient, frontendBaseUrl);
+    }
+
+    private void sendAppointmentDeclinedNotification(User user, String frontendBaseUrl) throws MessagingException, UnsupportedEncodingException {
+        String subject = "Appointment Not Approved";
+        String senderName = "Universal Pet Care Notification Service";
+        String mailContent = "<p> Hi, " + user.getFirstName() + ", </p>" +
+                "<p> We are sorry, your appointment was not approved at this time,<br/> " +
+                "Please kindly make a reschedule for another date. Thanks </p> " +
+                "<a href=\"" + frontendBaseUrl + "\">Please, check the clinic portal to view appointment details.</a> <br/>" +
+                "<p> Best Regards. <br /> Universal Pet Care";
+        emailService.sendEmail(user.getEmail(), subject, senderName, mailContent);
+    }
+
+    /* ========== End appointment decline notifications ============*/
 }

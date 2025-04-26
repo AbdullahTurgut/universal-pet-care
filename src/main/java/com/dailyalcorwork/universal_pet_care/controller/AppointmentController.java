@@ -1,6 +1,8 @@
 package com.dailyalcorwork.universal_pet_care.controller;
 
+import com.dailyalcorwork.universal_pet_care.event.AppointmentApprovedEvent;
 import com.dailyalcorwork.universal_pet_care.event.AppointmentBookedEvent;
+import com.dailyalcorwork.universal_pet_care.event.AppointmentDeclinedEvent;
 import com.dailyalcorwork.universal_pet_care.exception.ResourceNotFoundException;
 import com.dailyalcorwork.universal_pet_care.model.Appointment;
 import com.dailyalcorwork.universal_pet_care.request.AppointmentUpdateRequest;
@@ -33,7 +35,7 @@ public class AppointmentController {
     public ResponseEntity<ApiResponse> getAllAppointments() {
         try {
             List<Appointment> appointments = appointmentService.getAllAppointments();
-            return ResponseEntity.status(FOUND).body(new ApiResponse(FeedBackMessage.RESOURCE_FOUND, appointments));
+            return ResponseEntity.status(FOUND).body(new ApiResponse(FeedBackMessage.APPOINTMENTS_FOUND, appointments));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
@@ -50,7 +52,7 @@ public class AppointmentController {
         try {
             Appointment theAppointment = appointmentService.createAppointment(request, senderId, recipientId);
             publisher.publishEvent(new AppointmentBookedEvent(theAppointment));
-            return ResponseEntity.status(FOUND).body(new ApiResponse(FeedBackMessage.CREATE_SUCCESS, theAppointment));
+            return ResponseEntity.status(FOUND).body(new ApiResponse(FeedBackMessage.CREATE_APPOINTMENT_SUCCESS, theAppointment));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         } catch (Exception e) {
@@ -64,7 +66,7 @@ public class AppointmentController {
         // ctrl+alt+t ile try catch vs icine alabiliyoruz
         try {
             Appointment appointment = appointmentService.getAppointmentById(id);
-            return ResponseEntity.status(FOUND).body(new ApiResponse(FeedBackMessage.RESOURCE_FOUND, appointment));
+            return ResponseEntity.status(FOUND).body(new ApiResponse(FeedBackMessage.APPOINTMENT_FOUND, appointment));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
@@ -76,7 +78,7 @@ public class AppointmentController {
         // ctrl+alt+t ile try catch vs icine alabiliyoruz
         try {
             Appointment appointment = appointmentService.getAppointmentByNo(appointmentNo);
-            return ResponseEntity.status(FOUND).body(new ApiResponse(FeedBackMessage.RESOURCE_FOUND, appointment));
+            return ResponseEntity.status(FOUND).body(new ApiResponse(FeedBackMessage.APPOINTMENT_FOUND, appointment));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
@@ -87,7 +89,7 @@ public class AppointmentController {
     public ResponseEntity<ApiResponse> deleteAppointmentById(@PathVariable Long id) {
         try {
             appointmentService.deleteAppointment(id);
-            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.DELETE_SUCCESS, null));
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.DELETE_APPOINTMENT_SUCCESS, null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         } catch (Exception e) {
@@ -103,7 +105,7 @@ public class AppointmentController {
     ) {
         try {
             Appointment appointment = appointmentService.updateAppointment(id, request);
-            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.UPDATE_SUCCESS, appointment));
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.UPDATE_APPOINTMENT_SUCCESS, appointment));
         } catch (IllegalStateException e) {
             return ResponseEntity.status(NOT_ACCEPTABLE).body(new ApiResponse(e.getMessage(), null));
         } catch (Exception e) {
@@ -117,7 +119,7 @@ public class AppointmentController {
     public ResponseEntity<ApiResponse> cancelAppointment(@PathVariable Long appointmentId) {
         try {
             Appointment appointment = appointmentService.cancelAppointment(appointmentId);
-            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.UPDATE_SUCCESS, appointment));
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.CANCEL_APPOINTMENT_SUCCESS, appointment));
         } catch (IllegalStateException e) {
             return ResponseEntity.status(NOT_ACCEPTABLE).body(new ApiResponse(e.getMessage(), null));
         }
@@ -128,7 +130,8 @@ public class AppointmentController {
     public ResponseEntity<ApiResponse> approveAppointment(@PathVariable Long appointmentId) {
         try {
             Appointment appointment = appointmentService.approveAppointment(appointmentId);
-            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.UPDATE_SUCCESS, appointment));
+            publisher.publishEvent(new AppointmentApprovedEvent(appointment));
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.APPROVE_APPOINTMENT_SUCCESS, appointment));
         } catch (IllegalStateException e) {
             return ResponseEntity.status(NOT_ACCEPTABLE).body(new ApiResponse(e.getMessage(), null));
         }
@@ -138,7 +141,8 @@ public class AppointmentController {
     public ResponseEntity<ApiResponse> declineAppointment(@PathVariable Long appointmentId) {
         try {
             Appointment appointment = appointmentService.declineAppointment(appointmentId);
-            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.UPDATE_SUCCESS, appointment));
+            publisher.publishEvent(new AppointmentDeclinedEvent(appointment));
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.DECLINE_APPOINTMENT_SUCCESS, appointment));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
@@ -155,9 +159,9 @@ public class AppointmentController {
     public ResponseEntity<ApiResponse> getAppointmentsSummary() {
         try {
             List<Map<String, Object>> summary = appointmentService.getAppointmentsSummary();
-            return ResponseEntity.ok(new ApiResponse("Appointment summary retrieved successfully", summary));
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.APPOINTMENT_SUMMARY, summary));
         } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Error retrieving appointment summary: " + e.getMessage(), null));
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(FeedBackMessage.APPOINTMENT_SUMMARY_ERROR + e.getMessage(), null));
         }
     }
 }

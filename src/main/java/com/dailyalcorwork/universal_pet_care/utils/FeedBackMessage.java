@@ -2,6 +2,33 @@ package com.dailyalcorwork.universal_pet_care.utils;
 
 public class FeedBackMessage {
 
+    // ================== START User api ============================
+    public static final String CREATE_USER_SUCCESS = "User created successfully";
+    public static final String UPDATE_USER_SUCCESS = "User updated successfully";
+    public static final String DELETE_USER_SUCCESS = "User deleted successfully";
+    public static final String USER_FOUND = "User found";
+    public static final String USERS_FOUND = "All user found";
+    public static final String LOCKED_USER_ACCOUNT = "User account locked successfully";
+    public static final String PASSWORD_UPDATE_SUCCESS = "Password updated successfully";
+
+    // ================== END User api ============================
+
+
+    // ================== START Appointment api ============================
+
+    public static final String APPOINTMENTS_FOUND = "Appointments found";
+    public static final String APPOINTMENT_FOUND = "Appointment found";
+    public static final String CREATE_APPOINTMENT_SUCCESS = "Appointment created successfully";
+    public static final String DELETE_APPOINTMENT_SUCCESS = "Appointment deleted successfully";
+    public static final String UPDATE_APPOINTMENT_SUCCESS = "Appointment updated successfully";
+    public static final String CANCEL_APPOINTMENT_SUCCESS = "Appointment cancelled successfully";
+    public static final String APPROVE_APPOINTMENT_SUCCESS = "Appointment approved successfully";
+    public static final String DECLINE_APPOINTMENT_SUCCESS = "Appointment declined successfully";
+    public static final String APPOINTMENT_SUMMARY = "Appointment summary retrieved successfully";
+    public static final String APPOINTMENT_SUMMARY_ERROR = "Error retrieving appointment summary: ";
+
+    // ================== END Appointment api ============================
+
     public static final String CREATE_SUCCESS = "Resource created successfully";
     public static final String UPDATE_SUCCESS = "Resource updated successfully";
     public static final String RESOURCE_FOUND = "Resource Found";

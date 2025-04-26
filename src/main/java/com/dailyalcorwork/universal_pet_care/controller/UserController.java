@@ -44,7 +44,7 @@ public class UserController {
             User theUser = userService.register(request);
             publisher.publishEvent(new RegistrationCompleteEvent(theUser));
             UserDto registeredUser = entityConverter.mapEntityToDto(theUser, UserDto.class);
-            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.CREATE_SUCCESS, registeredUser));
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.CREATE_USER_SUCCESS, registeredUser));
         } catch (UserAlreadyExistsException e) {
             // burda db de email olsa bile htpp status 200 olarak ok geri döndürüyor
             // onu düzeltmek için
@@ -63,7 +63,7 @@ public class UserController {
         try {
             User theUser = userService.update(userId, request);
             UserDto updatedUser = entityConverter.mapEntityToDto(theUser, UserDto.class);
-            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.UPDATE_SUCCESS, updatedUser));
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.UPDATE_USER_SUCCESS, updatedUser));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         } catch (Exception e) {
@@ -79,7 +79,7 @@ public class UserController {
         try {
             UserDto userDto = userService.getUserWithDetails(userId);
             // status yerine .ok() kullanmalıyız
-            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.RESOURCE_FOUND, userDto));
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.USER_FOUND, userDto));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         } catch (Exception e) {
@@ -92,7 +92,7 @@ public class UserController {
     public ResponseEntity<ApiResponse> deleteById(@PathVariable Long userId) {
         try {
             userService.delete(userId);
-            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.DELETE_SUCCESS, null));
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.DELETE_USER_SUCCESS, null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         } catch (Exception e) {
@@ -105,7 +105,7 @@ public class UserController {
     @GetMapping(UrlMapping.GET_ALL_USERS)
     public ResponseEntity<ApiResponse> getAllUsers() {
         List<UserDto> theUsers = userService.getAllUsers();
-        return ResponseEntity.ok(new ApiResponse(FeedBackMessage.GET_ALL_SUCCESS, theUsers));
+        return ResponseEntity.ok(new ApiResponse(FeedBackMessage.USERS_FOUND, theUsers));
     }
 
     // changing user password above there
@@ -114,7 +114,7 @@ public class UserController {
                                                           @RequestBody ChangePasswordRequest request) {
         try {
             changePasswordService.changePassword(userId, request);
-            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.CREATE_SUCCESS, null));
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.PASSWORD_UPDATE_SUCCESS, null));
         } catch (IllegalStateException e) {
             return ResponseEntity.badRequest().body(new ApiResponse(e.getMessage(), null));
         } catch (ResourceNotFoundException e) {
@@ -146,7 +146,7 @@ public class UserController {
     public ResponseEntity<ApiResponse> aggregateUsersByMonthAndType() {
         try {
             Map<String, Map<String, Long>> aggregateUsers = userService.aggregateUsersByMonthAndType();
-            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.RESOURCE_FOUND, aggregateUsers));
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.USER_FOUND, aggregateUsers));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
@@ -157,7 +157,7 @@ public class UserController {
     public ResponseEntity<ApiResponse> aggregateUsersByEnableStatusAndType() {
         try {
             Map<String, Map<String, Long>> aggregatedUsers = userService.aggregateUsersByEnableStatusAndType();
-            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.RESOURCE_FOUND, aggregatedUsers));
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.USER_FOUND, aggregatedUsers));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
@@ -169,7 +169,7 @@ public class UserController {
     public ResponseEntity<ApiResponse> lockUserAccount(@PathVariable("userId") Long userId) {
         try {
             userService.lockUserAccount(userId);
-            return ResponseEntity.ok(new ApiResponse("User account locked successfully", null));
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.LOCKED_USER_ACCOUNT, null));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
