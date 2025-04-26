@@ -1,5 +1,6 @@
 package com.dailyalcorwork.universal_pet_care.controller;
 
+import com.dailyalcorwork.universal_pet_care.event.AppointmentBookedEvent;
 import com.dailyalcorwork.universal_pet_care.exception.ResourceNotFoundException;
 import com.dailyalcorwork.universal_pet_care.model.Appointment;
 import com.dailyalcorwork.universal_pet_care.request.AppointmentUpdateRequest;
@@ -9,6 +10,7 @@ import com.dailyalcorwork.universal_pet_care.service.appointment.AppointmentServ
 import com.dailyalcorwork.universal_pet_care.utils.FeedBackMessage;
 import com.dailyalcorwork.universal_pet_care.utils.UrlMapping;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +26,8 @@ import static org.springframework.http.HttpStatus.*;
 public class AppointmentController {
     private final AppointmentService appointmentService;
 
+    private final ApplicationEventPublisher publisher;
+
     // ------------- GET ALL APPOINTMENTS -------------
     @GetMapping(UrlMapping.GET_ALL_APPOINTMENTS)
     public ResponseEntity<ApiResponse> getAllAppointments() {
@@ -35,6 +39,7 @@ public class AppointmentController {
         }
     }
 
+
     // ------------- POST APPOINTMENT -------------
     @PostMapping(UrlMapping.BOOK_APPOINTMENT)
     public ResponseEntity<ApiResponse> bookAppointment(
@@ -44,6 +49,7 @@ public class AppointmentController {
     ) {
         try {
             Appointment theAppointment = appointmentService.createAppointment(request, senderId, recipientId);
+            publisher.publishEvent(new AppointmentBookedEvent(theAppointment));
             return ResponseEntity.status(FOUND).body(new ApiResponse(FeedBackMessage.CREATE_SUCCESS, theAppointment));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
