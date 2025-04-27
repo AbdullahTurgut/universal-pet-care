@@ -31,7 +31,7 @@ const UserDashboard = () => {
   } = UseMessageAlerts();
 
   // const {userId} = useParams();
-  const userId = 8;
+  const userId = 33;
 
   useEffect(() => {
     const getUser = async () => {
@@ -100,13 +100,6 @@ const UserDashboard = () => {
 
   return (
     <Container className="mt-2 user-dashboard">
-      {showErrorAlert && (
-        <AlertMessage type={"danger"} message={errorMessage} />
-      )}
-      {showSuccessAlert && (
-        <AlertMessage type={"success"} message={successMessage} />
-      )}
-
       <Tabs
         className="mb-2"
         justify
