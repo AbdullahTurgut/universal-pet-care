@@ -26,7 +26,8 @@ public class FeedBackMessage {
     public static final String DECLINE_APPOINTMENT_SUCCESS = "Appointment declined successfully";
     public static final String APPOINTMENT_SUMMARY = "Appointment summary retrieved successfully";
     public static final String APPOINTMENT_SUMMARY_ERROR = "Error retrieving appointment summary: ";
-
+    public static final String APPOINTMENT_UPDATE_NOT_ALLOWED = "Cannot update or cancel appointment";
+    public static final String OPERATION_NOT_ALLOWED = "This appointment is already approved";
     // ================== END Appointment api ============================
 
     public static final String CREATE_SUCCESS = "Resource created successfully";

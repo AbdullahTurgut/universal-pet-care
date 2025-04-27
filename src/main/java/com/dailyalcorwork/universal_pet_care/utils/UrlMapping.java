@@ -98,5 +98,10 @@ public class UrlMapping {
 
 
     /*====================== END verification token ==========================================*/
+
+    public static final String AUTH = "/auth";
+    public static final String LOGIN = "/login";
+    public static final String VERIFY_YOUR_EMAIL = "/verify-your-email";
+
 }
 
