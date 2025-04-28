@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getAggregatedUsersAccountByActiveStatus } from "../user/UserService";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
+import { NoDataAvailable } from "../common/NoDataAvailable";
 
 export const AccountChart = () => {
   const [accountData, setAccountData] = useState([]);
@@ -46,25 +47,34 @@ export const AccountChart = () => {
   }, []);
 
   return (
-    <div>
-      <h5 className="mt-4 chart-title">Account Activity Overview</h5>
-      <ResponsiveContainer width="80%" height={400}>
-        <PieChart>
-          <Pie
-            data={accountData}
-            dataKey="value"
-            nameKey="name"
-            outerRadius={110}
-            fill="#8884d8"
-            label
-          >
-            {accountData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={entry.color} />
-            ))}
-          </Pie>
-          <Tooltip />
-        </PieChart>
-      </ResponsiveContainer>
-    </div>
+    <section>
+      {accountData && accountData.length > 0 ? (
+        <React.Fragment>
+          <h5 className="mt-4 chart-title">Account Activity Overview</h5>
+          <ResponsiveContainer width="80%" height={400}>
+            <PieChart>
+              <Pie
+                data={accountData}
+                dataKey="value"
+                nameKey="name"
+                outerRadius={110}
+                fill="#8884d8"
+                label
+              >
+                {accountData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+        </React.Fragment>
+      ) : (
+        <NoDataAvailable
+          dataType={"account data"}
+          errorMessage={errorMessage}
+        />
+      )}
+    </section>
   );
 };

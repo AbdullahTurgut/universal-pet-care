@@ -9,6 +9,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { NoDataAvailable } from "../common/NoDataAvailable";
 
 export const RegistrationChart = () => {
   const [userData, setUserData] = useState([]);
@@ -37,16 +38,25 @@ export const RegistrationChart = () => {
     getUsers();
   }, []);
   return (
-    <ResponsiveContainer width={"60%"} height={400}>
-      <h5 className="chart-title mb-5">Users Registration Overview</h5>
-      <BarChart data={userData}>
-        <XAxis dataKey="name" angle={-50} textAnchor="end" height={70} />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Bar dataKey={"Veterinarians"} fill="#2f6a32" />
-        <Bar dataKey={"Patients"} fill="#d26161" />
-      </BarChart>
-    </ResponsiveContainer>
+    <section>
+      {userData && userData.length > 0 ? (
+        <React.Fragment>
+          <ResponsiveContainer width={"60%"} height={400}>
+            <h5 className="chart-title mb-5">Users Registration Overview</h5>
+
+            <BarChart data={userData}>
+              <XAxis dataKey="name" angle={-50} textAnchor="end" height={70} />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey={"Veterinarians"} fill="#2f6a32" />
+              <Bar dataKey={"Patients"} fill="#d26161" />
+            </BarChart>
+          </ResponsiveContainer>
+        </React.Fragment>
+      ) : (
+        <NoDataAvailable dataType={"users data"} errorMessage={errorMessage} />
+      )}
+    </section>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CustomPieChart } from "./CustomPieChart";
 import { getAppointmentsSummary } from "../appointment/AppointmentService";
+import { NoDataAvailable } from "../common/NoDataAvailable";
 
 export const AppointmentChart = () => {
   const [appointmentData, setAppointmentData] = useState([]);
@@ -19,9 +20,18 @@ export const AppointmentChart = () => {
   }, []);
 
   return (
-    <div>
-      <h5 className="mb-4 chart-title">Appointments Overview</h5>
-      <CustomPieChart data={appointmentData} />
-    </div>
+    <section>
+      {appointmentData && appointmentData.length > 0 ? (
+        <React.Fragment>
+          <h5 className="mb-4 chart-title">Appointments Overview</h5>
+          <CustomPieChart data={appointmentData} />
+        </React.Fragment>
+      ) : (
+        <NoDataAvailable
+          dataType={"appointment data"}
+          errorMessage={errorMessage}
+        />
+      )}
+    </section>
   );
 };

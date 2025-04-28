@@ -23,26 +23,45 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<RootLayout />}>
+        {/* Routes accessible without authentication */}
+
         <Route index element={<Home />} />
         <Route path="/doctors" element={<VeterinarianListing />} />
-        <Route
-          path="/book-appointment/:recipientId/new-appointment"
-          element={<BookAppointment />}
-        />
+
         <Route
           path="/veterinarian/:veterinarianId/veterinarian"
           element={<Veterinarian />}
         />
-
         <Route path="/register-user" element={<UserRegistration />} />
-        <Route path="/update-user/:userId/update" element={<UserUpdate />} />
+
         <Route path="/login" element={<Login />} />
+
+        <Route path="/email-verification" element={<EmailVerification />} />
+
+        {/* Routes accessible without authentication */}
+
+        {/* ****************** For authenticated users only ******************* */}
+
+        <Route path="/update-user/:userId/update" element={<UserUpdate />} />
+
+        <Route
+          path="/book-appointment/:recipientId/new-appointment"
+          element={<BookAppointment />}
+        />
+
         <Route
           path="/user-dashboard/:userId/my-dashboard"
           element={<UserDashboard />}
         />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
-        <Route path="/email-verification" element={<EmailVerification />} />
+
+        {/* ****************** End authenticated users only ******************* */}
+
+        {/* ****************** For admin only ******************* */}
+        <Route
+          path="/admin-dashboard/:userId/admin-dashboard"
+          element={<AdminDashboard />}
+        />
+        {/* ****************** For admin only ******************* */}
       </Route>
     )
   );

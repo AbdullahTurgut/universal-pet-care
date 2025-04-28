@@ -31,7 +31,7 @@ const UserDashboard = () => {
   } = UseMessageAlerts();
 
   // const {userId} = useParams();
-  const userId = 33;
+  const userId = localStorage.getItem("userId");
 
   useEffect(() => {
     const getUser = async () => {

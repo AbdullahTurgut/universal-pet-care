@@ -8,3 +8,19 @@ export const verifyEmail = async (token) => {
     throw error;
   }
 };
+
+export const loginUser = async (email, password) => {
+  try {
+    const response = await api.post("/auth/login", { email, password });
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const logout = () => {
+  localStorage.removeItem("authToken");
+  localStorage.removeItem("userId");
+  localStorage.removeItem("userRoles");
+  window.location.href = "/";
+};

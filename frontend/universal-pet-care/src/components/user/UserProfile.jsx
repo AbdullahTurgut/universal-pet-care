@@ -140,9 +140,9 @@ const UserProfile = ({ user, handleRemovePhoto, handleDeleteAccount }) => {
                 <Col md={4}>Account Status :</Col>
                 <Col md={4}>
                   <Card.Text
-                    className={user.enabled ? style.active : style.inactive}
+                    className={user.enable ? style.active : style.inactive}
                   >
-                    {user.enabled ? "Active" : "Inactive"}
+                    {user.enable ? "Active" : "Inactive"}
                   </Card.Text>
                 </Col>
               </Card.Body>

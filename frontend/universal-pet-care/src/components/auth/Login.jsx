@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
 import {
   Button,
   Card,
@@ -9,7 +10,10 @@ import {
   Row,
 } from "react-bootstrap";
 import { BsPersonFill, BsLockFill } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import UseMessageAlerts from "../hooks/UseMessageAlerts";
+import { loginUser } from "./AuthService";
+import AlertMessage from "../common/AlertMessage";
 
 const Login = () => {
   const [credentials, setCredentials] = React.useState({
@@ -17,9 +21,50 @@ const Login = () => {
     password: "",
   });
 
+  const { errorMessage, setErrorMessage, showErrorAlert, setShowErrorAlert } =
+    UseMessageAlerts();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || "/";
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCredentials((prevState) => ({ ...prevState, [name]: value }));
+  };
+
+  useEffect(() => {
+    const isAuthenticated = localStorage.getItem("authToken");
+    if (isAuthenticated) {
+      navigate(from, { replace: true });
+    }
+  });
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    if (!credentials.email || !credentials.password) {
+      setErrorMessage("Please, enter a valid username and password");
+      setShowErrorAlert(true);
+      return;
+    }
+    try {
+      const data = await loginUser(credentials.email, credentials.password);
+      localStorage.setItem("authToken", data.token);
+      const decoded = jwtDecode(data.token);
+      localStorage.setItem("userRoles", JSON.stringify(decoded.roles)); // Navbar userRoles params
+      localStorage.setItem("userId", decoded.id);
+      clearLoginForm();
+      navigate(from, { replace: true });
+    } catch (error) {
+      setErrorMessage(error.response.data.data);
+      setShowErrorAlert(true);
+    }
+  };
+
+  const clearLoginForm = () => {
+    setCredentials({ email: "", password: "" });
+    setShowErrorAlert(false);
   };
 
   return (
@@ -27,15 +72,18 @@ const Login = () => {
       <Row className="justify-content-center">
         <Col sm={6}>
           <Card>
+            {showErrorAlert && (
+              <AlertMessage type={"danger"} message={errorMessage} />
+            )}
             <Card.Body>
               <Card.Title className="text-center mb-4"></Card.Title>
-              <Form>
+              <Form onSubmit={handleLogin}>
                 <Form.Group className="mb-3" controlId="username">
                   <Form.Label>Username</Form.Label>
                   <InputGroup>
                     <InputGroup.Text>
                       <BsPersonFill />
-                      {/* Icon for username */}"
+                      {/* Icon for username */}
                     </InputGroup.Text>
                     <Form.Control
                       type="text"

@@ -49,7 +49,7 @@ const BookAppointment = () => {
   } = UseMessageAlerts();
 
   const { recipientId } = useParams(); // recipientId  useParams() ile alıyoruz
-  const senderId = 10;
+  const senderId = localStorage.getItem("userId");
 
   const handleDateChange = (date) => {
     setFormData((prevData) => ({

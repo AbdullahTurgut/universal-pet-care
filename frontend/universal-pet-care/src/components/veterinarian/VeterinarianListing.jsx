@@ -4,6 +4,7 @@ import VeterinarianCard from "./VeterinarianCard";
 import { getVeterinarians } from "./VeterinarianService";
 import VeterinarianSearch from "./VeterinarianSearch";
 import UseMessageAlerts from "../hooks/UseMessageAlerts";
+import { NoDataAvailable } from "../common/NoDataAvailable";
 
 const VeterinarianListing = () => {
   const [veterinarians, setVeterinarians] = useState([]);
@@ -39,19 +40,28 @@ const VeterinarianListing = () => {
   };
   return (
     <Container>
-      <Row className="justify-content-center">
-        <h2 className="text-center mb-4 mt-4">Meet Our Veterinarians</h2>
-      </Row>
-      <Row className="justify-content-center">
-        <Col md={4}>
-          <VeterinarianSearch onSearchResult={handleSearchResult} />
-        </Col>
-        <Col md={7}>
-          {veterinarians.map((veterinarian, index) => (
-            <VeterinarianCard key={index} veterinarian={veterinarian} />
-          ))}
-        </Col>
-      </Row>
+      {veterinarians && veterinarians.length > 0 ? (
+        <React.Fragment>
+          <Row className="justify-content-center">
+            <h2 className="text-center mb-4 mt-4">Meet Our Veterinarians</h2>
+          </Row>
+          <Row className="justify-content-center">
+            <Col md={4}>
+              <VeterinarianSearch onSearchResult={handleSearchResult} />
+            </Col>
+            <Col md={7}>
+              {veterinarians.map((veterinarian, index) => (
+                <VeterinarianCard key={index} veterinarian={veterinarian} />
+              ))}
+            </Col>
+          </Row>
+        </React.Fragment>
+      ) : (
+        <NoDataAvailable
+          dataType={"veterinarian"}
+          errorMessage={errorMessage}
+        />
+      )}
     </Container>
   );
 };
