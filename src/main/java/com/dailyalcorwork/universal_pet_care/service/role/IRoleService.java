@@ -16,4 +16,5 @@ public interface IRoleService {
     void saveRole(Role role);
 
     Collection<Role> setUserRoles(List<String> roles);
+
 }

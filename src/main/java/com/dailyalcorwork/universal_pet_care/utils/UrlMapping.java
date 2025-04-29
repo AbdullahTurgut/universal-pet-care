@@ -105,8 +105,8 @@ public class UrlMapping {
 
     public static final String ROLES = API + "/roles";
     public static final String ALl_ROLES = "/all-roles";
-    public static final String GET_ROLE_BY_ID = "/get-by-id";
-    public static final String GET_ROLE_BY_NAME = "/get-by-name";
-    
+    public static final String GET_ROLE_BY_ID = "/role/get-by-id/role";
+    public static final String GET_ROLE_BY_NAME = "/role/get-by-name";
+
 }
 

@@ -36,4 +36,8 @@ public interface IAppointmentService {
 
     // start of getAppointmentsSummary function to frontend
     List<Map<String, Object>> getAppointmentsSummary();
+
+    List<Long> getAppointmentIds();
+
+    void setAppointmentStatus(Long appointmentId);
 }

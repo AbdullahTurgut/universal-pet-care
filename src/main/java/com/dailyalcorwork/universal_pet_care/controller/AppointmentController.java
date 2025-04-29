@@ -144,7 +144,7 @@ public class AppointmentController {
             publisher.publishEvent(new AppointmentDeclinedEvent(appointment));
             return ResponseEntity.ok(new ApiResponse(FeedBackMessage.DECLINE_APPOINTMENT_SUCCESS, appointment));
         } catch (IllegalStateException e) {
-            return ResponseEntity.status(NOT_ACCEPTABLE).body(new ApiResponse(e.getMessage(), null));
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
 

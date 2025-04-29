@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -173,6 +174,55 @@ public class AppointmentService implements IAppointmentService {
 
     private String formatAppointmentStatus(AppointmentStatus appointmentStatus) {
         return appointmentStatus.toString().replace("_", "-").toLowerCase(Locale.ENGLISH);
+    }
+
+    @Override
+    public List<Long> getAppointmentIds() {
+        List<Appointment> appointments = appointmentRepository.findAll();
+        return appointments.stream()
+                .map(Appointment::getId)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void setAppointmentStatus(Long appointmentId) {
+        Appointment appointment = getAppointmentById(appointmentId);
+        LocalDate currentDate = LocalDate.now();
+        LocalTime currentTime = LocalTime.now();
+        LocalTime appointmentEndTime = appointment.getTime()
+                .plusMinutes(2).truncatedTo(ChronoUnit.MINUTES);
+
+        switch (appointment.getStatus()) {
+            case APPROVED:
+                if (currentDate.isBefore(appointment.getDate()) ||
+                        (currentDate.equals(appointment.getDate()) && currentTime.isBefore(appointment.getTime()))) {
+                    appointment.setStatus(AppointmentStatus.UP_COMING);
+                    // if already up_coming no change needed.
+                }
+                break;
+            case UP_COMING:
+                if (currentDate.equals(appointment.getDate()) &&
+                        currentTime.isAfter(appointment.getTime()) && !currentTime.isAfter(appointmentEndTime)) {
+                    // Changed to include the end time as part of ON_GOING status
+                    appointment.setStatus(AppointmentStatus.ON_GOING);
+                }
+                break;
+            case ON_GOING:
+                if (currentDate.isAfter(appointment.getDate()) ||
+                        (currentDate.equals(appointment.getDate()) && !currentTime.isBefore(appointmentEndTime))) {
+                    // changed to mark as completed when current time is not before the end time
+                    appointment.setStatus(AppointmentStatus.COMPLETED);
+                }
+                break;
+            case WAITING_FOR_APPROVAL:
+                if (currentDate.isAfter(appointment.getDate()) ||
+                        (currentDate.equals(appointment.getDate()) && currentTime.isAfter(appointment.getTime()))) {
+                    // adjusted to change status to not-approved if current time is past the appointment time
+                    appointment.setStatus(AppointmentStatus.NOT_APPROVED);
+                }
+                break;
+        }
+        appointmentRepository.save(appointment);
     }
     // end of getAppointmentsSummary function to frontend
 }

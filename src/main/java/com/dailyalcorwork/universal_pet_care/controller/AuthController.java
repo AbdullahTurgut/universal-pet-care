@@ -43,7 +43,7 @@ public class AuthController {
             String jwt = jwtUtils.generateTokenForUser(authentication);
             UPCUserDetails userDetails = (UPCUserDetails) authentication.getPrincipal();
             JwtResponse jwtResponse = new JwtResponse(userDetails.getId(), jwt);
-            return ResponseEntity.ok(new ApiResponse("Authentication successfull", jwtResponse));
+            return ResponseEntity.ok(new ApiResponse("Authentication successfully", jwtResponse));
         } catch (DisabledException e) {
             return ResponseEntity.status(UNAUTHORIZED)
                     .body(new ApiResponse("Sorry, your account is disabled. please contact the service desk", null));
