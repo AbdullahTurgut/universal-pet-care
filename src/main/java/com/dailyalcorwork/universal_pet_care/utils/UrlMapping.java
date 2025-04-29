@@ -99,11 +99,10 @@ public class UrlMapping {
 
     /*====================== END verification token ==========================================*/
 
-    public static final String AUTH = API + "/auth";
+    public static final String AUTH = "/api/v1/auth";
     public static final String LOGIN = "/login";
     public static final String VERIFY_YOUR_EMAIL = "/verify-your-email";
 
-    public static final String ROLES = API + "/roles";
     public static final String ALl_ROLES = "/all-roles";
     public static final String GET_ROLE_BY_ID = "/role/get-by-id/role";
     public static final String GET_ROLE_BY_NAME = "/role/get-by-name";

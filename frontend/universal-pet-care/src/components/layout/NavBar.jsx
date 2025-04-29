@@ -6,7 +6,7 @@ import { logout } from "../auth/AuthService";
 const NavBar = () => {
   const isLoggedIn = localStorage.getItem("authToken");
   const userRoles = localStorage.getItem("userRoles");
-  const userId = localStorage.getItem("userId") || [];
+  const userId = localStorage.getItem("userId");
 
   const handleLogout = () => {
     logout();
@@ -49,7 +49,6 @@ const NavBar = () => {
                   >
                     My Dashboard
                   </NavDropdown.Item>
-                  <NavDropdown.Divider />
 
                   {userRoles.includes("ROLE_ADMIN") && (
                     <React.Fragment>

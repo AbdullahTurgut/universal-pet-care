@@ -7,7 +7,9 @@ export const ProtectedRoute = ({
   useOutlet = false,
 }) => {
   const isAuthenticated = localStorage.getItem("authToken");
-  const userRoles = localStorage.getItem("userRoles") || [];
+  const userRoles = JSON.parse(localStorage.getItem("userRoles")) || [];
+  //console.log(allowedRoles);
+  //console.log(userRoles);
   const location = useLocation();
 
   if (!isAuthenticated) {
@@ -16,6 +18,7 @@ export const ProtectedRoute = ({
   }
 
   const userRolesLower = userRoles.map((role) => role.toLowerCase());
+
   const allowedRolesLower = allowedRoles.map((role) => role.toLowerCase());
 
   const isAuthorized = userRolesLower.some((userRole) =>

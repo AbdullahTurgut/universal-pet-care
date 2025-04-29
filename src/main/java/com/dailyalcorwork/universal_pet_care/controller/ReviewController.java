@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.*;
 
-@CrossOrigin("http://localhost:5173")
 @RequiredArgsConstructor
 @RequestMapping(UrlMapping.REVIEWS)
 @RestController

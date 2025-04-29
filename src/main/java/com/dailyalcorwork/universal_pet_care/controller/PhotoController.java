@@ -18,7 +18,6 @@ import java.util.Optional;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-@CrossOrigin("http://localhost:5173")
 @RestController
 @RequestMapping(UrlMapping.PHOTOS)
 @RequiredArgsConstructor

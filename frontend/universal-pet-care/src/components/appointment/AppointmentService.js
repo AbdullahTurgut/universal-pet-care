@@ -1,16 +1,21 @@
 import { api } from "../utils/api";
 
 export async function bookAppointment(
+  appointmentRequest,
   senderId,
-  recipientId,
-  appointmentRequest
+  recipientId
 ) {
   try {
+    const token = localStorage.getItem("authToken");
     const result = await api.post(
       `/appointments/book-appointment?senderId=${senderId}&recipientId=${recipientId}`,
-      appointmentRequest
+      appointmentRequest,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
-    console.log("The result from here :", result);
     return result.data;
   } catch (error) {
     throw error;

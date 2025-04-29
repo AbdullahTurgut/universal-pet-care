@@ -13,11 +13,11 @@ import BookAppointment from "./components/appointment/BookAppointment";
 import Veterinarian from "./components/veterinarian/Veterinarian";
 import UserRegistration from "./components/user/UserRegistration";
 import Login from "./components/auth/Login";
-import UserProfile from "./components/user/UserProfile";
 import UserDashboard from "./components/user/UserDashboard";
 import UserUpdate from "./components/user/UserUpdate";
 import { AdminDashboard } from "./components/admin/AdminDashboard";
 import { EmailVerification } from "./components/auth/EmailVerification";
+import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 
 function App() {
   const router = createBrowserRouter(
@@ -40,20 +40,28 @@ function App() {
 
         {/* Routes accessible without authentication */}
 
-        {/* ****************** For authenticated users only ******************* */}
-
-        <Route path="/update-user/:userId/update" element={<UserUpdate />} />
+        {/* Wrap the routes that require authentication and possibly authorization */}
 
         <Route
-          path="/book-appointment/:recipientId/new-appointment"
-          element={<BookAppointment />}
-        />
+          element={
+            <ProtectedRoute
+              allowedRoles={["ROLE_PATIENT", "ROLE_ADMIN", "ROLE_VET"]}
+              useOutlet={true}
+            />
+          }
+        >
+          <Route path="/update-user/:userId/update" element={<UserUpdate />} />
 
-        <Route
-          path="/user-dashboard/:userId/my-dashboard"
-          element={<UserDashboard />}
-        />
+          <Route
+            path="/book-appointment/:recipientId/new-appointment"
+            element={<BookAppointment />}
+          />
 
+          <Route
+            path="/user-dashboard/:userId/my-dashboard"
+            element={<UserDashboard />}
+          />
+        </Route>
         {/* ****************** End authenticated users only ******************* */}
 
         {/* ****************** For admin only ******************* */}

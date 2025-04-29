@@ -132,7 +132,8 @@ const BookAppointment = () => {
     };
     setIsProcessing(true);
     try {
-      const response = await bookAppointment(senderId, recipientId, request);
+      const response = await bookAppointment(request, senderId, recipientId);
+      console.log(response.data);
       setSuccessMessage(response.message);
       handleReset(); // Reset the form after successful booking
       setShowSuccessAlert(true);

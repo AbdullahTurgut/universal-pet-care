@@ -3,6 +3,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+src/main/java/com/dailyalcorwork/universal_pet_care/email/EmailProperties.java
 
 ### STS ###
 .apt_generated

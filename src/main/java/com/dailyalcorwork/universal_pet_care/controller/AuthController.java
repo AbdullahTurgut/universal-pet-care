@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 
-@CrossOrigin("http://localhost:5173")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(UrlMapping.AUTH)
