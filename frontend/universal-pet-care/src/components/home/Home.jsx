@@ -1,9 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import d5 from "../../assets/images/d5.jpg";
 import vett from "../../assets/images/vett.jpg";
 import { Container, Col, Row, Button, Card, ListGroup } from "react-bootstrap";
+import { getVeterinarians } from "../veterinarian/VeterinarianService";
+import { VetSlider } from "../veterinarian/VetSlider";
+import { NoDataAvailable } from "../common/NoDataAvailable";
 
 const Home = () => {
+  const [veterinarians, setVeterinarians] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
+  useEffect(() => {
+    getVeterinarians()
+      .then((veterinarians) => {
+        setVeterinarians(veterinarians.data);
+      })
+      .catch((error) => {
+        setErrorMessage(error.message || "Something went wrong!");
+      });
+  }, []);
   return (
     <Container className="home-container mt-5">
       <Row>
@@ -78,9 +92,15 @@ const Home = () => {
           <span className="text-info">Universal Pet Care</span> Veterinarians
         </h4>
         <hr />
-        <p className="text-center">
-          Here, we are going to sliding veterinarians across
-        </p>
+
+        {veterinarians.length > 0 ? (
+          <VetSlider veterinarians={veterinarians} />
+        ) : (
+          <NoDataAvailable
+            dataType={"veterinarians data"}
+            errorMessage={errorMessage}
+          />
+        )}
       </div>
     </Container>
   );

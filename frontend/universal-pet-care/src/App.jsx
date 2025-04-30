@@ -36,6 +36,11 @@ function App() {
 
         <Route path="/login" element={<Login />} />
 
+        <Route
+          path="vet-reviews/:veterinarianId/veterinarian"
+          element={<Veterinarian />}
+        />
+
         <Route path="/email-verification" element={<EmailVerification />} />
 
         {/* Routes accessible without authentication */}
