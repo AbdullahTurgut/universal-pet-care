@@ -27,6 +27,7 @@ import static org.springframework.http.HttpStatus.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(UrlMapping.USERS)
+@CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
 
     private final UserService userService;
@@ -77,7 +78,6 @@ public class UserController {
     public ResponseEntity<ApiResponse> findById(@PathVariable Long userId) {
         try {
             UserDto userDto = userService.getUserWithDetails(userId);
-            // status yerine .ok() kullanmalıyız
             return ResponseEntity.ok(new ApiResponse(FeedBackMessage.USER_FOUND, userDto));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));

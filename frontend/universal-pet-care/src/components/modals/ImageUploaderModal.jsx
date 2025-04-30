@@ -63,9 +63,8 @@ const ImageUploaderModal = ({ userId, show, handleClose }) => {
         setShowSuccessAlert(true);
       }
     } catch (error) {
-      setErrorMessage(error.response.data.message);
+      setErrorMessage(error.message);
       setShowErrorAlert(true);
-      console.log(error.message);
     }
   };
 

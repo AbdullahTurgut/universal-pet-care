@@ -7,7 +7,12 @@ import ChangePasswordModal from "../modals/ChangePasswordModal";
 import DeleteConfirmationModal from "../modals/DeleteConfirmationModal";
 import style from "../../components/user/UserProfile.module.css";
 
-const UserProfile = ({ user, handleRemovePhoto, handleDeleteAccount }) => {
+const UserProfile = ({
+  user,
+  handleRemovePhoto,
+  handleDeleteAccount,
+  isCurrentUser,
+}) => {
   const [showImageUploaderModal, setShowImageUploaderModal] = useState(false);
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -60,33 +65,37 @@ const UserProfile = ({ user, handleRemovePhoto, handleDeleteAccount }) => {
               <Card.Body>
                 <UserImage userId={user.id} userPhoto={user.photo} />
               </Card.Body>
-              <div className="text-center">
-                <p>
-                  <Link to={"#"} onClick={handleShowImageUploaderModal}>
-                    Update Photo
-                  </Link>
-                </p>
-                <ImageUploaderModal
-                  userId={user.id}
-                  show={showImageUploaderModal}
-                  handleClose={handleCloseImageUploaderModal}
-                />
-                <p>
-                  <Link to={"#"} onClick={handleRemovePhoto}>
-                    Remove Photo
-                  </Link>
-                </p>
-                <p>
-                  <Link to={"#"} onClick={handleShowChangePasswordModal}>
-                    Change Password
-                  </Link>
-                </p>
-                <ChangePasswordModal
-                  userId={user.id}
-                  show={showChangePasswordModal}
-                  handleClose={handleCloseChangePasswordModal}
-                />
-              </div>
+              <section className="text-center">
+                {isCurrentUser && (
+                  <React.Fragment>
+                    <p>
+                      <Link to={"#"} onClick={handleShowImageUploaderModal}>
+                        Update Photo
+                      </Link>
+                    </p>
+                    <ImageUploaderModal
+                      userId={user.id}
+                      show={showImageUploaderModal}
+                      handleClose={handleCloseImageUploaderModal}
+                    />
+                    <p>
+                      <Link to={"#"} onClick={handleRemovePhoto}>
+                        Remove Photo
+                      </Link>
+                    </p>
+                    <p>
+                      <Link to={"#"} onClick={handleShowChangePasswordModal}>
+                        Change Password
+                      </Link>
+                    </p>
+                    <ChangePasswordModal
+                      userId={user.id}
+                      show={showChangePasswordModal}
+                      handleClose={handleCloseChangePasswordModal}
+                    />
+                  </React.Fragment>
+                )}
+              </section>
             </Card>
           </Col>
           <Col md={8}>
@@ -147,44 +156,51 @@ const UserProfile = ({ user, handleRemovePhoto, handleDeleteAccount }) => {
                 </Col>
               </Card.Body>
             </Card>
-
-            <Card className="mb-3 shadow">
-              <Card.Body className="d-flex align-items-center">
-                <Col md={2}>Role(s) :</Col>
-                <Col md={4}>
-                  <ListGroup variant="flush">
-                    {user.roles &&
-                      user.roles.map((role, index) => (
-                        <ListGroup.Item key={index} className="text-success">
-                          {role ? role.replace("ROLE_", "") : ""}
-                        </ListGroup.Item>
-                      ))}
-                  </ListGroup>
-                </Col>
-              </Card.Body>
-
-              <Card.Body>
-                <div className="d-flex justify-content-center mb-4">
-                  <div className="mx-2">
-                    <Link
-                      to={`/update-user/${user.id}/update`}
-                      className="btn btn-warning btn-sm"
-                    >
-                      Edit Profile
-                    </Link>
-                  </div>
-                  <div className="mx-2">
-                    <Button
-                      variant="danger"
-                      size="sm"
-                      onClick={handleShowDeleteModal}
-                    >
-                      Close Account
-                    </Button>
-                  </div>
-                </div>
-              </Card.Body>
-            </Card>
+            <section>
+              {isCurrentUser && (
+                <React.Fragment>
+                  <Card className="mb-3 shadow">
+                    <Card.Body className="d-flex align-items-center">
+                      <Col md={2}>Role(s) :</Col>
+                      <Col md={4}>
+                        <ListGroup variant="flush">
+                          {user.roles &&
+                            user.roles.map((role, index) => (
+                              <ListGroup.Item
+                                key={index}
+                                className="text-success"
+                              >
+                                {role ? role.replace("ROLE_", "") : ""}
+                              </ListGroup.Item>
+                            ))}
+                        </ListGroup>
+                      </Col>
+                    </Card.Body>
+                  </Card>
+                  <Card.Body className="mt-5">
+                    <div className="d-flex justify-content-center mb-4">
+                      <div className="mx-2">
+                        <Link
+                          to={`/update-user/${user.id}/update`}
+                          className="btn btn-warning btn-sm"
+                        >
+                          Edit Profile
+                        </Link>
+                      </div>
+                      <div className="mx-2">
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          onClick={handleShowDeleteModal}
+                        >
+                          Close Account
+                        </Button>
+                      </div>
+                    </div>
+                  </Card.Body>
+                </React.Fragment>
+              )}
+            </section>
           </Col>
         </Row>
       </React.Fragment>

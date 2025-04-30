@@ -18,9 +18,10 @@ import java.util.Optional;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(UrlMapping.PHOTOS)
-@RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 public class PhotoController {
     private final IPhotoService photoService;
 

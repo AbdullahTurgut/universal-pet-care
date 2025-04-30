@@ -16,9 +16,10 @@ import java.util.List;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-@RestController
 @RequiredArgsConstructor
+@RestController
 @RequestMapping(UrlMapping.PETS)
+@CrossOrigin(origins = "http://localhost:5173")
 public class PetController {
 
     private final IPetService petService;

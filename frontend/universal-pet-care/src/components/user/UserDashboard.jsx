@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import UseMessageAlerts from "../hooks/UseMessageAlerts";
 import { deleteUserPhotoById } from "../modals/ImageUploaderService";
 import { Card, Col, Container, Row, Tab, Tabs } from "react-bootstrap";
@@ -19,6 +20,7 @@ const UserDashboard = () => {
     const storedActiveKey = localStorage.getItem("active");
     return storedActiveKey ? storedActiveKey : "profile";
   });
+
   const {
     successMessage,
     setSuccessMessage,
@@ -29,9 +31,9 @@ const UserDashboard = () => {
     showErrorAlert,
     setShowErrorAlert,
   } = UseMessageAlerts();
-
-  // const {userId} = useParams();
-  const userId = localStorage.getItem("userId");
+  const { userId } = useParams();
+  const currentUserId = localStorage.getItem("userId");
+  const isCurrentUser = userId === currentUserId;
 
   useEffect(() => {
     const getUser = async () => {
@@ -65,13 +67,13 @@ const UserDashboard = () => {
       const transformedData = Object.values(statusCounts);
       setAppointmentData(transformedData);
       setAppointments(user.appointments);
-      console.log("Here is the transform data: ", transformedData);
+      //console.log("Here is the transform data: ", transformedData);
     }
   }, [user]);
 
   const handleRemovePhoto = async () => {
     try {
-      const result = await deleteUserPhotoById(user.photoId, 6);
+      const result = await deleteUserPhotoById(user.photoId, userId);
       setSuccessMessage(result.message);
       setShowSuccessAlert(true);
     } catch (error) {
@@ -112,6 +114,7 @@ const UserDashboard = () => {
               user={user}
               handleRemovePhoto={handleRemovePhoto}
               handleDeleteAccount={handleDeleteAccount}
+              isCurrentUser={isCurrentUser}
             />
           )}
         </Tab>
@@ -126,21 +129,27 @@ const UserDashboard = () => {
             </Col>
           </Row>
         </Tab>
-        <Tab eventKey="appointments" title={<h3>Appointment Details</h3>}>
-          <Row>
-            <Col>
-              {user && (
-                <React.Fragment>
-                  {appointments && appointments.length > 0 ? (
-                    <UserAppointments appointments={appointments} user={user} />
-                  ) : (
-                    <NoDataAvailable dataType={"appointment data"} />
-                  )}
-                </React.Fragment>
-              )}
-            </Col>
-          </Row>
-        </Tab>
+        {isCurrentUser && (
+          <Tab eventKey="appointments" title={<h3>Appointment Details</h3>}>
+            <Row>
+              <Col>
+                {user && (
+                  <React.Fragment>
+                    {appointments && appointments.length > 0 ? (
+                      <UserAppointments
+                        appointments={appointments}
+                        user={user}
+                      />
+                    ) : (
+                      <NoDataAvailable dataType={"appointment data"} />
+                    )}
+                  </React.Fragment>
+                )}
+              </Col>
+            </Row>
+          </Tab>
+        )}
+
         <Tab eventKey="reviews" title={<h3>Reviews</h3>}>
           <Container className="d-flex justify-content-center align-items-center">
             <Card className="mt-5 mb-4 review-card">

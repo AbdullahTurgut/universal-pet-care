@@ -79,7 +79,7 @@ const UserUpdate = () => {
   };
 
   const handleCancelEdit = () => {
-    navigate(`/user-dashboard/${userId}/my-dashboard`);
+    navigate(`/user-dashboard/${userId}`);
   };
 
   return (
@@ -131,14 +131,12 @@ const UserUpdate = () => {
               <Form.Group as={Col} controlId="userType" className="mb-2">
                 <Form.Label className="legend">UserType</Form.Label>
                 <Form.Control
-                  as="text"
+                  type="text" // as="text" değil, type="text"
                   name="userType"
                   value={user.userType}
                   onChange={handleUserInputChange}
                   disabled
-                >
-                  {user.userType}
-                </Form.Control>
+                />
               </Form.Group>
 
               <fieldset className="field-set mb-2 mt-2">
@@ -149,15 +147,13 @@ const UserUpdate = () => {
                   className="mb-2 d-flex"
                 >
                   <Form.Control
-                    as="email"
+                    type="email"
                     name="email"
                     value={user.email}
                     onChange={handleUserInputChange}
                     style={{ marginRight: "10px" }}
                     disabled
-                  >
-                    {user.email}
-                  </Form.Control>
+                  />
                   <Form.Control
                     type="text"
                     name="phoneNumber"

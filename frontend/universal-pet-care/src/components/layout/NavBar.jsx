@@ -1,6 +1,6 @@
 import React from "react";
 import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { logout } from "../auth/AuthService";
 
 const NavBar = () => {
@@ -12,7 +12,6 @@ const NavBar = () => {
     logout();
   };
 
-  //const { userId } = useParams(); // This should be replaced with actual user ID from context or props
   return (
     <Navbar expand="lg" sticky="top" className="nav-bg">
       <Container>
@@ -49,9 +48,10 @@ const NavBar = () => {
                   >
                     My Dashboard
                   </NavDropdown.Item>
-
                   {userRoles.includes("ROLE_ADMIN") && (
                     <React.Fragment>
+                      <NavDropdown.Divider />
+
                       <NavDropdown.Item
                         to={`/admin-dashboard/${userId}/admin-dashboard`}
                         as={Link}

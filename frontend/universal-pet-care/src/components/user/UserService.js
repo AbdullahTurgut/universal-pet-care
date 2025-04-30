@@ -1,19 +1,21 @@
 import { api } from "../utils/api";
 
-export async function getUserById(userId) {
+export async function registerUser(user) {
   try {
-    // backend API call to fetch user data by ID
-    const result = await api.get(`/users/user/${userId}`);
+    const result = await api.post("/users/register", user);
     return result.data;
   } catch (error) {
     throw error;
   }
 }
-
-export async function registerUser(user) {
+export async function getUserById(userId) {
   try {
-    const result = await api.post("/users/register", user);
-    return result.data;
+    if (!userId) {
+      //console.warn("userId daha gelmedi");
+      return;
+    }
+    const response = await api.get(`/users/user/${userId}`);
+    return response.data;
   } catch (error) {
     throw error;
   }

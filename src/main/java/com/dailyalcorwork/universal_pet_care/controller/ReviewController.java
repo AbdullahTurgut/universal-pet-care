@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.http.HttpStatus.*;
 
 @RequiredArgsConstructor
-@RequestMapping(UrlMapping.REVIEWS)
 @RestController
+@RequestMapping(UrlMapping.REVIEWS)
+@CrossOrigin(origins = "http://localhost:5173")
 public class ReviewController {
     private final IReviewService reviewService;
     private final org.modelmapper.ModelMapper modelMapper;
