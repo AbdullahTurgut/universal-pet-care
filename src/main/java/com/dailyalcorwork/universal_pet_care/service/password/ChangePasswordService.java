@@ -5,6 +5,7 @@ import com.dailyalcorwork.universal_pet_care.model.User;
 import com.dailyalcorwork.universal_pet_care.repository.UserRepository;
 import com.dailyalcorwork.universal_pet_care.request.ChangePasswordRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -14,6 +15,8 @@ import java.util.Objects;
 public class ChangePasswordService implements IChangePasswordService {
 
     private final UserRepository userRepository;
+    // after security
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void changePassword(Long userId, ChangePasswordRequest request) {
@@ -23,15 +26,25 @@ public class ChangePasswordService implements IChangePasswordService {
             throw new IllegalArgumentException("All fields are required");
         }
 
-        if (!Objects.equals(request.getCurrentPassword(), user.getPassword())) {
+//        if (!Objects.equals(request.getCurrentPassword(), user.getPassword())) {
+//            throw new IllegalArgumentException("Current password does not match");
+//        }
+        //after security
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
             throw new IllegalArgumentException("Current password does not match");
         }
 
-        if (!Objects.equals(request.getNewPassword(), request.getConfirmNewPassword())) {
+//        if (!Objects.equals(request.getNewPassword(), request.getConfirmNewPassword())) {
+//            throw new IllegalArgumentException("Password confirmation miss-match");
+//        }
+        //after security
+
+        if (!request.getNewPassword().equals(request.getConfirmNewPassword())) {
             throw new IllegalArgumentException("Password confirmation miss-match");
         }
 
-        user.setPassword(request.getNewPassword());
+//        user.setPassword(request.getNewPassword());
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
     }
 }

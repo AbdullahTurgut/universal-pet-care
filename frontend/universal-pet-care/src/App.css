@@ -327,7 +327,9 @@ input[type="radio"] {
 
 /* End review component styling */
 
-
+.InputGroupText {
+  cursor: pointer; /* Göz ikonuna tıklanabilir işareti */
+}
 
 
 /* appointment Pie chart cell coloration */

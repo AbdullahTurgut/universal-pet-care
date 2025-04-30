@@ -55,8 +55,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles = new HashSet<>();
 
-    // cascade -> remove -> user silindigi zaman token de silinecek
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    // cascade -> remove -> user silindigi zaman token de silinecek , orphanRemoval = true -> çıkardım
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<VerificationToken> verificationTokens = new ArrayList<>();
 
     public void removeUserPhoto() {

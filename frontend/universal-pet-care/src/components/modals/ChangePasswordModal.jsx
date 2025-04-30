@@ -3,11 +3,11 @@ import UseMessageAlerts from "../hooks/UseMessageAlerts";
 import { Button, Form, InputGroup, Modal } from "react-bootstrap";
 import { changeUserPassword } from "../user/UserService";
 import AlertMessage from "../common/AlertMessage";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const ChangePasswordModal = ({ userId, show, handleClose }) => {
   const [type, setType] = useState("password");
-  const { icon, setIcon } = useState(null);
-
+  const [icon, setIcon] = useState(FaEyeSlash);
   const [passwords, setPasswords] = useState({
     currentPassword: "",
     newPassword: "",
@@ -33,6 +33,16 @@ const ChangePasswordModal = ({ userId, show, handleClose }) => {
     }));
   };
 
+  const togglePasswordVisibility = () => {
+    if (type === "password") {
+      setType("text");
+      setIcon(FaEye); // Göz açıldı
+    } else {
+      setType("password");
+      setIcon(FaEyeSlash); // Göz kapalı
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -52,17 +62,7 @@ const ChangePasswordModal = ({ userId, show, handleClose }) => {
       setShowErrorAlert(true);
     }
   };
-  /*
-  const handleShowPassword = () => {
-    if (type === "password") {
-      setType("text");
-      setIcon(eye);
-    } else {
-      setType("password");
-      setIcon(eyeOff);
-    }
-  };
-*/
+
   const handleReset = () => {
     setPasswords({
       currentPassword: "",
@@ -96,9 +96,12 @@ const ChangePasswordModal = ({ userId, show, handleClose }) => {
                 onChange={handleInputChange}
                 placeholder="Enter current password"
               />
-              {/*<InputGroup.Text onClick={handleShowPassword}>
-                <Icon icon={icon} />
-              </InputGroup.Text> */}
+              <InputGroup.Text
+                onClick={togglePasswordVisibility}
+                style={{ cursor: "pointer" }}
+              >
+                {icon} {/* Göz açma/kapama ikonu */}
+              </InputGroup.Text>
             </InputGroup>
           </Form.Group>
 

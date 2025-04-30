@@ -97,7 +97,31 @@ const UserProfile = ({
                 )}
               </section>
             </Card>
+            {isCurrentUser && (
+              <Card.Body className="mt-5">
+                <div className="d-flex justify-content-center mb-4">
+                  <div className="mx-2">
+                    <Link
+                      to={`/update-user/${user.id}/update`}
+                      className="btn btn-warning btn-sm"
+                    >
+                      Edit Profile
+                    </Link>
+                  </div>
+                  <div className="mx-2">
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      onClick={handleShowDeleteModal}
+                    >
+                      Close Account
+                    </Button>
+                  </div>
+                </div>
+              </Card.Body>
+            )}
           </Col>
+
           <Col md={8}>
             <Card className="mb-3 shadow">
               <Card.Body className="d-flex align-items-center">
@@ -156,51 +180,21 @@ const UserProfile = ({
                 </Col>
               </Card.Body>
             </Card>
-            <section>
-              {isCurrentUser && (
-                <React.Fragment>
-                  <Card className="mb-3 shadow">
-                    <Card.Body className="d-flex align-items-center">
-                      <Col md={2}>Role(s) :</Col>
-                      <Col md={4}>
-                        <ListGroup variant="flush">
-                          {user.roles &&
-                            user.roles.map((role, index) => (
-                              <ListGroup.Item
-                                key={index}
-                                className="text-success"
-                              >
-                                {role ? role.replace("ROLE_", "") : ""}
-                              </ListGroup.Item>
-                            ))}
-                        </ListGroup>
-                      </Col>
-                    </Card.Body>
-                  </Card>
-                  <Card.Body className="mt-5">
-                    <div className="d-flex justify-content-center mb-4">
-                      <div className="mx-2">
-                        <Link
-                          to={`/update-user/${user.id}/update`}
-                          className="btn btn-warning btn-sm"
-                        >
-                          Edit Profile
-                        </Link>
-                      </div>
-                      <div className="mx-2">
-                        <Button
-                          variant="danger"
-                          size="sm"
-                          onClick={handleShowDeleteModal}
-                        >
-                          Close Account
-                        </Button>
-                      </div>
-                    </div>
-                  </Card.Body>
-                </React.Fragment>
-              )}
-            </section>
+            <Card className="mb-3 shadow">
+              <Card.Body className="d-flex align-items-center">
+                <Col md={2}>Role(s) :</Col>
+                <Col md={4}>
+                  <ListGroup variant="flush">
+                    {user.roles &&
+                      user.roles.map((role, index) => (
+                        <ListGroup.Item key={index} className="text-success">
+                          {role ? role.replace("ROLE_", "") : ""}
+                        </ListGroup.Item>
+                      ))}
+                  </ListGroup>
+                </Col>
+              </Card.Body>
+            </Card>
           </Col>
         </Row>
       </React.Fragment>

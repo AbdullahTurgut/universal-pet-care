@@ -11,6 +11,7 @@ import UserAppointments from "../appointment/UserAppointments";
 import { CustomPieChart } from "../charts/CustomPieChart";
 import { formatAppointmentStatus } from "../utils/utilities";
 import { NoDataAvailable } from "../common/NoDataAvailable";
+import { logout } from "../auth/AuthService";
 
 const UserDashboard = () => {
   const [user, setUser] = useState({});
@@ -87,11 +88,13 @@ const UserDashboard = () => {
       const response = await deleteUser(userId);
       setSuccessMessage(response.message);
       setShowSuccessAlert(true);
+      setTimeout(() => {
+        logout();
+      }, 10000);
     } catch (error) {
-      console.log("this is the error from the delete account:", error);
+      //console.log("this is the error from the delete account:", error);
       setErrorMessage(error.message);
       setShowErrorAlert(true);
-      console.error(error.message);
     }
   };
 
@@ -109,6 +112,12 @@ const UserDashboard = () => {
         onSelect={handleTabSelect}
       >
         <Tab eventKey="profile" title={<h3>Profile</h3>}>
+          {showErrorAlert && (
+            <AlertMessage type={"danger"} message={errorMessage} />
+          )}
+          {showSuccessAlert && (
+            <AlertMessage type={"success"} message={successMessage} />
+          )}
           {user && (
             <UserProfile
               user={user}
