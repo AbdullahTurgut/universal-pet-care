@@ -7,6 +7,7 @@ public class FeedBackMessage {
     public static final String UPDATE_USER_SUCCESS = "User updated successfully";
     public static final String DELETE_USER_SUCCESS = "User deleted successfully";
     public static final String USER_FOUND = "User found";
+    public static final String USER_NOT_FOUND = "User not found";
     public static final String USERS_FOUND = "All user found";
     public static final String LOCKED_USER_ACCOUNT = "User account locked successfully";
     public static final String PASSWORD_UPDATE_SUCCESS = "Password updated successfully";
