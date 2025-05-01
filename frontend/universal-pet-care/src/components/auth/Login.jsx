@@ -108,6 +108,7 @@ const Login = () => {
                     />
                   </InputGroup>
                 </Form.Group>
+
                 <Button
                   variant="outline-primary"
                   type="submit"
@@ -116,11 +117,26 @@ const Login = () => {
                   Login
                 </Button>
               </Form>
-              <div className="text-center mt-2">
-                Don't have an account yet?{" "}
-                <Link to={"/register-user"} style={{ textDecoration: "none" }}>
-                  Register here
-                </Link>
+              {/* Alt linkler */}
+              <div className="text-center mt-4">
+                <div className="text-muted small">
+                  Don't have an account yet?{" "}
+                  <Link
+                    to="/register-user"
+                    className="fw-semibold text-decoration-none"
+                  >
+                    Register here
+                  </Link>
+                </div>
+
+                <div className="mt-2">
+                  <Link
+                    to="/password-reset-request"
+                    className="text-primary text-decoration-none small"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
               </div>
             </Card.Body>
           </Card>

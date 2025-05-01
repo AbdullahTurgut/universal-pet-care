@@ -9,6 +9,7 @@ import Rating from "../rating/Rating";
 import Review from "../review/Review";
 import { getUserById } from "../user/UserService";
 import Paginator from "../common/Paginator";
+import { LoadSpinner } from "../common/LoadSpinner";
 
 const Veterinarian = () => {
   const [veterinarian, setVeterinarian] = useState(null);
@@ -25,7 +26,9 @@ const Veterinarian = () => {
     try {
       const response = await getUserById(veterinarianId);
       setVeterinarian(response.data);
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
     } catch (error) {
       setErrorMessage(error.response.data.message);
       setShowErrorAlert(true);
@@ -37,14 +40,19 @@ const Veterinarian = () => {
     getUser();
   }, []);
 
-  if (isLoading) {
-    return <h1>Loading...</h1>;
-  }
-
+  const vetReviews = veterinarian?.reviews || [];
   const indexOfLastReview = currentPage * reviewPerPage;
   const indexOfFirstReview = indexOfLastReview - reviewPerPage;
   const currentReviews =
-    veterinarian.reviews.slice(indexOfFirstReview, indexOfLastReview) || [];
+    vetReviews.slice(indexOfFirstReview, indexOfLastReview) || [];
+
+  if (isLoading) {
+    return (
+      <div>
+        <LoadSpinner />
+      </div>
+    );
+  }
 
   return (
     <Container className="d-flex justify-content-center align-items-center mt-4">
