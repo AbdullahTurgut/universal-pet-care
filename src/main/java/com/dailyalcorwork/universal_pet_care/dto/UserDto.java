@@ -16,7 +16,7 @@ public class UserDto {
     private String gender;
     private String phoneNumber;
     private String email;
-    //private String password; // password not be show
+    //private String password; // password not 
     private String userType;
     private boolean isEnable;
 
