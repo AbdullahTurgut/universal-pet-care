@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UseMessageAlerts from "../hooks/UseMessageAlerts";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import AlertMessage from "../common/AlertMessage";
-import { findAvailableVeterinarians } from "./VeterinarianService";
+import {
+  findAvailableVeterinarians,
+  getSpecializations,
+} from "./VeterinarianService";
 import { formatDateAndTime } from "../utils/utilities";
 
 const VeterinarianSearch = ({ onSearchResult }) => {
+  const [specializations, setSpecialization] = useState([]);
   const [searchQuery, setSearchQuery] = useState({
     date: null,
     time: null,
@@ -25,6 +29,16 @@ const VeterinarianSearch = ({ onSearchResult }) => {
       [e.target.name]: e.target.value,
     });
   };
+
+  useEffect(() => {
+    getSpecializations()
+      .then((data) => {
+        setSpecialization(data.data || data);
+      })
+      .catch((error) => {
+        setErrorMessage(error.message);
+      });
+  }, []);
 
   const handleDateChange = (date) => {
     setSearchQuery({
@@ -58,14 +72,15 @@ const VeterinarianSearch = ({ onSearchResult }) => {
 
     let searchParams = { specialization: searchQuery.specialization };
 
-    if (searchQuery.date) {
+    if (searchQuery.date && searchQuery.time) {
       //const formattedDate = format(searchQuery.date, "yyyy-MM-dd");
       searchParams.date = formattedDate;
-    }
-    if (searchQuery.time) {
-      //const formattedTime = format(searchQuery.time, "HH:mm");
       searchParams.time = formattedTime;
     }
+    //if (searchQuery.time) {
+    //const formattedTime = format(searchQuery.time, "HH:mm");
+    // searchParams.time = formattedTime;
+    //}
     try {
       const response = await findAvailableVeterinarians(searchParams);
       onSearchResult(response.data);
@@ -100,9 +115,11 @@ const VeterinarianSearch = ({ onSearchResult }) => {
             onChange={handleInputChange}
           >
             <option value="">Select specialization</option>
-            <option value="Surgery">Surgery</option>
-            <option value="Urologist">Urologist</option>
-            <option value="Other">Other</option>
+            {specializations.map((specialization, index) => (
+              <option value={specialization} key={index}>
+                {specialization}
+              </option>
+            ))}
           </Form.Control>
           <fieldset>
             <Row className="mb-3">

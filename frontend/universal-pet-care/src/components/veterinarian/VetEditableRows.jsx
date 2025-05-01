@@ -78,6 +78,7 @@ export const VetEditableRows = ({ vet, onSave, onCancel }) => {
         >
           <BsCheck />
         </Button>
+
         <Button variant="secondary" size="sm" onClick={onCancel}>
           <BsX />
         </Button>

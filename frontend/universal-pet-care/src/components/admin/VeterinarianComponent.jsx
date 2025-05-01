@@ -211,7 +211,7 @@ export const VeterinarianComponent = () => {
                 onCancel={handleCancelClick}
               />
             ) : (
-              <tr key={index}>
+              <tr key={vet.id}>
                 <td>Dr. {vet.firstName}</td>
                 <td>{vet.lastName}</td>
                 <td>{vet.email}</td>
