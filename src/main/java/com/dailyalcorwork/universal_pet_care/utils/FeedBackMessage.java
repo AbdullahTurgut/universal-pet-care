@@ -56,6 +56,12 @@ public class FeedBackMessage {
     public static final String TOKEN_VALIDATION_ERROR = "Error validation";
     public static final String TOKEN_SAVED_SUCCESS = "Token saved successfully";
     public static final String TOKEN_DELETE_SUCCESS = "User token deleted successfully";
+    public static final String MISSING_TOKEN_OR_PASSWORD = "Missing token or password";
+    public static final String SENT_RESET_PASSWORD_REQUEST = "A link was sent to your email, please check to complete your password request";
+
+    public static final String EMAIL_ASSOCIATED_WITH_ACCOUNT = "Please enter the email that is associated with your account";
+    public static final String SUCCESS_AUTHENTICATION = "Authentication successfully";
+    public static final String DISABLED_ACCOUNT = "Sorry, your account is disabled. please contact the service desk";
 }
 
 

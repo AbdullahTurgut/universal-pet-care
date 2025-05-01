@@ -33,7 +33,7 @@ public class PasswordResetService implements IPasswordResetService {
     }
 
     @Override
-    public void passwordResetRequest(String email) {
+    public void requestPasswordReset(String email) {
         userRepository.findByEmail(email).ifPresentOrElse(user -> {
             PasswordResetEvent passwordResetEvent = new PasswordResetEvent(this, user);
             eventPublisher.publishEvent(passwordResetEvent);

@@ -1,10 +1,7 @@
 package com.dailyalcorwork.universal_pet_care.event.listener;
 
 import com.dailyalcorwork.universal_pet_care.email.EmailService;
-import com.dailyalcorwork.universal_pet_care.event.AppointmentApprovedEvent;
-import com.dailyalcorwork.universal_pet_care.event.AppointmentBookedEvent;
-import com.dailyalcorwork.universal_pet_care.event.AppointmentDeclinedEvent;
-import com.dailyalcorwork.universal_pet_care.event.RegistrationCompleteEvent;
+import com.dailyalcorwork.universal_pet_care.event.*;
 import com.dailyalcorwork.universal_pet_care.model.Appointment;
 import com.dailyalcorwork.universal_pet_care.model.User;
 import com.dailyalcorwork.universal_pet_care.service.token.IVerificationTokenService;
@@ -67,6 +64,10 @@ public class NotificationEventListener implements ApplicationListener<Applicatio
                         throw new RuntimeException(e);
                     }
                 }
+                break;
+            case "PasswordResetEvent":
+                PasswordResetEvent passwordResetEvent = (PasswordResetEvent) event;
+                handlePasswordResetRequest(passwordResetEvent);
                 break;
             default:
                 break;
@@ -162,4 +163,33 @@ public class NotificationEventListener implements ApplicationListener<Applicatio
     }
 
     /* ========== End appointment decline notifications ============*/
+
+
+    /* ========== START password reset notifications ============*/
+
+    private void handlePasswordResetRequest(PasswordResetEvent event) {
+        User user = event.getUser();
+        String token = UUID.randomUUID().toString();
+        tokenService.saveVerificationTokenForUser(token, user);
+        String resetUrl = frontendBaseUrl + "/reset-password?token=" + token;
+        try {
+            sendPasswordResetEmail(user, resetUrl);
+        } catch (MessagingException | UnsupportedEncodingException e) {
+            throw new RuntimeException("Failed to send password reset email", e);
+        }
+    }
+
+    private void sendPasswordResetEmail(User user, String resetUrl) throws MessagingException, UnsupportedEncodingException {
+        String subject = "Password Reset Request";
+        String senderName = "Universal Pet Care";
+        String mailContent = "<p> Hi, " + user.getFirstName() + ", </p>" +
+                "<p> You have requested the reset your password.Please click the link below to proceed:</p> " +
+                "<a href=\"" + frontendBaseUrl + "\">Reset Password</a> <br/>" +
+                "<p> If you did not request this, please ignore this email.</p>" +
+                "<p> Best Regards. <br /> Universal Pet Care </p>";
+        emailService.sendEmail(user.getEmail(), subject, senderName, mailContent);
+    }
+
+    /* ========== END password reset notifications ============*/
+
 }

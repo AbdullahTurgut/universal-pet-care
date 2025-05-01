@@ -1,10 +1,14 @@
 package com.dailyalcorwork.universal_pet_care.controller;
 
+import com.dailyalcorwork.universal_pet_care.exception.ResourceNotFoundException;
+import com.dailyalcorwork.universal_pet_care.model.User;
 import com.dailyalcorwork.universal_pet_care.request.LoginRequest;
+import com.dailyalcorwork.universal_pet_care.request.PasswordResetRequest;
 import com.dailyalcorwork.universal_pet_care.response.ApiResponse;
 import com.dailyalcorwork.universal_pet_care.response.JwtResponse;
 import com.dailyalcorwork.universal_pet_care.security.jwt.JwtUtils;
 import com.dailyalcorwork.universal_pet_care.security.user.UPCUserDetails;
+import com.dailyalcorwork.universal_pet_care.service.password.PasswordResetService;
 import com.dailyalcorwork.universal_pet_care.service.token.VerificationTokenService;
 import com.dailyalcorwork.universal_pet_care.utils.FeedBackMessage;
 import com.dailyalcorwork.universal_pet_care.utils.UrlMapping;
@@ -20,6 +24,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+import java.util.Optional;
+
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 
@@ -32,6 +40,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final VerificationTokenService tokenService;
+    private final PasswordResetService passwordResetService;
 
     @PostMapping(UrlMapping.LOGIN)
     public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginRequest request) {
@@ -43,10 +52,10 @@ public class AuthController {
             String jwt = jwtUtils.generateTokenForUser(authentication);
             UPCUserDetails userDetails = (UPCUserDetails) authentication.getPrincipal();
             JwtResponse jwtResponse = new JwtResponse(userDetails.getId(), jwt);
-            return ResponseEntity.ok(new ApiResponse("Authentication successfully", jwtResponse));
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.SUCCESS_AUTHENTICATION, jwtResponse));
         } catch (DisabledException e) {
             return ResponseEntity.status(UNAUTHORIZED)
-                    .body(new ApiResponse("Sorry, your account is disabled. please contact the service desk", null));
+                    .body(new ApiResponse(FeedBackMessage.DISABLED_ACCOUNT, null));
         } catch (AuthenticationException e) {
             return ResponseEntity.status(UNAUTHORIZED)
                     .body(new ApiResponse(e.getMessage(), "Invalid username or password"));
@@ -66,5 +75,40 @@ public class AuthController {
             default ->
                     ResponseEntity.internalServerError().body(new ApiResponse(FeedBackMessage.TOKEN_VALIDATION_ERROR, null));
         };
+    }
+
+    // received password reset request for method----------------------
+    @PostMapping(UrlMapping.REQUEST_PASSWORD_RESET)
+    public ResponseEntity<ApiResponse> requestPasswordReset(Map<String, String> requestBody) {
+        String email = requestBody.get("email");
+        if (email == null || email.trim().isEmpty()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ApiResponse(FeedBackMessage.EMAIL_ASSOCIATED_WITH_ACCOUNT, null));
+        }
+
+        try {
+            passwordResetService.requestPasswordReset(email);
+            return ResponseEntity
+                    .ok(new ApiResponse(FeedBackMessage.SENT_RESET_PASSWORD_REQUEST, null));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    @PostMapping(UrlMapping.RESET_PASSWORD)
+    public ResponseEntity<ApiResponse> resetPassword(@RequestBody PasswordResetRequest request) {
+        String token = request.getToken();
+        String newPassword = request.getNewPassword();
+        if (token == null || token.trim().isEmpty() || newPassword == null || newPassword.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(new ApiResponse(FeedBackMessage.MISSING_TOKEN_OR_PASSWORD, null));
+        }
+        Optional<User> theUser = passwordResetService.findUserByPasswordResetToken(token);
+        if (theUser.isEmpty()) {
+            return ResponseEntity.badRequest().body(new ApiResponse(FeedBackMessage.INVALID_TOKEN, null));
+        }
+        User user = theUser.get();
+        String message = passwordResetService.resetPassword(newPassword, user);
+        return ResponseEntity.ok(new ApiResponse(message, null));
     }
 }

@@ -8,7 +8,7 @@ public interface IPasswordResetService {
 
     Optional<User> findUserByPasswordResetToken(String token);
 
-    void passwordResetRequest(String email);
+    void requestPasswordReset(String email);
 
     String resetPassword(String password, User user);
 }

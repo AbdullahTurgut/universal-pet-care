@@ -107,5 +107,8 @@ public class UrlMapping {
     public static final String GET_ROLE_BY_ID = "/role/get-by-id/role";
     public static final String GET_ROLE_BY_NAME = "/role/get-by-name";
 
+    public static final String REQUEST_PASSWORD_RESET = "/request-password-reset";
+    public static final String RESET_PASSWORD = "/reset-password";
+    
 }
 
