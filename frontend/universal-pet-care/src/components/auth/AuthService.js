@@ -24,3 +24,35 @@ export const logout = () => {
   localStorage.removeItem("userRoles");
   window.location.href = "/";
 };
+
+export const requestPasswordReset = async (email) => {
+  try {
+    const response = await api.post("/auth/request-password-reset", { email });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const validateToken = async (token) => {
+  try {
+    const result = await api.get(
+      `/verification/check-expiration?token=${token}`
+    );
+    return result.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const resetPassword = async (token, newPassword) => {
+  try {
+    const response = await api.post("/auth/reset-password", {
+      token,
+      newPassword,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

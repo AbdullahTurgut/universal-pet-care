@@ -3,6 +3,7 @@ import UseMessageAlerts from "../hooks/UseMessageAlerts";
 import { Button, Card, Container, Form } from "react-bootstrap";
 import AlertMessage from "../common/AlertMessage";
 import ProcessSpinner from "../common/ProcessSpinner";
+import { requestPasswordReset } from "./AuthService";
 
 const PasswordResetRequest = () => {
   // state variables
