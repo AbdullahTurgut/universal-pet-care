@@ -8,7 +8,10 @@ import com.dailyalcorwork.universal_pet_care.utils.FeedBackMessage;
 import com.dailyalcorwork.universal_pet_care.utils.UrlMapping;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -21,7 +24,6 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(UrlMapping.VETERINARIANS)
-@CrossOrigin(origins = "http://localhost:5173")
 public class VeterinarianController {
     private final IVeterinarianService veterinarianService;
 

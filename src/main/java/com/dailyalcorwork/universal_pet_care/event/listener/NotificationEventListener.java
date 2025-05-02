@@ -31,8 +31,7 @@ public class NotificationEventListener implements ApplicationListener<Applicatio
         switch (source.getClass().getSimpleName()) {
             case "RegistrationCompleteEvent":
                 if (source instanceof User) {
-                    RegistrationCompleteEvent registrationCompleteEvent = (RegistrationCompleteEvent) event;
-                    handleSendRegistrationVerificationEmail(registrationCompleteEvent);
+                    handleSendRegistrationVerificationEmail((RegistrationCompleteEvent) event);
                 }
                 break;
             case "AppointmentBookedEvent":
@@ -85,6 +84,7 @@ public class NotificationEventListener implements ApplicationListener<Applicatio
         String verificationUrl = frontendBaseUrl + "/email-verification?token=" + vToken;
         try {
             sendRegistrationVerificationEmail(user, verificationUrl);
+            System.out.println("RegistrationCompleteEvent published for: " + user.getEmail());
         } catch (MessagingException | UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }

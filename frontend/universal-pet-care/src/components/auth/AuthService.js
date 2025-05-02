@@ -9,6 +9,17 @@ export const verifyEmail = async (token) => {
   }
 };
 
+export async function resendVerificationToken(oldToken) {
+  try {
+    const response = await api.put(
+      `/auth/resend-verification-token?token=${oldToken}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export const loginUser = async (email, password) => {
   try {
     const response = await api.post("/auth/login", { email, password });

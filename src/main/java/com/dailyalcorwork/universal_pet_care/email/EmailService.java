@@ -23,7 +23,7 @@ public class EmailService {
 
     public void sendEmail(String to, String subject, String senderName, String mailContent) throws MessagingException, UnsupportedEncodingException {
         MimeMessage message = mailSender.createMimeMessage();
-        var messageHelper = new MimeMessageHelper(message);
+        var messageHelper = new MimeMessageHelper(message, true, "UTF-8");
         messageHelper.setFrom(EmailProperties.DEFAULT_USERNAME, senderName);
         messageHelper.setTo(to);
         messageHelper.setSubject(subject);
@@ -40,6 +40,7 @@ public class EmailService {
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.smtp.auth", EmailProperties.DEFAULT_AUTH);
         props.put("mail.smtp.starttls.enable", EmailProperties.DEFAULT_STARTTLS);
+        props.put("mail.debug", "true");
         return mailSender;
     }
 }

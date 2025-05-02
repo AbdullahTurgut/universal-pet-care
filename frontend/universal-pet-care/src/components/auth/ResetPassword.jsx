@@ -51,7 +51,10 @@ const ResetPassword = () => {
     setIsProcessing(false);
   };
   return (
-    <Container>
+    <Container
+      className="d-flex align-items-center justify-content-center"
+      style={{ marginTop: "100px" }}
+    >
       <Card style={{ maxWidth: "600px" }} className="w-100">
         {showErrorAlert && (
           <AlertMessage type={"danger"} message={errorMessage} />

@@ -46,6 +46,7 @@ public class PasswordResetService implements IPasswordResetService {
     public String resetPassword(String password, User user) {
         try {
             user.setPassword(passwordEncoder.encode(password));
+            userRepository.save(user);
             return "Your password has been reset";
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());

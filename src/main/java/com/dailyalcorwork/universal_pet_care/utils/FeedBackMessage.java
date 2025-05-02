@@ -62,6 +62,7 @@ public class FeedBackMessage {
     public static final String EMAIL_ASSOCIATED_WITH_ACCOUNT = "Please enter the email that is associated with your account";
     public static final String SUCCESS_AUTHENTICATION = "Authentication successfully";
     public static final String DISABLED_ACCOUNT = "Sorry, your account is disabled. please contact the service desk";
+    public static final String NEW_VERIFICATION_TOKEN_SENT = "New verification token sent.";
 }
 
 

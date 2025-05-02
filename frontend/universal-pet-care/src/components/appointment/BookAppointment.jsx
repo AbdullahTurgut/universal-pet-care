@@ -14,10 +14,10 @@ import {
 import DatePicker from "react-datepicker";
 import PetEntry from "../pet/PetEntry";
 import { formatDateAndTime } from "../utils/utilities";
-import { bookAppointment } from "./AppointmentService";
 import { FaPlus } from "react-icons/fa";
 import AlertMessage from "../common/AlertMessage";
 import ProcessSpinner from "../common/ProcessSpinner";
+import { bookAppointment } from "./AppointmentService";
 
 const BookAppointment = () => {
   const [isProcessing, setIsProcessing] = useState(false); // islem yapildiginda butonlarin disable edilmesi icin
@@ -132,14 +132,15 @@ const BookAppointment = () => {
     };
     setIsProcessing(true);
     try {
-      const response = await bookAppointment(request, senderId, recipientId);
-      console.log(response.data);
+      const response = await bookAppointment(senderId, recipientId, request);
       setSuccessMessage(response.message);
       handleReset(); // Reset the form after successful booking
       setShowSuccessAlert(true);
       s;
     } catch (error) {
       if (error.status === 401) {
+        setErrorMessage(error);
+
         setErrorMessage("Please, login first to book appointment!");
         setShowErrorAlert(true);
       } else {

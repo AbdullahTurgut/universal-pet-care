@@ -19,7 +19,6 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(UrlMapping.PETS)
-@CrossOrigin(origins = "http://localhost:5173")
 public class PetController {
 
     private final IPetService petService;

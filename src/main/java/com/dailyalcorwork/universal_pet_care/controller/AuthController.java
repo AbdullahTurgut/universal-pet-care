@@ -1,7 +1,9 @@
 package com.dailyalcorwork.universal_pet_care.controller;
 
+import com.dailyalcorwork.universal_pet_care.event.RegistrationCompleteEvent;
 import com.dailyalcorwork.universal_pet_care.exception.ResourceNotFoundException;
 import com.dailyalcorwork.universal_pet_care.model.User;
+import com.dailyalcorwork.universal_pet_care.model.VerificationToken;
 import com.dailyalcorwork.universal_pet_care.request.LoginRequest;
 import com.dailyalcorwork.universal_pet_care.request.PasswordResetRequest;
 import com.dailyalcorwork.universal_pet_care.response.ApiResponse;
@@ -14,6 +16,7 @@ import com.dailyalcorwork.universal_pet_care.utils.FeedBackMessage;
 import com.dailyalcorwork.universal_pet_care.utils.UrlMapping;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,13 +37,13 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(UrlMapping.AUTH)
-@CrossOrigin(origins = "http://localhost:5173")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final VerificationTokenService tokenService;
     private final PasswordResetService passwordResetService;
+    private final ApplicationEventPublisher publisher;
 
     @PostMapping(UrlMapping.LOGIN)
     public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginRequest request) {
@@ -77,9 +80,21 @@ public class AuthController {
         };
     }
 
+    @PutMapping(UrlMapping.RESEND_VERIFY_EMAIL)
+    public ResponseEntity<ApiResponse> resendVerificationToken(@RequestParam("token") String oldToken) {
+        try {
+            VerificationToken verificationToken = tokenService.generateNewVerificationToken(oldToken);
+            User theUser = verificationToken.getUser();
+            publisher.publishEvent(new RegistrationCompleteEvent(theUser));
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.NEW_VERIFICATION_TOKEN_SENT, null));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
     // received password reset request for method----------------------
     @PostMapping(UrlMapping.REQUEST_PASSWORD_RESET)
-    public ResponseEntity<ApiResponse> requestPasswordReset(Map<String, String> requestBody) {
+    public ResponseEntity<ApiResponse> requestPasswordReset(@RequestBody Map<String, String> requestBody) {
         String email = requestBody.get("email");
         if (email == null || email.trim().isEmpty()) {
             return ResponseEntity

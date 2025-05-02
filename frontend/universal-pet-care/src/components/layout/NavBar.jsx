@@ -24,9 +24,6 @@ const NavBar = () => {
             <Nav.Link to={"/doctors"} as={Link}>
               Meet Our Veterinarians
             </Nav.Link>
-            <Nav.Link to={"/admin-dashboard"} as={Link}>
-              Admin
-            </Nav.Link>
           </Nav>
           <Nav>
             <NavDropdown title="Account" id="basic-nav-dropdown">

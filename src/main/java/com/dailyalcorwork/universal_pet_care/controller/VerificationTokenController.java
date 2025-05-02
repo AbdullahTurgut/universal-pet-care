@@ -21,7 +21,7 @@ public class VerificationTokenController {
     private final UserRepository userRepository;
 
     @GetMapping(UrlMapping.VALIDATE_TOKEN)
-    public ResponseEntity<ApiResponse> validateToken(String token) {
+    public ResponseEntity<ApiResponse> validateToken(@RequestParam String token) {
         String result = verificationTokenService.validateToken(token);
         ApiResponse response = switch (result) {
             case "Invalid" -> new ApiResponse(FeedBackMessage.INVALID_TOKEN, null);
@@ -35,7 +35,7 @@ public class VerificationTokenController {
     }
 
     @GetMapping(UrlMapping.CHECK_TOKEN_EXPIRATION)
-    public ResponseEntity<ApiResponse> checkTokenExpiration(String token) {
+    public ResponseEntity<ApiResponse> checkTokenExpiration(@RequestParam String token) {
         boolean isExpired = verificationTokenService.isTokenExpired(token);
         ApiResponse response;
         if (isExpired) {

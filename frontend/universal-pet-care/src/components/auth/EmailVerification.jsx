@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { verifyEmail } from "./AuthService";
+import { resendVerificationToken, verifyEmail } from "./AuthService";
 import ProcessSpinner from "../common/ProcessSpinner";
 
 export const EmailVerification = () => {
@@ -63,6 +63,38 @@ export const EmailVerification = () => {
       setIsProcessing(false); // Stop loading regardless of the outcome
     }
   };
+
+  // Resend verification to user if the initial one has expired
+  const handleResendToken = async () => {
+    setIsProcessing(true);
+    const queryParams = new URLSearchParams(location.search);
+    const oldToken = queryParams.get("token");
+    try {
+      if (!oldToken) {
+        return;
+      }
+      const response = await resendVerificationToken(oldToken);
+      setVerificationMessage(response.message);
+      setAlertType("alert-success");
+    } catch (error) {
+      console.log("The error :" + error);
+      let message = "Failed to resend verification token.";
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        message = error.response.data.message;
+      } else if (error.message) {
+        message = error.message;
+      }
+      setVerificationMessage(message);
+      setAlertType("alert-danger");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   return (
     <div className="d-flex justify-content-center mt-lg-5">
       {isProcessing ? (
@@ -71,6 +103,12 @@ export const EmailVerification = () => {
         <div className="col-12 col-md-6">
           <div className={`alert ${alertType}`} role="alert">
             {verificationMessage}
+
+            {alertType === "alert-warning" && (
+              <button onClick={handleResendToken} className="btn btn-link">
+                Resend Verification Link
+              </button>
+            )}
           </div>
         </div>
       )}

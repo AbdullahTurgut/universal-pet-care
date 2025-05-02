@@ -24,7 +24,6 @@ import static org.springframework.http.HttpStatus.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(UrlMapping.APPOINTMENT)
-@CrossOrigin(origins = "http://localhost:5173")
 public class AppointmentController {
     private final AppointmentService appointmentService;
 

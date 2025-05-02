@@ -109,6 +109,7 @@ public class UrlMapping {
 
     public static final String REQUEST_PASSWORD_RESET = "/request-password-reset";
     public static final String RESET_PASSWORD = "/reset-password";
-    
+
+    public static final String RESEND_VERIFY_EMAIL = "/resend-verification-token";
 }
 

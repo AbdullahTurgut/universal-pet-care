@@ -167,7 +167,11 @@ const UserDashboard = () => {
                 <Col>
                   {user && user.reviews && user.reviews.length > 0 ? (
                     user.reviews.map((review, index) => (
-                      <Review key={index} review={review} />
+                      <Review
+                        key={index}
+                        review={review}
+                        userType={user.userType}
+                      />
                     ))
                   ) : (
                     <NoDataAvailable dataType={"review data"} />

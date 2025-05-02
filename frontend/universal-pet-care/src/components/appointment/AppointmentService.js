@@ -1,9 +1,9 @@
 import { api } from "../utils/api";
 
 export async function bookAppointment(
-  appointmentRequest,
   senderId,
-  recipientId
+  recipientId,
+  appointmentRequest
 ) {
   try {
     const token = localStorage.getItem("authToken");
@@ -16,12 +16,12 @@ export async function bookAppointment(
         },
       }
     );
+    console.log("The result from here :", result);
     return result.data;
   } catch (error) {
     throw error;
   }
 }
-
 /*   `/appointments/book-appointment/${senderId}/${recipientId}` */
 
 export const updateAppointment = async (appointmentId, appointmentData) => {

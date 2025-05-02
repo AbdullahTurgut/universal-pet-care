@@ -4,7 +4,6 @@ import com.dailyalcorwork.universal_pet_care.model.Role;
 import com.dailyalcorwork.universal_pet_care.service.role.IRoleService;
 import com.dailyalcorwork.universal_pet_care.utils.UrlMapping;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +13,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/roles")
-@CrossOrigin(origins = "http://localhost:5173")
 public class RoleController {
     private final IRoleService roleService;
 

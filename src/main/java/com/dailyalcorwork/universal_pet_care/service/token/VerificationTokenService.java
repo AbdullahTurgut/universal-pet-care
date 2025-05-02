@@ -52,9 +52,9 @@ public class VerificationTokenService implements IVerificationTokenService {
             var verificationToken = theToken.get();
             verificationToken.setToken(UUID.randomUUID().toString());
             verificationToken.setExpirationDate(SystemUtils.getExpirationTime());
-            tokenRepository.save(verificationToken);
-        }
-        throw new IllegalArgumentException("Invalid verification token");
+            return tokenRepository.save(verificationToken);
+        } else
+            throw new IllegalArgumentException("Invalid verification token");
     }
 
     @Override

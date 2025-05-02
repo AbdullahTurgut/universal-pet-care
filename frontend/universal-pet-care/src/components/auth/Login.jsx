@@ -57,7 +57,7 @@ const Login = () => {
       clearLoginForm();
       navigate(from, { replace: true });
     } catch (error) {
-      setErrorMessage(error.response.data.data);
+      setErrorMessage(error.response.data.message);
       setShowErrorAlert(true);
     }
   };

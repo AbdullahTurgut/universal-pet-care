@@ -19,6 +19,7 @@ import { AdminDashboard } from "./components/admin/AdminDashboard";
 import { EmailVerification } from "./components/auth/EmailVerification";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import PasswordResetRequest from "./components/auth/PasswordResetRequest";
+import ResetPassword from "./components/auth/ResetPassword";
 
 function App() {
   const router = createBrowserRouter(
@@ -41,6 +42,8 @@ function App() {
           path="/password-reset-request"
           element={<PasswordResetRequest />}
         />
+
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         <Route
           path="vet-reviews/:veterinarianId/veterinarian"

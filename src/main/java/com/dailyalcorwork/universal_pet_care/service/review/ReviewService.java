@@ -33,7 +33,7 @@ public class ReviewService implements IReviewService {
         if (veterinarianId.equals(reviewerId)) {
             throw new IllegalArgumentException(FeedBackMessage.VET_CANNOT_REVIEW_THEMSELVES);
         }
-        
+
         // 2. Check if the reviewer has previously submitted a review for this doctor.
 
         Optional<Review> existingReview = reviewRepository.findByVeterinarianIdAndPatientId(veterinarianId, reviewerId);
